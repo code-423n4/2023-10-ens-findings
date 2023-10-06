@@ -174,6 +174,15 @@ G3. Checking the proxy address of a given address is really expensive. It is bet
         token.transferFrom(proxyAddressFrom, proxyAddressTo, amount);
     }
 
+function _reimburse(address source, uint256 amount) internal {
+        // Transfer the remaining source amount or the full source amount
+        // (if no remaining amount) to the delegator
+-        address proxyAddressFrom = retrieveProxyContractAddress(token, source);
++        address proxyAddressFrom = proxyAddresses[source];
+
+        token.transferFrom(proxyAddressFrom, msg.sender, amount);
+    }
+
 ```
 
 G4  To save gas, for function _delegateMulti(), there is no need to calculate ``source`` and ``target``, which is a waste of gas due to comparison of ``transferIndex < sourcesLength`` and ``transferIndex < targetsLength``. These two comparisons can be eliminated. 
