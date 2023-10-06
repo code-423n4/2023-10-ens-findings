@@ -1,4 +1,4 @@
-# 1. Using max() function inside the for loop
+# 1. Using function inside the for loop
 
 ## Description
 
@@ -31,6 +31,44 @@ At the following location in the code, there is a function max from OZ Math.sol 
 ```
 
 https://github.com/code-423n4/2023-10-ens/blob/1adbe2cce191140657b8bccffab85103953bdccb/contracts/ERC20MultiDelegate.sol#L87C10-L87C10
+
+### POC
+
+```
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+contract Counter {
+    uint256 public someNumber = 0;
+
+    function max(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a > b ? a : b;
+    }
+
+    function testinloop(uint256 number1, uint256 number2) public {
+      for (
+            uint transferIndex = 0;
+            transferIndex < max(number1, number2);
+            transferIndex++
+        ) {
+          someNumber += 1;
+        }
+    }
+    function testoutsideloop(uint256 number1, uint256 number2) public {
+
+      uint256 testnum; 
+      testnum = max(number1, number2);
+
+      for (
+            uint transferIndex = 0;
+            transferIndex < testnum;
+            transferIndex++
+        ) {
+          someNumber += 1;
+        }
+    }
+}
+```
 
 ## Remediation
 
