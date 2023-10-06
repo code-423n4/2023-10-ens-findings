@@ -74,9 +74,6 @@ contract Counter {
 
 I would recommend writing a new variable before a for loop and then using it inside the loop in favor of saving gas.
 
-```
-uint transferIndex;
-```
 
 # 2. Default value initialization
 
