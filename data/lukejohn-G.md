@@ -176,7 +176,7 @@ G3. Checking the proxy address of a given address is really expensive. It is bet
 
 ```
 
-G4  To save gas, for function _delegateMulti(), there is no need to calculate ``source`` and ``target``, which is a waste of gas due to comparison of ``transferIndex < sourcesLength`` and ``transferIndex < targetsLength``.
+G4  To save gas, for function _delegateMulti(), there is no need to calculate ``source`` and ``target``, which is a waste of gas due to comparison of ``transferIndex < sourcesLength`` and ``transferIndex < targetsLength``. These two comparisons can be eliminated. 
 
 ```diff
  function _delegateMulti(
