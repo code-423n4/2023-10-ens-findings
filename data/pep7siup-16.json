@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "pep7siup",
+  "risk": "2",
+  "title": "Griefing Attack Risk Due to Lack of Approval Management in ERC20ProxyDelegator",
+  "issueId": 16,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/16"
+}
