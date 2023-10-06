@@ -121,4 +121,27 @@ G2. Math.min(sourcesLength, targetsLength) should be evaluated only once, not ea
 
 ```
 
+G3. ERC20MultiDelegate._processDelegation() calls transferBetweenDelegators(), which will calculate the proxy address again for target although it has been returned by deployProxyDelegatorIfNeeded(). So we can save gas by implementing the transfer directly here:
 
+```diff
+ function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+        uint256 balance = getBalanceForDelegate(source);
+
+        assert(amount <= balance);
+
++       address proxyAddressFrom = retrieveProxyContractAddress(token, from);
+
+-        deployProxyDelegatorIfNeeded(target);
++       address proxyAddressTo = deployProxyDelegatorIfNeeded(target);
+       
+-       transferBetweenDelegators(source, target, amount);
+
++       token.transferFrom(proxyAddressFrom, proxyAddressTo, amount);
+
+        emit DelegationProcessed(source, target, amount);
+    }
+```
