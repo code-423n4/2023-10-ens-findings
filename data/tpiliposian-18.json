@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "tpiliposian",
+  "risk": "3",
+  "title": "Missing access control on transfering tokens",
+  "issueId": 18,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/18"
+}
