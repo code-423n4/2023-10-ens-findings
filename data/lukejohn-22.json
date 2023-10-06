@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "lukejohn",
+  "risk": "2",
+  "title": "ERC20MultiDelegate._processDelegation() mistakingly calls getBalanceForDelegate(source) to get the token balance of ``source``.",
+  "issueId": 22,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/22"
+}
