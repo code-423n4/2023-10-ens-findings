@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "KiteWeb3",
+  "risk": "2",
+  "title": "Approve return value in the constructor ignored",
+  "issueId": 30,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/30"
+}
