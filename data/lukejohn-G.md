@@ -145,3 +145,33 @@ G3. ERC20MultiDelegate._processDelegation() calls transferBetweenDelegators(), w
         emit DelegationProcessed(source, target, amount);
     }
 ```
+
+G3. Checking the proxy address of a given address is really expensive. It is better to introduce a mapping called ``proxyAddresses``, we reimplement the following functions to save gas:
+
+```diff
++  mapping(address => address) proxyAddresses;
+
+   function deployProxyDelegatorIfNeeded(
+        address delegate
+    ) public returns (address proxyAddress) {
+         proxyAddress = proxyAddresses[delegate];
+
+         if(proxy == address(0))  
+            proxy = address(new ERC20ProxyDelegator{salt: 0}(token, delegate));
+            emit ProxyDeployed(delegate, proxyAddress);
+        }
+        return proxyAddress;
+    }
+
+ function transferBetweenDelegators(
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
+        address proxyAddressFrom = proxyAddresses[from];
+        address proxyAddressTo = proxyAddresses[to];
+        require(proxyAddressFrom != address(0) && proxyAddressTo != address(0);
+        token.transferFrom(proxyAddressFrom, proxyAddressTo, amount);
+    }
+
+```
