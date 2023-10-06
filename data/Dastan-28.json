@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Dastan",
+  "risk": "2",
+  "title": "The delegateMulti function  allows for the delegation of tokens to proxy contracts, which can introduce additional risks or vulnerabilities",
+  "issueId": 28,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/28"
+}
