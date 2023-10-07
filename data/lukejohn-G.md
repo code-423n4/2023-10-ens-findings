@@ -246,3 +246,53 @@ G4  To save gas, for function _delegateMulti(), there is no need to calculate ``
         }
     }
 ```
+
+G5. For for function _delegateMulti(), the comparisons of transferIndex < Math.min(sourcesLength, targetsLength, transferIndex < sourcesLength, and transferIndex < targetsLength is a waste of gas since they will be conducted for each iteration. In the following, we differentiate the three cases outside of the loop and thus save gas by not comparing for each iteration. We only need to compare once. in addition, we move the ``_burnBatch`` statement to the beginning to save some gas since when ``_burnBatch`` fail, there is no sufficient balance for the batch transfer, there is no need to execute the rest. 
+
+```diff
+   function _delegateMulti(
+        uint256[] calldata sources,
+        uint256[] calldata targets,
+        uint256[] calldata amounts
+    ) internal {
+        uint256 sourcesLength = sources.length;
+        uint256 targetsLength = targets.length;
+        uint256 amountsLength = amounts.length;
+
+        if (sourcesLength > 0) {
+            _burnBatch(msg.sender, sources, amounts[:sourcesLength]);
+        }
+
+        require(
+            sourcesLength > 0 || targetsLength > 0,
+            "Delegate: You should provide at least one source or one target delegate"
+        );
+
+        require(
+            Math.max(sourcesLength, targetsLength) == amountsLength,
+            "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
+        );
+
+        if(sourcesLength == targetsLength){
+           for(int i; i < sourcesLength; i++) _processDelegation(sources[i], targets[i], amounts[i]);
+        }
+        else if(sourcesLength < targetsLength){
+           for(int i; i < sourcesLength; i++) _processDelegation(sources[i], targets[i], amounts[i]);
+           for(int i = sourcesLength; i < targetsLength; i++) {
+                createProxyDelegatorAndTransfer(targets[i], amount);
+           } 
+       }
+       else{
+          for(int i; i < targetsLength; i++) _processDelegation(sources[i], targets[i], amounts[i]);
+          for(int i = targetsLength; i < sourcesLength; i++) {
+                _reimburse(sources[i], amount);
+           }          
+       }
+
+        if (targetsLength > 0) {
+            _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
+        }
+    }
+```
+
+
