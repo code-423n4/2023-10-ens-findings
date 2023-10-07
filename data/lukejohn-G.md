@@ -319,7 +319,6 @@ G7. There is no need to check the balance in function _processDelegation(). Sinc
         uint256 amount
     ) internal {
 -        uint256 balance = getBalanceForDelegate(source);
-
 -        assert(amount <= balance);
 
         deployProxyDelegatorIfNeeded(target);
