@@ -38,3 +38,56 @@ function retrieveProxyContractAddress(
         return address(uint160(uint256(hash)));
     }
 ```
+
+QA4. I suggest to split the delegateMulti() function into three functions: transferDelegation, reimburseDelegation; and createDelegation as follows. It not only saves gas (due to elimination of many comparisons), but also improve UX (they can pick which function to call based on each of the three cases).
+
+```javascript
+
+    function transferDelegation(
+        uint256[] calldata sources,
+        uint256[] calldata targets,
+        uint256[] calldata amounts
+    ) external {
+        uint256 sourcesLength = sources.length;
+        uint256 targetsLength = targets.length;
+        uint256 amountsLength = amounts.length;
+
+        require(sourcesLength > 0, "empty array");
+        require(sourcesLength == targetsLength && targetsLength == amountsLength, "array lengths not equal.");
+
+        for (uint i; i < sourcesLength; i++)  _processDelegation(address(uint160(sources[i])), address(uint160(targets[i])), amounts[i]);
+
+        _burnBatch(msg.sender, sources, amounts);
+        _mintBatch(msg.sender, targets, amounts, "");
+    }
+
+    function reimburseDelegation(
+        uint256[] calldata sources,
+        uint256[] calldata amounts
+    ) external {
+        uint256 sourcesLength = sources.length;
+        uint256 amountsLength = amounts.length;
+
+        require(sourcesLength > 0, "empty array");
+        require(sourcesLength ==  amountsLength, "array lengths not equal.");
+
+        for (uint i; i < sourcesLength; i++)  _reimburse(address(uint160(sources[i])), amounts[i]);
+
+        _burnBatch(msg.sender, sources, amounts);
+    }
+
+    function createDelegation(
+        uint256[] calldata targets,
+        uint256[] calldata amounts
+    ) external {
+        uint256 targetsLength = targets.length;
+        uint256 amountsLength = amounts.length;
+
+        require(targetsLength > 0, "empty array");
+        require(targetsLength == amountsLength, "array lengths not equal.");
+
+        for (uint i; i < targetsLength; i++)  createProxyDelegatorAndTransfer(address(uint160(targets[i])), amounts[i]);
+
+        _mintBatch(msg.sender, targets, amounts, "");
+    }
+```
