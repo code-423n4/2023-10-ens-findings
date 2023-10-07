@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Darshan",
+  "risk": "2",
+  "title": " contract uses the assert function cause a denial of service.",
+  "issueId": 41,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/41"
+}
