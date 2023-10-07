@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "lukejohn",
+  "risk": "3",
+  "title": "Tokens won't be transferrable from one delegator proxy to another if  delegateMulti() is called with targets having non-zero in the high 80 bits. ",
+  "issueId": 79,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/79"
+}
