@@ -8,8 +8,7 @@ Approach taken in evaluating the codebase
 [https://github.com/chaduke3730/diagrams/blob/main/multidelegate.png](https://github.com/chaduke3730/diagrams/blob/main/multidelegate.png)
 
     Architecture recommendations
-1) A very good architecture already. 
-2) Maybe add a whitelist for the delegatees. 
+1) Maybe add a whitelist for the delegatees. 
 
     Codebase quality analysis
 1) Some of the code can be improved by adding mapping(address => address) proxyAddresses so that it is easier to return the proxy address of a given delegate.
@@ -18,13 +17,15 @@ Approach taken in evaluating the codebase
     Centralization risks
 1)  No centralization risk
 
-
-
     Mechanism review
-1)  Some edges cases can be detected such as zero address check and zero amount check
+1) Split delegateMulti() into three functions to improve UX: transferDelegation(); reimburse(); and  createDelegation(), which correspond to three cases: transfer from an array of delegator proxies to another array of delegator proxies; reimburse the user from an array of delegator proxies; and create a new set of delegator proxies. 
+
+2)  Some edges cases can be detected such as zero address check and zero amount check
 
     Systemic risks
 1) Not aware of any system risk
+
+
 
 
 
