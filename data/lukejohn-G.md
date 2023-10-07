@@ -153,14 +153,13 @@ G3. Checking the proxy address of a given address is really expensive. It is bet
 
    function deployProxyDelegatorIfNeeded(
         address delegate
-    ) public returns (address proxyAddress) {
-         proxyAddress = proxyAddresses[delegate];
+    ) public returns (address proxy) {
+         proxy = proxyAddresses[delegate];
 
          if(proxy == address(0))  
             proxy = address(new ERC20ProxyDelegator{salt: 0}(token, delegate));
             emit ProxyDeployed(delegate, proxyAddress);
         }
-        return proxyAddress;
     }
 
  function transferBetweenDelegators(
@@ -291,6 +290,23 @@ G5. For for function _delegateMulti(), the comparisons of transferIndex < Math.m
 
         if (targetsLength > 0) {
             _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
+        }
+    }
+```
+
+G6. Each call of retrieveProxyContractAddress(_token, _delegate) can be replaced by a call of deployProxyDelegatorIfNeeded() that is implemented as follows. Therefore, the function retrieveProxyContractAddress(_token, _delegate) can be deleted!
+
+```diff
++  mapping(address => address) proxyAddresses;
+
+   function deployProxyDelegatorIfNeeded(
+        address delegate
+    ) public returns (address proxy) {
+         proxy = proxyAddresses[delegate];
+
+         if(proxy == address(0))  
+            proxy = address(new ERC20ProxyDelegator{salt: 0}(token, delegate));
+            emit ProxyDeployed(delegate, proxyAddress);
         }
     }
 ```
