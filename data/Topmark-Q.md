@@ -84,3 +84,25 @@ At createProxyDelegatorAndTransfer(...) function
         token.transferFrom(msg.sender, proxyAddress, amount);
     }
 ```
+### Report 4:
+#### Use of Already known Salt Before Deployment is Risky
+The contract uses zero salt for its contract deployment which opens risk of Phishing or Impersonation Attacks & Griefing Attacks since the address is predictable before deployment. ENS should consider working with unpredictable salt except a predictable address is absolutely necessary.
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L168
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L210
+```solidity
+        // if the proxy contract has not been deployed, deploy it
+        if (bytecodeSize == 0) {
+ >>>         new ERC20ProxyDelegator{salt: 0}(token, delegate);
+            emit ProxyDeployed(delegate, proxyAddress);
+        }
+```
+```solidity
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                bytes1(0xff),
+                address(this),
+>>>             uint256(0), // salt
+                keccak256(bytecode)
+            )
+        );
+```
