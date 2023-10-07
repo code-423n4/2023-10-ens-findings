@@ -3,7 +3,9 @@ Any comments for the judge to contextualize your findings
 
 Approach taken in evaluating the codebase
 1) I wrote a test to test all cases, with a focus on delegateMulti().
-2) Draw a diagram to show how delegates and delegatees are related. 
+2) Draw a diagram to show how delegates and delegatees are related; for example, users u1 and u2 can multi-delegate to addresses A, B, C, respectively. 
+
+[https://github.com/chaduke3730/diagrams/blob/main/multidelegate.png](https://github.com/chaduke3730/diagrams/blob/main/multidelegate.png)
 
     Architecture recommendations
 1) A very good architecture already. 
@@ -17,11 +19,14 @@ Approach taken in evaluating the codebase
 1)  No centralization risk
 
 
+
     Mechanism review
 1)  Some edges cases can be detected such as zero address check and zero amount check
 
     Systemic risks
 1) Not aware of any system risk
+
+
 
 ### Time spent:
 5 hours
