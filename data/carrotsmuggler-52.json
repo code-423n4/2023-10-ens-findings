@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "carrotsmuggler",
+  "risk": "2",
+  "title": "Delegation to same address can be made to generate ERC1155 tokens with different ids.",
+  "issueId": 52,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/52"
+}
