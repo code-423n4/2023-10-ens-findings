@@ -1,4 +1,4 @@
-### Cache result of function call in stack variable outside of `for`-loop
+### Cache result of function call in stack variable outside of `for`-loop to save gas
 ```solidity
 if (transferIndex < Math.min(sourcesLength, targetsLength)) {
 ```
