@@ -11,6 +11,10 @@
 ```
 # [G-02] Cache values that are used multiple times
 [ERC20MultiDelegate.sol#L79-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L79-L108)
+
+`Math.max(sourcesLength, targetsLength)` is used twice
+`Math.min(sourcesLength, targetsLength)` is used once per loop iteration
+
 ```diff
 +       uint256 maxSourcesOrTargetsLength = Math.max(sourcesLength, targetsLength);
         require(
@@ -19,7 +23,6 @@
             "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
         );
 
-+       uint256 maxSourcesOrTargetsLength = Math.max(sourcesLength, targetsLength);
 +       uint256 minSourcesOrTargetsLength = Math.min(sourcesLength, targetsLength);
         // Iterate until all source and target delegates have been processed.
         for (
