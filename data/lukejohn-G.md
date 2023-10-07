@@ -310,5 +310,22 @@ G6. Each call of retrieveProxyContractAddress(_token, _delegate) can be replaced
         }
     }
 ```
+G7. There is no need to check the balance in function _processDelegation(). Since delegateMulti() will burn ERC1155 tokens, which is equivalent to check balances. Therefore, the check of balance in _processDelegation() can be deleted to save gas:
 
+```diff
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+-        uint256 balance = getBalanceForDelegate(source);
+
+-        assert(amount <= balance);
+
+        deployProxyDelegatorIfNeeded(target);
+        transferBetweenDelegators(source, target, amount);
+
+        emit DelegationProcessed(source, target, amount);
+    }
+```
 
