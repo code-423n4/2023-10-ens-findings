@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "SHA_256",
+  "risk": "2",
+  "title": "The function #transferBetweenDelegators in #ERC20MultiDelegate.sol do not emit any event.",
+  "issueId": 70,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/70"
+}
