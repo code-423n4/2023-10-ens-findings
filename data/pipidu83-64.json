@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "pipidu83",
+  "risk": "3",
+  "title": "_delegateMulti is vulnerable to Denial Of Service due to improper input validation on length",
+  "issueId": 64,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/64"
+}
