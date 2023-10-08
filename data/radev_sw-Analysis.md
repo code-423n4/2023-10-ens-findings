@@ -282,7 +282,36 @@ This function is used to determine the address of a proxy contract that represen
 
 - In summary, the sentence describes a smart contract that provides a function for users to delegate authority or responsibility to multiple other users at once.
 
+### 3.3 Why EIP1155 standard is used?
+
+- EIP1155 is used to keep track of all delegates for a token holder. A token holder will call `delegateMultifunction` to delegate his token, this will trigger a proxy deployment (if needed) for each delegate the token holder has decided to delegate to. The token holder will send his token to the proxy (or from a proxy to another, but this is still tokens actually owned by the token holder), and ERC20MultiDelegate inherits from ERC1155 to keep track of delegated tokens actually owned by the token holder, in all different proxy delegate contracts. Here, ID of erc1155 `_balances` mapping is the delegate address (and not a token). `_burnBatch` and `_mintBatch` are here used to update ERC1155 mappings and check if the caller of (delegateMulti) is legitimate.
+
+---
+
+---
+
 # 4. My Findings Summary
+
+### 4.1 QA Report:
+
+| ID              | Title                                                                                                                                      | Instances | Severity                  |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------- |
+| [L-01](#L-01)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
+| [L-02](#L-02)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
+| [L-03](#L-03)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
+| [L-04](#L-04)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
+| [L-05](#L-05)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
+| [NC-01](#NC-01) | Potential Reversion Issue with Certain ERC20 Token Approvals                                                                               | 1         | _Non Critical_            |
+| [NC-02](#NC-02) | Unchecked Return Values for `approve()`                                                                                                    | 1         | _Non Critical_            |
+| [NC-03](#NC-03) | Need for Comments on State Variables                                                                                                       | 1         | _Non Critical_            |
+| [NC-04](#NC-04) | Absence of Event Emissions                                                                                                                 | 3         | _Non Critical_            |
+| [NC-05](#NC-05) | Missing address zero checks for `sources[]` and `targets[]` arrays in `delegateMulti()` function                                           | 1         | _Non Critical_            |
+| [S-01](#S-01)   | Optimization for `deployProxyDelegatorIfNeeded()` function logic                                                                           | -         | _Suggestion/Optimization_ |
+| [S-02](#S-02)   | Optimization for transferring flow                                                                                                         | -         | _Suggestion/Optimization_ |
+
+---
+
+---
 
 # 5 Potential Attack Vectors Discussed during the Audit
 
@@ -290,6 +319,10 @@ This function is used to determine the address of a proxy contract that represen
 2. Ensure that the delegateMulti function handles array inputs correctly.
 3. Validate the logic for transferring between proxy delegators.
 4. Tokens should only be transferred between approved delegators.
+
+---
+
+---
 
 # 6. Time Spent
 
@@ -305,8 +338,6 @@ Day 1:
 Day2:
 
 - Took a deep dive into the ERC1155 and ERC20Votes standards.
-
-
 
 ### Time spent:
 30 hours
