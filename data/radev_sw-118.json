@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "radev_sw",
+  "risk": "3",
+  "title": "Each user can mine an arbitrary unlimited amount of tokens for themselves without any restrictions, resulting in unfair token delegation",
+  "issueId": 118,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/118"
+}
