@@ -1,10 +1,10 @@
-## [N-01] Unnecessary import of Library
+## [N-01] Unnecessary import of library
 
 The Openzeppelin Address library is never used.
 
 ### Recommended Mitigation
 
-Consider removing the Address libray import.
+Consider removing the Address library import.
 
 ```diff
 diff --git a/contracts/ERC20MultiDelegateOrig.sol b/contracts/ERC20MultiDelegate.sol
