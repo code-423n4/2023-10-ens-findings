@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "mahdirostami",
+  "risk": "3",
+  "title": "Inability to Delegate Sequentially to Multiple Addresses in a Single Transaction",
+  "issueId": 102,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/102"
+}
