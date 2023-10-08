@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Dravee",
+  "risk": "3",
+  "title": "Some tokens enable the direct draining of all approved `ERC20Votes` tokens",
+  "issueId": 91,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/91"
+}
