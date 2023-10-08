@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Fitro",
+  "risk": "2",
+  "title": "The creation of ERC20ProxyDelegator can be frontrunned",
+  "issueId": 93,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/93"
+}
