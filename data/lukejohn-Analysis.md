@@ -9,6 +9,7 @@ Approach taken in evaluating the codebase
 
     Architecture recommendations
 1) Maybe add a whitelist for the delegatees. 
+2) ERC20MultiDelegate only works for ONE token right now, it would be helpful to allow it to manage multiple whitelisted tokens so that the same contract can be used to delegate for multiple voting tokens. 
 
     Codebase quality analysis
 1) Some of the code can be improved by adding mapping(address => address) proxyAddresses so that it is easier to return the proxy address of a given delegate.
@@ -24,6 +25,8 @@ Approach taken in evaluating the codebase
 
     Systemic risks
 1) Not aware of any system risk
+
+
 
 
 
