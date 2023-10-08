@@ -28,18 +28,156 @@
 
 | ID              | Title                                                                                                                                      | Instances | Severity                  |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------- |
+| [L-01](#L-01)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
+| [L-02](#L-02)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
+| [L-03](#L-03)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
+| [L-04](#L-04)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
+| [L-05](#L-05)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
 | [NC-01](#NC-01) | Potential Reversion Issue with Certain ERC20 Token Approvals                                                                               | 1         | _Non Critical_            |
 | [NC-02](#NC-02) | Unchecked Return Values for `approve()`                                                                                                    | 1         | _Non Critical_            |
 | [NC-03](#NC-03) | Need for Comments on State Variables                                                                                                       | 1         | _Non Critical_            |
 | [NC-04](#NC-04) | Absence of Event Emissions                                                                                                                 | 3         | _Non Critical_            |
 | [NC-05](#NC-05) | Missing address zero checks for `sources[]` and `targets[]` arrays in `delegateMulti()` function                                           | 1         | _Non Critical_            |
-| [NC-06](#NC-06) | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Non Critical_            |
 | [S-01](#S-01)   | Optimization for `deployProxyDelegatorIfNeeded()` function logic                                                                           | -         | _Suggestion/Optimization_ |
 | [S-02](#S-02)   | Optimization for transferring flow                                                                                                         | -         | _Suggestion/Optimization_ |
 
 ---
 
-### <a name="NC-01"></a>[NC-01] Potential Reversion Issue with Certain ERC20 Token Approvals
+## <a name="L-01"></a>[L-01] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
+
+#### Overview:
+
+The function `_delegateMulti()` processes the delegation transfer process for multiple source and target delegates. Currently, there are no explicit bounds set for the lengths of the `sources` and `targets` arrays. This lack of upper limit poses potential risks in terms of gas costs and unwanted system behaviors.
+
+#### Impact:
+
+1. **Denial of Service DoS**
+
+2. **Gas Costs:** If an excessively large number of delegates is supplied to the function, the unbounded loop can consume a lot of gas. In extreme cases, this might cause the transaction to fail due to reaching the block gas limit.
+
+3. **Denial-of-Service (DoS) Attack Vector:** Malicious actors can attempt to exhaust the contract's functions by calling `_delegateMulti()` with a large number of delegates, potentially causing regular users' transactions to fail or become more expensive.
+
+4. **Operational Delays:** For a contract that is intended to process other transactions in a timely manner, long-loop iterations can cause operational delays.
+
+#### Recommendation:
+
+To mitigate these risks, consider adding an explicit maximum bound for the lengths of the `sources[]` and `targets[]` arrays. This will ensure that the loop does not iterate an excessive number of times:
+
+```solidity
+uint256 constant MAX_DELEGATES = 100; // Example value; adjust as needed
+
+require(sourcesLength <= MAX_DELEGATES, "Delegate: Too many source delegates provided");
+require(targetsLength <= MAX_DELEGATES, "Delegate: Too many target delegates provided");
+```
+
+By introducing these checks, you can ensure that the `_delegateMulti()` function remains efficient and less susceptible to potential abuse.
+
+---
+
+## <a name="L-02"></a>[L-02] Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address
+
+#### **Impact**
+
+This vulnerability potentially impacts the upgradability of the `ERC20ProxyDelegator` contract. In scenarios where there's a need to redeploy an `ERC20ProxyDelegator` for a specific `token` and `delegate` combination due to, for instance, an upgrade or bug fix, the system wouldn't be able to deploy the new contract at the same address. As a result, the predictability and management of the system can be compromised. Furthermore, an attacker aware of this static salt can precompute and self-destruct the proxy contract's address, causing a Denial-of-Service (DoS) condition where the contract can't be redeployed at its expected address.
+
+#### **Explanation**
+
+The `deployProxyDelegatorIfNeeded` function is responsible for deploying a new `ERC20ProxyDelegator` contract, if not already deployed, for a specific `token` and `delegate` combination. The deployment uses the `CREATE2` opcode with a static salt (`uint256(0)`). As a result, the address for a new proxy contract is predictable and always the same for the given `token` and `delegate` pair.
+
+The `ERC20ProxyDelegator` contract is a proxy delegator contract designed to vote on behalf of the original delegator. Upon deployment, it automatically delegates the votes and approves the utility contract to spend its tokens.
+
+#### **Proof of Concept**
+
+1. Deploy an `ERC20ProxyDelegator` for a specific `token` and `delegate`.
+2. Note the contract's address (it will be predictable due to the static salt).
+3. Destroy or self-destruct the deployed `ERC20ProxyDelegator`.
+4. Try to deploy the `ERC20ProxyDelegator` again for the same `token` and `delegate`. Since the contract's address is predictable and static, the system will try to deploy at the same address, which is already taken, leading to a failure in deployment.
+
+#### **Recommendation Steps**
+
+1. **Dynamic Salting**: Avoid using a static salt for the `CREATE2` opcode. Instead, employ a mechanism to dynamically generate the salt, for example, by using a combination of the current block number, timestamp, or a nonce which gets incremented with every deployment.
+2. **Management Mechanism**: Implement a mechanism or function that allows the system admin or governance mechanism to update or modify the salt, ensuring that in scenarios where redeployment is needed, it can be managed efficiently.
+
+---
+
+## <a name="L-03"></a>[L-03] Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`
+
+#### **Impact**
+
+If there's a malfunction during the initialization of the `ERC20ProxyDelegator`, or if an out-of-gas error occurs during its deployment, it could lead to the `ERC20ProxyDelegator` contract being deployed without proper initialization. This can render the deployed contract useless, potentially halting any subsequent operations or interactions relying on this contract. Such a scenario can result in a Denial-of-Service (DoS) state for the affected operations.
+
+#### **Explanation**
+
+The function `deployProxyDelegatorIfNeeded` is tasked with deploying a new `ERC20ProxyDelegator` contract when required. However, once the contract is deployed using the `new` keyword, the function doesn't verify if the newly deployed contract has been correctly initialized.
+
+The `ERC20ProxyDelegator` contract, upon deployment, is expected to approve a specified amount of tokens for spending and delegate votes on behalf of the original delegator. If this initialization fails, the proxy delegator might not function as expected, causing subsequent operations to be disrupted.
+
+#### **Proof of Concept**
+
+1. Introduce an intentional failure in the `ERC20ProxyDelegator` constructor, such as an invalid operation or an out-of-gas consuming loop.
+2. Try deploying the `ERC20ProxyDelegator` using the `deployProxyDelegatorIfNeeded` function.
+3. Observe that even though the `ERC20ProxyDelegator` contract gets deployed, it might not be correctly initialized, making it non-functional or leaving it in an undesirable state.
+
+#### **Recommendation Steps**
+
+1. **Post-deployment Verification**: After deploying the `ERC20ProxyDelegator`, verify its state. For instance, check if the expected approvals and delegations have been made. If not, the deployment should be considered a failure, and corrective measures should be taken.
+
+---
+
+## <a name="L-04"></a>[L-05] Front Running of `ERC20ProxyDelegator` Deployment
+
+#### Impact
+
+An attacker can front-run the deployment of the `ERC20ProxyDelegator`, leading to unexpected behavior for the original transaction sender. The contract, instead of being deployed by the legitimate transaction, gets deployed by the attacker's transaction. This could lead to scenarios where the expected contract logic doesn't apply as intended, potentially causing monetary or functionality disruptions for users.
+
+#### Explanation
+
+Front-running is a scenario on public blockchains where a malicious actor can see pending transactions and then decide to place their own transaction with a higher gas price, ensuring it gets mined before the original transaction. In the context of the `ERC20ProxyDelegator` deployment:
+
+- A malicious actor observes a transaction attempting to deploy an `ERC20ProxyDelegator` contract.
+- Before the original transaction is mined, the attacker sends a similar transaction but with a higher gas price, aiming to have their transaction processed first.
+- If successful, the `ERC20ProxyDelegator` is deployed by the attacker's transaction, not the original transaction. This can cause confusion and unexpected behavior, especially if the attacker's deployment has any deviations or manipulations.
+
+#### Proof of Concept
+
+1. Observe the mempool for pending transactions aiming to deploy `ERC20ProxyDelegator`.
+2. When such a transaction is spotted, quickly send a similar transaction with a higher gas price.
+3. If the network processes the attacker's transaction first, the `ERC20ProxyDelegator` contract will be deployed by the attacker's transaction, causing the original transaction to fail or behave unexpectedly.
+
+#### Recommendation Steps
+
+1. **Dynamic Salting**: Use dynamic salt values for deploying the proxy. By ensuring a unique salt for each deployment, the exact contract address becomes unpredictable, making front-running attempts harder.
+2. **Commit-Reveal Scheme**: Implement a two-step deployment process. In the first step, users send a commitment (a hash of some random value). In the second step, they reveal the random value. Only after a successful reveal, the deployment is allowed. This ensures that front-runners can't determine the exact deployment details from the initial transaction.
+
+---
+
+## <a name="L-05"></a>[L-05] Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`
+
+#### Impact
+
+Excessive and unnecessary contract deployments could result in draining funds from the deploying address due to the high gas costs associated with contract creation. An attacker could intentionally cause frequent deployments, leading to increased transaction costs and potentially depleting the funds of the contract or the user that's bearing the deployment costs.
+
+#### Explanation
+
+Contract deployment on the Ethereum network consumes a considerable amount of gas, especially when the contract contains complex logic or storage. In the provided code, the `deployProxyDelegatorIfNeeded()` function deploys an instance of the `ERC20ProxyDelegator` contract. If there are pathways in the system that allow this function to be triggered without necessary conditions, it exposes a vulnerability.
+
+A malicious actor might discover ways to frequently call these pathways, forcing the system to deploy new contract instances repeatedly. Each deployment incurs gas costs, and over time, this can be a vector for a Denial of Service (DoS) attack, as the deploying entity might run out of funds to cover these costs.
+
+#### Proof of Concept
+
+1. Identify pathways in the system where `deployProxyDelegatorIfNeeded()` can be triggered, preferably without stringent conditions or checks.
+2. Write a script or manually send transactions that exploit these pathways, causing the system to deploy `ERC20ProxyDelegator` instances repeatedly.
+3. Monitor the deploying address's balance. With each deployment, there should be a noticeable decrease in funds due to the gas fees.
+
+#### Recommendation Steps
+
+1. **Throttling**: Implement a mechanism to limit the frequency of deployments. For example, allow only one deployment per user within a set time window.
+
+---
+
+---
+
+## <a name="NC-01"></a>[NC-01] Potential Reversion Issue with Certain ERC20 Token Approvals
 
 Several well-known ERC20 tokens, such as `UNI` and `COMP`, may revert when the `approve` functions are called with values exceeding `uint96`. This behavior deviates from the standard ERC20 implementation and might lead to unexpected results.
 
@@ -68,7 +206,7 @@ contract ERC20ProxyDelegator {
 
 ---
 
-### <a name="NC-02"></a>[NC-02] Unchecked Return Values for `approve()`
+## <a name="NC-02"></a>[NC-02] Unchecked Return Values for `approve()`
 
 It is essential to note that not all `IERC20` implementations utilize the `revert()` mechanism to indicate failures in the `approve()` function. Some instead return a boolean to signal any issues. By not verifying this returned value, certain operations might proceed as if they were successful, despite no actual approvals taking place.
 
@@ -84,7 +222,7 @@ It is essential to note that not all `IERC20` implementations utilize the `rever
 
 ---
 
-### <a name="NC-03"></a>[NC-03] Need for Comments on State Variables
+## <a name="NC-03"></a>[NC-03] Need for Comments on State Variables
 
 To enhance readability and assist future reviewers, it is advisable to provide detailed comments on crucial state variables. Such documentation clarifies their intended roles and usage.
 
@@ -100,7 +238,7 @@ To enhance readability and assist future reviewers, it is advisable to provide d
 
 ---
 
-### <a name="NC-04"></a>[NC-04] Absence of Event Emissions
+## <a name="NC-04"></a>[NC-04] Absence of Event Emissions
 
 Event emissions play a vital role in tracking and auditing on-chain activities. The following functions currently lack event emissions, which may hinder transparency and monitoring:
 
@@ -158,7 +296,7 @@ emit ProxyCreatedAndFunded(target, proxyAddress, amount);
 
 ---
 
-### <a name="NC-05"></a>[NC-05] Missing address zero checks for `sources[]` and `targets[]` arrays in `delegateMulti()` function
+## <a name="NC-05"></a>[NC-05] Missing address zero checks for `sources[]` and `targets[]` arrays in `delegateMulti()` function
 
 #### Problem:
 
@@ -209,38 +347,9 @@ By integrating this check, the contract can safeguard against accidental or mali
 
 ---
 
-### <a name="NC-06"></a>[NC-06] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
-
-#### Overview:
-
-The function `_delegateMulti()` processes the delegation transfer process for multiple source and target delegates. Currently, there are no explicit bounds set for the lengths of the `sources` and `targets` arrays. This lack of upper limit poses potential risks in terms of gas costs and unwanted system behaviors.
-
-#### Impact:
-
-1. **Gas Costs:** If an excessively large number of delegates is supplied to the function, the unbounded loop can consume a lot of gas. In extreme cases, this might cause the transaction to fail due to reaching the block gas limit.
-
-2. **Denial-of-Service (DoS) Attack Vector:** Malicious actors can attempt to exhaust the contract's functions by calling `_delegateMulti()` with a large number of delegates, potentially causing regular users' transactions to fail or become more expensive.
-
-3. **Operational Delays:** For a contract that is intended to process other transactions in a timely manner, long-loop iterations can cause operational delays.
-
-#### Recommendation:
-
-To mitigate these risks, consider adding an explicit maximum bound for the lengths of the `sources[]` and `targets[]` arrays. This will ensure that the loop does not iterate an excessive number of times:
-
-```solidity
-uint256 constant MAX_DELEGATES = 100; // Example value; adjust as needed
-
-require(sourcesLength <= MAX_DELEGATES, "Delegate: Too many source delegates provided");
-require(targetsLength <= MAX_DELEGATES, "Delegate: Too many target delegates provided");
-```
-
-By introducing these checks, you can ensure that the `_delegateMulti()` function remains efficient and less susceptible to potential abuse.
-
 ---
 
----
-
-### <a name="S-01"></a>[S-01] Optimization for `deployProxyDelegatorIfNeeded()` function logic
+## <a name="S-01"></a>[S-01] Optimization for `deployProxyDelegatorIfNeeded()` function logic
 
 #### Optimization:
 
@@ -294,7 +403,7 @@ If the goal is only ever to retrieve the address (and not necessarily deploy eve
     }
 ```
 
-### <a name="S-02"></a>[S-02] Optimization for transferring flow
+## <a name="S-02"></a>[S-02] Optimization for transferring flow
 
 #### Overview:
 
