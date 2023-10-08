@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "ABA",
+  "risk": "2",
+  "title": "Unspecified input **address in uint256** encoding in `delegateMulti` may break integrating projects",
+  "issueId": 117,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/117"
+}
