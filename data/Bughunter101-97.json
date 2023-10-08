@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Bughunter101",
+  "risk": "3",
+  "title": "Missing `_transferOwnership()`, it will cause `setUri()` being useless",
+  "issueId": 97,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/97"
+}
