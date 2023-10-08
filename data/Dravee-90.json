@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Dravee",
+  "risk": "2",
+  "title": "Some tokens break accounting by enabling the free minting of `ERC20MultiDelegate` tokens",
+  "issueId": 90,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/90"
+}
