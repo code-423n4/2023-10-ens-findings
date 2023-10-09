@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Inspecktor",
+  "risk": "2",
+  "title": "Some core functions of the ERC20MultiDelegate.sol contract do not call event",
+  "issueId": 136,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/136"
+}
