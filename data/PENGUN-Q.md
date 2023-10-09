@@ -1,3 +1,11 @@
+## The values passed as id for _burnBatch and _mintBatch are uint256, not address.
+`sources` and `targets` are uint256 arrays, and in actual use, each element is converted to an address.
+In the last part of `delegateMulti`, `_burnBatch` and `_mintBatch` use the `sources` and `targets` arrays as they are, so the values with dirty bytes are applied.
+This means that when you delegate to address `0x1234...1234`, the minted id could be `0x7777...1234...1234`.
+This can cause problems with front-end integration and confuse users when ERC1155 is tradable.
+
+To solve this, take the `delegateMulti` argument as an addresse array.
+
 ## No check for null address target when `_processDelegation`
 there is no check for null address so vote will delegate to null address when user mistake.
 
