@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "nisedo",
+  "risk": "2",
+  "title": "Inconsistent Error Handling for ERC20 `transferFrom()` Method in `ERC20MultiDelegate` Contract",
+  "issueId": 183,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/183"
+}
