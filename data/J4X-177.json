@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "J4X",
+  "risk": "3",
+  "title": "Transfer of less than Amount leads to malicious users being able to drain proxies",
+  "issueId": 177,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/177"
+}
