@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "J4X",
+  "risk": "3",
+  "title": "Proxies can be drained due to missing return value validation.",
+  "issueId": 140,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/140"
+}
