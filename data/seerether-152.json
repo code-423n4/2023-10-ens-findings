@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "seerether",
+  "risk": "3",
+  "title": "delegateMulti() running out of gas mid-execution could lead to stranded tokens due to reverted NFT burn and mint operations.",
+  "issueId": 152,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/152"
+}
