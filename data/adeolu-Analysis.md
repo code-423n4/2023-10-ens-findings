@@ -20,7 +20,7 @@ During transfers, source delegate must have its `ERC20ProxyDelegator` erc1155 to
 ## Architecture recommendations
 Here the only optimization i suggest is in the `_processDelegation()` fcn. `transferBetweenDelegators()` can be modified so we can pass the `proxyAddress` returned from the `deployProxyDelegatorIfNeeded`() into `transferBetweenDelegators()` and use that `proxyAddress` for `proxyAddressTo`  in the  `transferBetweenDelegators()` instead of calling `retrieveProxyContractAddress()` twice for `proxyAddressFrom` and `proxyAddressTo`.  This will reduce the number of `retrieveProxyContractAddress()` calls in the `_processDelegation()` logic flow to 2 from 3 (because `retrieveProxyContractAddress()` is also called in `deployProxyDelegatorIfNeeded()` fcn). This will the reduce computation. 
 
-Here's an exmaple snippet of what i am proposing. 
+Here's an example snippet of what i am proposing. 
 ```
     function retrieveProxyContractAddress(
         ERC20Votes _token,
@@ -94,6 +94,8 @@ Here's an exmaple snippet of what i am proposing.
         emit DelegationProcessed(source, target, amount);
     }
 ```
+
+
 
 ### Time spent:
 30 hours
