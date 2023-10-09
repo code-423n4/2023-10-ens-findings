@@ -1,8 +1,9 @@
 | *Issue* | *Description*                                                                                                                                              |
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [L-01]  | Possible re-entrancy in Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65) |
-| [L-02]  | The whole contract does not work with approvals                                                                                                            |
-| [N-01]  | If a user send any vote tokens to ERC20ProxyDelegator they will be lost forever                                                                            |
+| [L-02]  | The whole contract does not work with approvals  |
+| [L-03] | Quadratic voting is less secure with [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) |                                                                                                          
+| [N-01]  | If a user send any vote tokens to [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) they will be lost forever                                                                            |
 
 
 ### [L-01] Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65)
@@ -117,6 +118,13 @@ However due to the way `_processDelegation` makes the swap with the inside ERC20
 6. User2 still has his 200 (id: 333) tokens.
 
 I would suggest to implement a way for approvals to work with the current contract.
+
+### [L-03] Quadratic voting is less secure with ERC20ProxyDelegator
+The power of quadratic voting is that large volumes of vote tokens will be square rooted. However with the help of **ERC20ProxyDelegator** and it's ability to instantly delegate to 100+ addresses sibyl  attacks on quadratic voting systems become more possible and with time more common. 
+
+If attacker votes with 10k tokens with a single address => 100 votes. However he can simply split 10k  tokens between 100 addresses and vote with 100 tokens per address (10 votes) => 1000 votes. Applying 10x to his voting power. 
+
+Because this issues is about the whole structure of the system, I am not able to give a guarantied fix. Will leave it for the devs to decide.
 
 ### [N-01] If a user send any vote tokens to ERC20ProxyDelegator they will be lost forever
 If a user sends any VoteTokens to **ERC20ProxyDelegator** they will be counted as votes, since this contract delegates to someone, however they will be stuck there forever. 
