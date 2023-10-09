@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "nisedo",
+  "risk": "2",
+  "title": "Incompatibility with Fee-on-Transfer ERC20 Tokens Due to `_burnBatch` and `_mintBatch` Operations",
+  "issueId": 217,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/217"
+}
