@@ -43,7 +43,7 @@ This will help to rapidly respond to issues or breaches.
 **Mitigation**
 Use emit functions.
 
-## [L-02] Floating pragmas in the ERC20MultiDelegate contract
+## [L-02] Floating pragmas and outdated version in the ERC20MultiDelegate contract
 **Description**
 Floating pragmas can introduce security vulnerabilities.
 Because you can cross-compile with different versions.
@@ -51,3 +51,5 @@ Because you can cross-compile with different versions.
 ```txt
 /contracts/ERC20MultiDelegate.sol - ^0.8.2
 ```
+**Mitigation**
+Use `0.8.18`.
