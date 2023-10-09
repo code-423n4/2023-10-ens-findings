@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xHelium",
+  "risk": "3",
+  "title": "ERC20ProxyDelegator deployment with CREATE2 with constant salt can be frontrun by an attacker",
+  "issueId": 148,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/148"
+}
