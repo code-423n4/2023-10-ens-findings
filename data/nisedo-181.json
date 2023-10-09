@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "nisedo",
+  "risk": "2",
+  "title": "Input Validation Issue in `delegateMulti()` Function for Multiple Operations",
+  "issueId": 181,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/181"
+}
