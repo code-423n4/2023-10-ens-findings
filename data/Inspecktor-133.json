@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Inspecktor",
+  "risk": "3",
+  "title": "The determination that an address has a deployed ERC20ProxyDelegator is incorrect. This may result in loss of tokens",
+  "issueId": 133,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/133"
+}
