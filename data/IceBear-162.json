@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "IceBear",
+  "risk": "2",
+  "title": "deployProxyDelegatorIfNeeded() is vulnerable to potential front run  attacks",
+  "issueId": 162,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/162"
+}
