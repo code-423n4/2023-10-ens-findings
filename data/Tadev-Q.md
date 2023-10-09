@@ -16,7 +16,7 @@ if (amount == 0) {
 ```
 
 
-## [L‑02] A user would need to do 2 transactions to initiate a delegation with `ERC20MultiDelegate` contract
+## [L‑02] A user might need to do 2 transactions to initiate a delegation with `ERC20MultiDelegate` contract
 
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L160
 
