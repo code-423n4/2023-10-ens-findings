@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "ABA",
+  "risk": "2",
+  "title": "Delegation fails on any intermediary delegation because mints/burns are batched and not sequential",
+  "issueId": 147,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/147"
+}
