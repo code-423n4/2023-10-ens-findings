@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "tnquanghuy0512",
+  "risk": "2",
+  "title": "Naive users who send token directly to ERC20ProxyDelegator contract have no way withdraw it back",
+  "issueId": 150,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/150"
+}
