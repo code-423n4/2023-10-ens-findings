@@ -62,4 +62,4 @@ ENS Multi Delegate
 Any of the following would be a fix:
 - Delete `package-lock.json` file
 - Recreate and synchronize `package-lock.json` file in accordance with `yarn.lock` file.
-- Change the version of `@openzeppelin/contracts` to `^4.6.0` in `package.json` file.
+- Change the version of `@openzeppelin/contracts` to `^4.7.2` in `package.json` file.
