@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Inspecktor",
+  "risk": "3",
+  "title": "The contract does not provide a temporary lock-in mechanism for the transfer of voting rights. This will result in multiple voting from one token by transferring from one account to another",
+  "issueId": 128,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/128"
+}
