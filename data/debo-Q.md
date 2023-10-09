@@ -25,3 +25,20 @@ contracts/ERC20MultiDelegate.sol#L214-L214
 ```
 **Mitigation**
 Use OpenZeppelin safeCast.
+
+## [L-02] USE OWNABLE2STEP in the ERC20MultiDelegate contract
+**Description**
+The Ownable2Step is more safe than Ownable.
+Because unsafe tranfers of ownership are not possible.
+The new owner will have to acknowledge ownership now which adds an extra layer of security.
+**Vulnerable code snippet**
+```sol
+// Line 25
+contract ERC20MultiDelegate is ERC1155, Ownable {
+```
+**Reference**
+```txt
+contracts/ERC20MultiDelegate.sol#L25-L216
+```
+**Mitigation**
+Use Ownable2Step or Ownable2StepUpgradeable based on business logic.
