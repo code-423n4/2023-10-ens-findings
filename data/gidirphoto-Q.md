@@ -1,0 +1,1 @@
+The ERC20MultiDelegate contract uses inline assembly to check if a ERC20ProxyDelegator contract has already been deployed. Inline assembly should be avoided if possible, as it is harder to read and more prone to errors than Solidity code. It would be better to use a Solidity function to check if a ERC20ProxyDelegator contract has already been deployed.
