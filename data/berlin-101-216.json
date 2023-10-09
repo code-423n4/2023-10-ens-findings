@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "berlin-101",
+  "risk": "2",
+  "title": "Delegated votes cannot be moved if ERC20 token wrapped by ERC20Votes is implementing a blacklist, can be paused or is upgradeable",
+  "issueId": 216,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/216"
+}
