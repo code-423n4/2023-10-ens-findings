@@ -34,3 +34,22 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L80
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L87
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L98
+
+# Functions guaranteed to revert when called by normal users can be marked payable
+
+If a function modifier such as onlyOwner is used, the function will revert if a normal user tries to pay the function. Marking thefunction as payable will lower the gas cost for legitimate callers because the compiler will not include checks for whether a paymentwas provided.
+
+```
+    function setUri(string memory uri) external onlyOwner {
+        _setURI(uri);
+    }
+```
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L151
+
+Recommended code：
+```
+    function setUri(string memory uri) external onlyOwner payable{
+        _setURI(uri);
+    }
+```
