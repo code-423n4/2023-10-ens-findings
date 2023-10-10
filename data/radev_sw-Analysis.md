@@ -2,14 +2,14 @@
 
 ---
 
-| #   | Topic                                                 |
-| --- | ----------------------------------------------------- |
-| 1   | ENS Contest Documentation Analysis                    |
-| 2   | Codebase Explanation, Examples Executions & Scenarios |
-| 3   | Questions & Notes during the Audit                    |
-| 4   | My Findings Summary                                   |
-| 5   | Potential Attack Vectors Discussed during the Audit   |
-| 6   | Time Spent                                            |
+| #   | Topic                                                               |
+| --- | ------------------------------------------------------------------- |
+| 1   | ENS Contest Documentation Analysis                                  |
+| 2   | Codebase Explanation, Examples Executions & Scenarios               |
+| 3   | Questions & Notes during the Audit                                  |
+| 4   | Potential Attack Vectors Discussed during the Audit                 |
+| 5   | My opinion for the contract (Code Complexity, Systemic Risks, etc,) |
+| 6   | Time Spent                                                          |
 
 ---
 
@@ -17,7 +17,7 @@
 
 **Ethereum Name Service (ENS) Summary**
 
-- **ENS** is a decentralised naming service built on top of Ethereum, and designed to resolve a wide array of resources including blockchain addresses, decentralised content, and user profile information.
+- **ENS** is a decentralized naming service built on top of Ethereum, and designed to resolve a wide array of resources including blockchain addresses, decentralised content, and user profile information.
 
 - **Purpose**: ENS provides a decentralized naming system on the Ethereum blockchain. It associates human-readable names (e.g., 'alice.eth') with machine identifiers, such as Ethereum addresses, other crypto addresses, content hashes, and more. It can be likened to the Internet's DNS but is uniquely structured to work within Ethereum's capabilities.
 
@@ -290,35 +290,33 @@ This function is used to determine the address of a proxy contract that represen
 
 ---
 
-# 4. My Findings Summary
-
-### 4.1 QA Report:
-
-| ID              | Title                                                                                                                                      | Instances | Severity                  |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------- |
-| [L-01](#L-01)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
-| [L-02](#L-02)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
-| [L-03](#L-03)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
-| [L-04](#L-04)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
-| [L-05](#L-05)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
-| [NC-01](#NC-01) | Potential Reversion Issue with Certain ERC20 Token Approvals                                                                               | 1         | _Non Critical_            |
-| [NC-02](#NC-02) | Unchecked Return Values for `approve()`                                                                                                    | 1         | _Non Critical_            |
-| [NC-03](#NC-03) | Need for Comments on State Variables                                                                                                       | 1         | _Non Critical_            |
-| [NC-04](#NC-04) | Absence of Event Emissions                                                                                                                 | 3         | _Non Critical_            |
-| [NC-05](#NC-05) | Missing address zero checks for `sources[]` and `targets[]` arrays in `delegateMulti()` function                                           | 1         | _Non Critical_            |
-| [S-01](#S-01)   | Optimization for `deployProxyDelegatorIfNeeded()` function logic                                                                           | -         | _Suggestion/Optimization_ |
-| [S-02](#S-02)   | Optimization for transferring flow                                                                                                         | -         | _Suggestion/Optimization_ |
-
----
-
----
-
-# 5 Potential Attack Vectors Discussed during the Audit
+# 4. Potential Attack Vectors Discussed during the Audit
 
 1. Check for proper permissions and roles.
 2. Ensure that the delegateMulti function handles array inputs correctly.
 3. Validate the logic for transferring between proxy delegators.
 4. Tokens should only be transferred between approved delegators.
+5. Dos Attack during delegation of tokens.
+6. Wrong delegation of tokens during `delegateMulti()` execution.
+7. Users to get more ERC20MultiDelegate minted tokens that are actually delegated during `delegateMulti()` execution.
+8. Users to get smaller amount of ERC20MultiDelegate minted tokens that are actually delegated during `delegateMulti()` execution.
+9. System Design Pitfalls.
+10. Loss of ERC20Votes tokens for users in particular situations during `delegateMulti()` execution.
+11. Loss of minted ERC20MultiDelegate tokens for users in particular situations during `delegateMulti()` execution.
+
+---
+
+---
+
+# 5. My opinion for the contract (Code Complexity, Systemic Risks, etc,)
+
+- The ERC20MultiDelegate contract is very well designed and written.
+- The codebase as a whole is very straightforward and understandable.
+- The ERC20MultiDelegate contract solve very well the main restriction in ERC20Votes which is that you must delegate your full voting power to only 1 address. ENS20MultiDelegate contract solves that by using ERC1155 and Proxy contracts.
+
+- The ERC20MultiDelegate contract is well-designed and written.
+- The codebase, as a whole, is straightforward and understandable.
+- The ERC20MultiDelegate contract addresses the primary limitation in `ERC20Votes contract` (the fact that you must delegate your entire voting power to only one address. The `ERC20MultiDelegate contract` overcomes this using ERC1155 and Proxy contracts.
 
 ---
 
@@ -326,7 +324,7 @@ This function is used to determine the address of a proxy contract that represen
 
 # 6. Time Spent
 
-Day 1:
+Day 1: (6 hours)
 
 - Investigated the ENS Protocol.
 - Reviewed the ENS Audit Contest Documentation and the ERC20MultiDelegate.sol contract codebase.
@@ -335,9 +333,24 @@ Day 1:
 - Began writing the Analysis report.
 - Began writing the QA report.
 
-Day2:
+Day 2: (8 hours)
 
 - Took a deep dive into the ERC1155 and ERC20Votes standards.
+- Took a deep dive into Compound Voting.
+- Wrote reports for my findings.
+
+Day 3: (8 hours)
+
+- Auditing
+
+Day 4: (8 hours)
+
+- Auditing
+
+---
+
+---
+
 
 ### Time spent:
 30 hours
