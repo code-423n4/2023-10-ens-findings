@@ -28,3 +28,20 @@ The function `delegateMulti()` may mint ERC1155 tokens, which in turn may invoke
 
 While we evaluated that the function correctly follows the CEI pattern and did not identify a potential attack vector, we do believe a proper reentrancy guard in place is good practice. 
 
+## [N-03] `_reimburse()` docs is slightly inconsistent with its behavior
+
+The docs for function `_reimburse()` mentions
+
+```solidity
+/**
+ * @dev Reimburses any remaining source amounts back to the delegator after the delegation transfer process.
+ * @param source The source delegate from which tokens are being withdrawn.
+ * @param amount The amount of tokens to be withdrawn from the source delegate.
+ */
+// ...
+
+// Transfer the remaining source amount or the full source amount
+// (if no remaining amount) to the delegator
+```
+
+However the function always (attempt to) transfers exactly `amount`, which should be specified as a function parameter earlier in the `delegateMulti()` call.
