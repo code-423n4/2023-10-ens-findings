@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "seerether",
+  "risk": "3",
+  "title": "The lack of checks that source and target delegates are different allows votes to be consolidated from multiple source delegates into one target delegate. This could can someone to gain more voting power than they should be allowed.",
+  "issueId": 243,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/243"
+}
