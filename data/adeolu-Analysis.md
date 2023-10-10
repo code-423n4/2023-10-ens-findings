@@ -95,6 +95,11 @@ Here's an example snippet of what i am proposing.
     }
 ```
 
+## Codebase quality analysis
+Overall the code in scope is of good quality, but not of highest quality as i noticed it doesnt follow all the solidity style guide rules i.e the functions are not arranged in the correct manner (layout), there is an external function in between two internal functions. Also not all functions have well detailed comments describing what they do. i.e `createProxyDelegatorAndTransfer()` and `transferBetweenDelegators()`.  These functions may be hard to understand for less skilled devs/ users. 
+
+## Centralization risks
+The contract has centralization risks as it is ownable and the owner is a single address entity. This is further corrobarated by the bot report issues [M-O1](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#m01-centralization-risk-for-privileged-functions) and [L-01](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#l01-use-ownable2step-instead-of-ownable).
 
 
 ### Time spent:
