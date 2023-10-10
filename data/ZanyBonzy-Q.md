@@ -21,7 +21,7 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 // Transfer **the remaining source amount** or the full source amount
 // (if no remaining amount) to the delegator
 ```
-These reads like after the `_processDelegation` function is called, the `_reimburse` function should be immediately called after to withdraw the amount left, the remaining source (source balance - amount to target) from the transfer to the target back to the delgator. 
+These read like after the `_processDelegation` function is called, the `_reimburse` function should be immediately called after to withdraw the amount left ie `the remaining source amount` from the `_processDelegation` transfer back to the delgator. 
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L145C1-L146C53
 
 4. ERC1155Supply vulnerability in OpenZeppelin Contracts
