@@ -324,7 +324,7 @@ This function is used to determine the address of a proxy contract that represen
 
 # 6. Time Spent
 
-Day 1: (6 hours)
+Day 1:
 
 - Investigated the ENS Protocol.
 - Reviewed the ENS Audit Contest Documentation and the ERC20MultiDelegate.sol contract codebase.
@@ -333,23 +333,25 @@ Day 1: (6 hours)
 - Began writing the Analysis report.
 - Began writing the QA report.
 
-Day 2: (8 hours)
+Day 2:
 
 - Took a deep dive into the ERC1155 and ERC20Votes standards.
 - Took a deep dive into Compound Voting.
 - Wrote reports for my findings.
 
-Day 3: (8 hours)
+Day 3:
 
 - Auditing
 
-Day 4: (8 hours)
+Day 4:
 
 - Auditing
 
 ---
 
 ---
+
+
 
 
 ### Time spent:
