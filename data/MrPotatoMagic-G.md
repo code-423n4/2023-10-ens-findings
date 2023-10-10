@@ -7,9 +7,10 @@
 | [G-03]            | Remove initialization to 0 to save gas                                                        | 1         |
 | [G-04]            | Remove parameter `ERC20Votes _token` from function `retrieveProxyContractAddress` to save gas | 1         |
 | [G-05]            | Use if conditional statements instead of ternary operators to save gas                        | 1         |
-| [G-06]            | Consider using alternatives to OpenZeppelin                                                   | 1         |
+| [G-06]            | Use gas-efficient assembly for common math operations like min and max                        | 3         |
+| [G-07]            | Consider using alternatives to OpenZeppelin                                                   | 1         |
 
-### Total number of issues: 6 instances across 6 issues
+### Total number of issues: 9 instances across 7 issues
 
 ### Total deployment gas saved: 35209 gas
 
@@ -216,9 +217,38 @@ File: ERC20MultiDelegate.sol
 103:             if (transferIndex < targetsLength) target = address(uint160(targets[transferIndex]));
 ```
 
-## [G-06] Consider using alternatives to OpenZeppelin
+## [G-06] Use gas-efficient assembly for common math operations like min and max
 
-Consider using [Solmate](https://github.com/transmissions11/solmate) and [Solady](https://github.com/Vectorized/solady). Solmate is a library that provides a number of gas-efficient implementations of common smart contract patterns. Solady is another gas-efficient library that places a strong emphasis on using assembly. In the [ERC20MultiDelegate.sol](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) contract, ERC1155 is used frequently. Using a gas-optimized version can help reduce gas costs on the user end.
+There are 3 instances of this:
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L80
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L87
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L98C39-L98C39
+
+These are the following min and max instances in the code.
+```solidity
+File: contracts/ERC20MultiDelegate.sol
+80: Math.max(sourcesLength, targetsLength) == amountsLength,
+87: transferIndex < Math.max(sourcesLength, targetsLength);
+98: if (transferIndex < Math.min(sourcesLength, targetsLength)) {
+```
+The current Math library being used by OpenZeppelin evaluates "max" using ternary operators as follows:
+```solidity
+    function max(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a > b ? a : b;
+    }
+```
+An optimized version for this in assembly would be as follows (Similar to [Solady's implementation](https://github.com/Vectorized/solady/blob/08901b1131be4903e989884571198d72de1c0ee9/src/utils/FixedPointMathLib.sol#L693)):
+```solidity
+    assembly {
+        c := xor(a, mul(xor(a, b), gt(b, a)))
+    }
+```
+The reason the above example is more gas efficient is because the ternary operator in the original code contains conditional jumps in the opcodes, which are more costly.
+
+## [G-07] Consider using alternatives to OpenZeppelin
+
+Consider using [Solmate](https://github.com/transmissions11/solmate) and [Solady](https://github.com/Vectorized/solady). Solmate is a library that provides a number of gas-efficient implementations of common smart contract patterns. Solady is another gas-efficient library that places a strong emphasis on using assembly. In the [ERC20MultiDelegate.sol](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) contract, ERC1155 is used frequently for batch minting and burning. Using a gas-optimized version can help reduce gas costs on the user end.
 
 There is 1 instance of this:
 
