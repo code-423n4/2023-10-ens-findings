@@ -1,6 +1,6 @@
 ## GAS report
 
-[G1] Unnecessary 'if' in the last comparison
+### [G1] Unnecessary 'if' in the last comparison
 ```diff
 - } else if (transferIndex < targetsLength) {
 + } else {
@@ -9,7 +9,7 @@
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L104-L106
 
-[G2] The minimum value of two array's length can be cached
+### [G2] The minimum value of two array's length can be cached
 You can calculate the minimum length of arrays once and use this value, rather than calculating it at each iteration
 ```diff
   // Iterate until all source and target delegates have been processed.
@@ -32,7 +32,7 @@ You can calculate the minimum length of arrays once and use this value, rather t
 ```
 https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L84C2-L99C1
 
-[G3]  If we understand that the array element is empty, then we do not need to assign the value address(0) to the variable because this is already the default value
+### [G3]  If we understand that the array element is empty, then we do not need to assign the value address(0) to the variable because this is already the default value
 ```diff
 -    address source = transferIndex < sourcesLength
 -                ? address(uint160(sources[transferIndex]))
@@ -50,7 +50,7 @@ https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L92
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L95
 
-[G4] Unnecessary conversion to bytes1
+### [G4] Unnecessary conversion to bytes1
 ```diff
   bytes32 hash = keccak256(
             abi.encodePacked(
@@ -64,7 +64,7 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L208
 
-[G5] It is not necessary to use library functions for simple mathematics. We can insert the calculation directly into the contract. And create variable maxLen, and use it instead call library function.
+### [G5] It is not necessary to use library functions for simple mathematics. We can insert the calculation directly into the contract. And create variable maxLen, and use it instead call library function.
 ```diff
 // Create variable maxLen
 +  uint maxLen = (sourcesLength >= targetsLength ? sourcesLength : targetsLength);
@@ -86,8 +86,24 @@ require(
 
 ```
 
+### [G6] Do not apply library 'Address' for type address.
+The contract does not use functions from the Address library, so we can remove the line with applying library to type address and remove import the library to contract. This will reduce the cost of deploying a contract.
+```diff
+- import {Address} from "@openzeppelin/contracts/utils/Address.sol";
+  import "@openzeppelin/contracts/access/Ownable.sol";
+  import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+  import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
+  import "@openzeppelin/contracts/utils/math/Math.sol";
 
-[G6] All function not payable, so we can change in all places 0 to msg.value
+contract ERC20MultiDelegate is ERC1155, Ownable {
+-    using Address for address;
++     // delete line
+
+```
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L26
+
+### [G7] All function not payable, so we can change in all places 0 to msg.value
 We can use msg.value (as 0) because function delegateMulti() is not payable. Value of msg.value always will be 0.
 ```diff
 // case 1
