@@ -12,7 +12,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         );
 ```
 
-1. First loop - for indexes in `[0:min(s,t))`. Ternary operator is removed: Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
+1. First loop - for indexes in `[0 : min(s,t))`. Ternary operator is removed: Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
 ```
         for (
             uint transferIndex = 0;
@@ -26,9 +26,11 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         }
 ```
 
-2. a) If s > t, we use a loop with `_reimburse`. Only Sources are needed and they are guaranteed to be provided.
+2. The second loop is for `[min(s,t) : max(s,t))`.
 
-   b) If s <= t, we use a loop with `createProxyDelegatorAndTransfer`. Only Targets are needed and they are guaranteed to be provided.
+a) If s > t, we use a loop with `_reimburse`. Only Sources are needed and they are guaranteed to be provided.
+
+b) If s <= t, we use a loop with `createProxyDelegatorAndTransfer`. Only Targets are needed and they are guaranteed to be provided.
 
 ```
         if (sourcesLength > targetsLength) {
@@ -208,4 +210,4 @@ Remove `token` parameter from the following lines:
 
 | savings                                                      | 120             | 80     | 80     | 40      |         | 
 ```
-`deployment diff = 20874 gas`
+Deployment savings - 20874 gas.
