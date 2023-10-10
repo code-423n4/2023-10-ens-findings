@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "matrix_0wl",
+  "risk": "2",
+  "title": "Malleability Risk from Dirty High Order Bits",
+  "issueId": 291,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/291"
+}
