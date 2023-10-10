@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "peakbolt",
+  "risk": "3",
+  "title": "Lack of return value handling for `approve()` can lead to loss of ERC20 tokens",
+  "issueId": 302,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/302"
+}
