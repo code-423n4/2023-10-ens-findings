@@ -1,6 +1,6 @@
 ### Gas Optimizations
 
-|ID|Issue|Gas|
+|ID|Issue|Gas saving|
 |:--:|:---|:--:|
 | [[G&#x2011;01]](#g01-rewrite-_delegatemulti-function) | Rewrite `_delegateMulti()` function | 804 |
 | [[G&#x2011;02]](#g02-remove-amount-checking-from-_processdelegation) | Remove `amount` checking from `_processDelegation()` | 1140 |
