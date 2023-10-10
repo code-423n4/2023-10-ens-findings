@@ -1,4 +1,4 @@
-## Consider for delegateMulti() Non-reentrant Modifier
+## Consider Non-reentrant Modifier for delegateMulti()
 
  - Protocol uses ERC1155 tokens to track the amount of tokens delegated by delegators to various delegates.
 
