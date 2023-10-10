@@ -57,6 +57,7 @@ For `transferIndex` ∈ `[min(sourcesLength, targetsLength), max(sourcesLength, 
             }
         }
 ```
+
 Original version:
 
 ```
