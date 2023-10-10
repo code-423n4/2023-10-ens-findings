@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "seerether",
+  "risk": "3",
+  "title": "The delegateMulti() function can temporarily reduce the user's balance in a way that could cause issues",
+  "issueId": 251,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/251"
+}
