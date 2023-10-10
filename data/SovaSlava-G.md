@@ -114,7 +114,22 @@ contract ERC20MultiDelegate is ERC1155, Ownable {
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L26
 
-### [G-7] All functions not payable, so we can change in all places 0 to msg.value.
+### [G-7] Unnecessary balance check.
+There is no need to check additionally the balance in the _processDelegation() function, because this point is checked in the token burning function - _burnBatch(). If the user specifies a larger balance than he delegated, the contract will not be able to burn more tokens than he has (ERC-1155).
+```diff
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+-        uint256 balance = getBalanceForDelegate(source);
+
+-        assert(amount <= balance);
+
+```
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L129-L131
+
+### [G-8] All functions not payable, so we can change in all places 0 to msg.value.
 We can use msg.value (as 0) because function delegateMulti() is not payable. Value of msg.value always will be 0.
 ```diff
 // case 1
