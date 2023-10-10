@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Aymen0909",
+  "risk": "3",
+  "title": "Potential loss of funds in `createProxyDelegatorAndTransfer`",
+  "issueId": 305,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/305"
+}
