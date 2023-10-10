@@ -53,3 +53,21 @@ Recommended code：
         _setURI(uri);
     }
 ```
+
+# Use hardcoded address instead of address(this)
+
+Instead of using address(this), it is more gas-efficient to pre-calculate and use the hardcoded address. Foundry’s script.sol and solmate’s LibRlp.sol contracts can help achieve this
+Refrences:https://book.getfoundry.sh/reference/forge-std/compute-create-address
+
+```
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                bytes1(0xff),
+                address(this),
+                uint256(0), // salt
+                keccak256(bytecode)
+            )
+        );
+```
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L209
