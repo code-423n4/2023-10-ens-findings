@@ -2,8 +2,9 @@
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [L-01]  | Possible re-entrancy in Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65) |
 | [L-02]  | The whole contract does not work with approvals  |
-| [L-03] | Quadratic voting is less secure with [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) |                                                                                                          
-| [N-01]  | If a user send any vote tokens to [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) they will be lost forever                                                                            |
+| [L-03] | Quadratic voting is less secure with [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) |    
+| [L-04] | If a user claims to his **ERC20ProxyDelegator** his tokens will be lost |                                                                                                      
+| [N-01]  | If a user send any vote tokens to [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) they will be lost forever |                                                                       
 
 
 ### [L-01] Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65)
@@ -125,6 +126,15 @@ The power of quadratic voting is that large volumes of vote tokens will be squar
 If attacker votes with 10k tokens with a single address => 100 votes. However he can simply split 10k  tokens between 100 addresses and vote with 100 tokens per address (10 votes) => 1000 votes. Applying 10x to his voting power. 
 
 Because this issues is about the whole structure of the system, I am not able to give a guarantied fix. Will leave it for the devs to decide.
+
+### [L-04] If a user claims to his **ERC20ProxyDelegator** his tokens will be lost 
+When users claim from **ENSToken** they specifically need to claim to themselves and not to their own **ProxyDelegator**. This is because [claimTokens](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ENSToken.sol#L59-L70) transfers the tokens directly to the `msg.sender` and when transferred to ProxyDelegator, no ERC1155 will be minted to the user.
+
+Example:
+1. User1 claims his ENS tokens to himself, and then uses **MultiDelegate** to spread them, in return receiving ERC1155
+2. User2 claims his ENS tokens directly to his **ProxyDelegator**
+
+User2 will not receive any ERC1155 tokens and the vote tokens will be stuck forever in his **ProxyDelegator**. He will be able to vote with them, however if he want to delegate them to someone else, he will not be able to do so.
 
 ### [N-01] If a user send any vote tokens to ERC20ProxyDelegator they will be lost forever
 If a user sends any VoteTokens to **ERC20ProxyDelegator** they will be counted as votes, since this contract delegates to someone, however they will be stuck there forever. 
