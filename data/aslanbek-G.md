@@ -1,6 +1,7 @@
-# [G-01] function _delegateMulti - avoid if-else and ternary operator overuse by splitting the loop into smaller ones
+# [G-01] function _delegateMulti - avoid excessive if-else and ternary operators by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
-Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones.
+
+Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
 
 The expected input is: a amounts, s sources, t targets; a = max(s,t). 
 ```
@@ -9,7 +10,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
             "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
         );
 ```
-For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function `_processDelegation` is called. So we're moving it into a separate loop, avoiding plenty of branchings:
+For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function `_processDelegation` is called. So we're moving it into a separate loop:
 ```
         for (
             uint transferIndex = 0;
@@ -170,7 +171,7 @@ With [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g0
         return address(uint160(uint256(hash)));
     }
 ```
-Remove `token` parameter: 
+Remove `token` parameter from the contract at the following lines: 
 ```
 147: address proxyAddressFrom = retrieveProxyContractAddress(token, source);
 ```
