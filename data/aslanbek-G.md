@@ -9,7 +9,7 @@
 +       return balanceOf(msg.sender, uint256(uint160(delegate)));
     }
 ```
-# [G-02] function _delegateMulti - avoid if-else and ternary operator abuse by splitting the loop into smaller ones
+# [G-02] function _delegateMulti - avoid if-else and ternary operator overuse by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
 Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones.
 
@@ -125,3 +125,23 @@ Optimized version:
             }
         }
 ```
+The following output is the result of creating 5 delegatees, then moving their voting power to another addresses.
+
+While the optimization makes the deployment ~29k gas more expensive, it saves ~230 gas per iteration, so there only need to be at least ~126 iterations (iteration is 1 transfer of voting power between two accounts) over the contract's lifetime to break even.
+```
+| contracts/ERC20MultiDelegate.sol:ERC20MultiDelegate contract |                 |        |        |         |         |
+|--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2100669                                                      | 11018           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 214448          | 617632 | 617632 | 1020817 | 2       |
+```
+```
+| contracts/ERC20MultiDelegate.sol:ERC20MultiDelegate contract |                 |        |        |         |         |
+|--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2129498                                                      | 11162           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 213567          | 616474 | 616474 | 1019381 | 2       |
+```
+[Multidelegate.t.sol](https://gist.github.com/aslanbekaibimov/10135b8d15888a9c2bbaa3814d511bdf)
