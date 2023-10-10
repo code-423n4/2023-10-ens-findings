@@ -1,4 +1,4 @@
-# [QA-1] `_reimburse`, functions does not emit event
+# [QA-1] `_reimburse`, function does not emit event
 Function `_reimburse`, which reimburses any remaining source amounts back to the delegator after the delegation transfer process does not emit event
 
 ```
@@ -40,3 +40,13 @@ This comment should be moved before the `_reimburse` function call. The current 
 
 # [N-3] Protocol does not provide any documentation
 Having all functions and features of the contract well documented helps during the audit-process. There wasn't any provided documentation on the Code4rena contest page and on the protocols website.  
+
+# [N-4] `uint256` mixed with `uint`
+While `uint256` is basically the same as `uint`, it's good coding practice to stick to using one version across the whole code-base. The more recommended one is `uint256`, since it explicitly states the size of the datatype.
+
+The code-base, in most cases uses `uint256`, however, in two lines, it uses `uint`:
+
+```
+86:         uint transferIndex = 0;
+179:        uint bytecodeSize;
+```
