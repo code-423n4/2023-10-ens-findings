@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "hyh",
+  "risk": "3",
+  "title": "Delegation proxy holdings can be used for voting manipulation if underlying ERC20Votes token has transfer hook",
+  "issueId": 314,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/314"
+}
