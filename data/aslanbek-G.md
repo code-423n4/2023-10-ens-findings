@@ -1,4 +1,4 @@
-# [G-01] function _delegateMulti - avoid excessive if-else and ternary operators by splitting the loop into smaller ones
+# [G-01] function _delegateMulti - save gas on if-else and ternary operators by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
 
 Instead of the "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
@@ -205,10 +205,11 @@ Remove `token` parameter from the following lines:
 
 
 | Savings                                                      | 120             | 80     | 80     | 40      |         | 
-```
-Deployment savings - 20874 gas.
 
-# [G-03] Excessive retrieveProxyContractAddress
+Deployment savings - 20874 gas
+```
+
+# [G-03] Redundant retrieveProxyContractAddress
 
 ```diff
     function _processDelegation(
@@ -251,5 +252,5 @@ Deployment savings - 20874 gas.
 
 | Savings                                                      | 12213           | 6107   | 6107   | 0       |         |
 
-Deployment savings - 5400 gas.
+Deployment savings - 5400 gas
 ```
