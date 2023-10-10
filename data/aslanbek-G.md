@@ -139,7 +139,29 @@ Optimized version:
         return proxyAddress;
     }
 ```
-# [G-03] retrieveProxyContractAddress does not need `_token` parameter - it can be retrieved from contract's bytecode
+
+[The test](https://gist.github.com/aslanbekaibimov/da4f4c8a0454f8a41277773e92a71c94) creates 5 delegatees, then moves their voting power to 5 other delegatees.
+
+`solc = 0.8.21` (Sponsor confirmed that they will be using the latest version)
+`runs = 200`
+```
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2143100                                                      | 11491           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+
+| delegateMulti                                                | 882638          | 949097 | 949097 | 1015556 | 2       |
+
+
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2171929                                                      | 11635           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+
+| delegateMulti                                                | 881537          | 947828 | 947828 | 1014120 | 2       |
+
+| savings                                                      | 1101            | 1269   | 1269   | 1436    |         |
+
+Deployment cost will increase by ~29k gas, which will pay off very quickly.
+# [G-03] retrieveProxyContractAddress does not need `_token` parameter - it can be retrieved from the contract's bytecode
 
 With the [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g02-state-variables-that-are-never-modified-after-deploymentconstructor-should-be-declared-as-constant-or-immutable) optimization from the bot report, it's better to retrieve the `token` from contract's bytecode inside the function's body, instead of passing it as a parameter every time the function is invoked.
 
@@ -184,6 +206,9 @@ Remove `token` parameter from the following lines:
 ```
 
 [The test](https://gist.github.com/aslanbekaibimov/da4f4c8a0454f8a41277773e92a71c94) creates 5 delegatees, then moves their voting power to 5 other delegatees.
+
+`solc = 0.8.21` (Sponsor confirmed that they will be using the latest version)
+`runs = 200`
 ```
 |--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
@@ -200,4 +225,4 @@ Remove `token` parameter from the following lines:
 
 | diff                                                         | 120             | 80     | 80     | 40      |         | 
 ```
-deployment diff = 20874
+`deployment diff = 20874 gas`
