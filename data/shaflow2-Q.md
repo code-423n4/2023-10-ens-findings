@@ -1,5 +1,5 @@
 
-Potential risks of address brute-forcing
+## Potential risks of address brute-forcing
 
 The contract utilizes a fixed salt for checking the ERC20ProxyDelegator, which introduces potential risks of address brute-forcing. A malicious individual could calculate a salt and deploy contracts with malicious functions preemptively at the ERC20ProxyDelegate location. For instance, they could modify the _delegate parameter to their own address in order to acquire votes. While calculating the salt may be challenging, it is not impossible if there is a profit incentive involved.
 
