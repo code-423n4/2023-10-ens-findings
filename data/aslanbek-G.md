@@ -182,3 +182,22 @@ Remove `token` parameter from the following lines:
 ```
 176: address proxyAddress = retrieveProxyContractAddress(token, delegate);
 ```
+
+[The test](https://gist.github.com/aslanbekaibimov/da4f4c8a0454f8a41277773e92a71c94) creates 5 delegatees, then moves their voting power to 5 other delegatees.
+```
+|--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2143100                                                      | 11491           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 882638          | 949097 | 949097 | 1015556 | 2       |
+
+|--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2122226                                                      | 11366           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 882518          | 949017 | 949017 | 1015516 | 2       | 
+
+
+| diff                                                         | 120             | 80     | 80     | 40      | 2       | 
+```
+deployment diff = 20874
