@@ -117,7 +117,7 @@ Optimized version:
 
 # [G-02] Use address.code.length directly instead of caching extcodesize
 [ERC20MultiDelegate.sol#L179-L185](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L179-L185)
-```
+```diff
     function deployProxyDelegatorIfNeeded(
         address delegate
     ) internal returns (address) {
@@ -137,4 +137,47 @@ Optimized version:
         }
         return proxyAddress;
     }
+```
+# [G-03] retrieveProxyContractAddress does not need `_token` parameter - it can be retrieved from contract's bytecode
+
+With [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g02-state-variables-that-are-never-modified-after-deploymentconstructor-should-be-declared-as-constant-or-immutable) fix from the bot report, it's better to retrieve the `token` from contract's bytecode instead of passing it as a parameter every time the function is invoked
+
+```diff
+-    ERC20Votes public token;
++    ERC20Votes public immutable token;
+```
+ 
+
+
+```diff
+    function retrieveProxyContractAddress(
+-       ERC20Votes _token,
+        address _delegate
+    ) private view returns (address) {
+        bytes memory bytecode = abi.encodePacked(
+            type(ERC20ProxyDelegator).creationCode,
+-           abi.encode(_token, _delegate)
++           abi.encode(token, _delegate)
+        );
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                bytes1(0xff),
+                address(this),
+                uint256(0), // salt
+                keccak256(bytecode)
+            )
+        );
+        return address(uint160(uint256(hash)));
+    }
+```
+Remove `token` parameter: 
+```
+147: address proxyAddressFrom = retrieveProxyContractAddress(token, source);
+```
+```
+168: address proxyAddressFrom = retrieveProxyContractAddress(token, from);
+169: address proxyAddressTo = retrieveProxyContractAddress(token, to);
+```
+```
+176: address proxyAddress = retrieveProxyContractAddress(token, delegate);
 ```
