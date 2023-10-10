@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "SovaSlava",
+  "risk": "2",
+  "title": "User can lost his ENS tokens when delegate them to other user",
+  "issueId": 296,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/296"
+}
