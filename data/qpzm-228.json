@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "qpzm",
+  "risk": "3",
+  "title": "The target of `delegateMulti` may not be `ERC20ProxyDelegator`.",
+  "issueId": 228,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/228"
+}
