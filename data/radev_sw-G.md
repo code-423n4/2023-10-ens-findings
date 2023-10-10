@@ -37,10 +37,6 @@
 
 ---
 
-Sure! Here's a gas optimization report for the given issues:
-
----
-
 ## <a name="GAS-01"></a>[GAS-01] Use of `Math.max` and `Math.min`
 
 ### Overview:
@@ -113,6 +109,7 @@ Store the value of `Math.min(sourcesLength, targetsLength)` in a local variable 
 
 ### Overview:
 
+By indexing event parameters, they are not stored in the event data but in a separate data structure called the topics array, which can save a considerable amount of gas.
 Using indexed parameters in events can help reduce the gas costs when filtering for specific event logs. In the given contract, certain important parameters in the events such as `delegate` and `from` are already indexed, which is good. However, ensuring that all necessary fields are indexed can further optimize gas usage.
 
 ### Code
