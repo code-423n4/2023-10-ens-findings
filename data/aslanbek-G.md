@@ -141,7 +141,7 @@ Optimized version:
 | Function Name                                                | min             | avg    | median | max     | # calls |
 | delegateMulti                                                | 881537          | 947828 | 947828 | 1014120 | 2       |
 
-| savings                                                      | 1101            | 1269   | 1269   | 1436    |         |
+| Savings                                                      | 1101            | 1269   | 1269   | 1436    |         |
 ```
 Deployment cost will increase by ~29k gas, which, as you can see, will pay off very quickly.
 
@@ -190,10 +190,6 @@ Remove `token` parameter from the following lines:
 176: address proxyAddress = retrieveProxyContractAddress(token, delegate);
 ```
 
-[The test](https://gist.github.com/aslanbekaibimov/da4f4c8a0454f8a41277773e92a71c94) creates 5 delegatees, then moves their voting power to 5 other delegatees.
-
-`solc = 0.8.21` (Sponsor confirmed that they will be using the latest version)
-`runs = 200`
 ```
 |--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
@@ -208,6 +204,52 @@ Remove `token` parameter from the following lines:
 | delegateMulti                                                | 882518          | 949017 | 949017 | 1015516 | 2       | 
 
 
-| savings                                                      | 120             | 80     | 80     | 40      |         | 
+| Savings                                                      | 120             | 80     | 80     | 40      |         | 
 ```
 Deployment savings - 20874 gas.
+
+# [G-03] Excessive retrieveProxyContractAddress
+
+```diff
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+        uint256 balance = getBalanceForDelegate(source);
+
+        assert(amount <= balance);
+
+ -      deployProxyDelegatorIfNeeded(target);
+        transferBetweenDelegators(source, target, amount);
+
+        emit DelegationProcessed(source, target, amount);
+    }
+```
+```
+    function transferBetweenDelegators(
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
+        address proxyAddressFrom = retrieveProxyContractAddress(token, from);
+-       address proxyAddressTo = retrieveProxyContractAddress(token, to);
++       address proxyAddressTo = deployProxyDelegatorIfNeeded(to);
+        token.transferFrom(proxyAddressFrom, proxyAddressTo, amount);
+    }
+```
+```
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2125456                                                      | 11245           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 885663          | 952517 | 952517 | 1019371 | 2       |
+
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2120056                                                      | 11218           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 873450          | 946410 | 946410 | 1019371 | 2       |
+
+| Savings                                                      | 12213           | 6107   | 6107   | 0       |         |
+
+Deployment savings - 5400 gas.
+```
