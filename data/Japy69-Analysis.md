@@ -28,7 +28,11 @@ You could enhance the user-friendliness and decentralization of the contract by 
 To improve clarity and avoid potential confusion, I recommended to change the contract name from 'ERC20MultiDelegate' to 'MultiDelegate'. The current name might inadvertently mislead users into thinking it is an ERC20 token, while it is, in fact, an ERC1155-based contract. Renaming it to 'MultiDelegate' aligns better with its purpose and helps prevent any misconceptions.
 
 ## Centralization
-There is no centralization risk as there is no access control. The only risk may come from a proxy but it is out-of-scope.
+There is not much centralization risk as the only function with access privilege is setUri.
+
+The only risks may come from:
+1. a proxy but it is out-of-scope.
+2. setUri function. A trigger can be added to let owner set it once.
 
 ### Time spent:
 8 hours
