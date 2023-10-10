@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Fulum",
+  "risk": "2",
+  "title": "Lack of inputs verifications may result in delegation to a wrong address or prevent the use of `_processDelegation`.",
+  "issueId": 334,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/334"
+}
