@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "SandNallani",
+  "risk": "3",
+  "title": "Vote delegation will fail if the ENS token holder is a contract wallet that isn’t ERC1155 compatible. ",
+  "issueId": 332,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/332"
+}
