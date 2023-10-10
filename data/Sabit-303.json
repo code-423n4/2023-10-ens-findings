@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Sabit",
+  "risk": "3",
+  "title": "Any arbitrary user can call delegateMulti() and pass in any source addresses, target addresses, and amounts to transfer voting power",
+  "issueId": 303,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/303"
+}
