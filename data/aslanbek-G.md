@@ -141,7 +141,7 @@ Optimized version:
 ```
 # [G-03] retrieveProxyContractAddress does not need `_token` parameter - it can be retrieved from contract's bytecode
 
-With [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g02-state-variables-that-are-never-modified-after-deploymentconstructor-should-be-declared-as-constant-or-immutable) fix from the bot report, it's better to retrieve the `token` from contract's bytecode instead of passing it as a parameter every time the function is invoked
+With the [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g02-state-variables-that-are-never-modified-after-deploymentconstructor-should-be-declared-as-constant-or-immutable) optimization from the bot report, it's better to retrieve the `token` from contract's bytecode instead of passing it as a parameter every time the function is invoked.
 
 ```diff
 -    ERC20Votes public token;
@@ -171,7 +171,7 @@ With [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g0
         return address(uint160(uint256(hash)));
     }
 ```
-Remove `token` parameter from the contract at the following lines: 
+Remove `token` parameter from the following lines: 
 ```
 147: address proxyAddressFrom = retrieveProxyContractAddress(token, source);
 ```
