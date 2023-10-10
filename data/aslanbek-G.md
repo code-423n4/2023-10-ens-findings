@@ -198,6 +198,6 @@ Remove `token` parameter from the following lines:
 | delegateMulti                                                | 882518          | 949017 | 949017 | 1015516 | 2       | 
 
 
-| diff                                                         | 120             | 80     | 80     | 40      | 2       | 
+| diff                                                         | 120             | 80     | 80     | 40      |         | 
 ```
 deployment diff = 20874
