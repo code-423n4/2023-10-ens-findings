@@ -5,6 +5,8 @@ https://github.com/code-423n4/2023-10-ens/blob/main/contracts/MerkleProof.sol#L3
 
 Gas optimization - The `claimPeriodEnds` variable is initialized in the constructor and never modified again. `claimPeriodEnds` can be declared as and `immutable` variable.
 https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ENSToken.sol#L27
+The `token` variable is initialized in the constructor and never modified again. `token` can be declared as and `immutable` variable.
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L48
 
 
 Gas optimization - `createProxyDelegatorAndTransfer` and `_processDelegation` in `ERC20MultiDelegate` contract are checking whether `target` proxy delegator is deployed or not by first calculating the address and then fetching the code size using `extcodesize` opcode which will cost 2600 amount of gas on next calls after deployment (since we are not interacting with proxy delegator address after deployment). the gas cost of `extcodesize` opcode is variant depending on whether the address is in `touched_addresses` (100) or not (2600 in our case)
