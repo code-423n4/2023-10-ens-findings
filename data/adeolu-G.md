@@ -114,13 +114,13 @@ since `target` and `proxyAddressTo` are same address. In the logic flow of `_pro
     function transferBetweenDelegators(
         address from,
         address to,
-        address proxyOfTarget,
+        address proxyOfTarget, //can set to addr(0) if unknown at point of function call
         uint256 amount
     ) internal {
         address proxyAddressFrom = retrieveProxyContractAddress(token, from);
         address proxyAddressTo;
         if (proxyOfTarget == address(0)) {
-        // means proxyOfTarget not passed in or set or known. we may now compute it
+        // means proxyOfTarget is not known. we may now compute it
            proxyAddressTo = retrieveProxyContractAddress(token, to);
         } else {
             proxyAddressTo = proxyOfTarget;
