@@ -6,14 +6,15 @@
 | [G-02]            | Use do-while loop instead of for-loop to save gas                                             | 1         |
 | [G-03]            | Remove initialization to 0 to save gas                                                        | 1         |
 | [G-04]            | Remove parameter `ERC20Votes _token` from function `retrieveProxyContractAddress` to save gas | 1         |
+| [G-05]            | Use if conditional statements instead of ternary operators to save gas                        | 1         |
 
-### Total number of issues: 4 instances across 4 issues
+### Total number of issues: 5 instances across 5 issues
 
-### Total deployment gas saved: 31993 gas
+### Total deployment gas saved: 35209 gas
 
-### Total function execution gas saved: 460 gas (per call)
+### Total function execution gas saved: 488 gas (per call)
 
-### Total gas saved: 32453 gas
+### Total gas saved: 35697 gas
 
 ## [G-01] Unnecessary function can be removed
 
@@ -181,4 +182,35 @@ File: ERC20MultiDelegate.sol
 246:         );
 247:         return address(uint160(uint256(hash)));
 248:     }
+```
+
+## [G-05] Use if conditional statements instead of ternary operators to save gas
+
+There is 1 instance of this:
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L90C1-L96C53
+
+**Before VS After**
+
+**Deployment cost: 4121917 - 4118701 = 3216 gas saved**
+
+**Function execution cost: 90194 - 90166 = 28 gas saved per call**
+
+Instead of this:
+```solidity
+File: ERC20MultiDelegate.sol
+94:             address source = transferIndex < sourcesLength
+95:                 ? address(uint160(sources[transferIndex]))
+96:                 : address(0);
+97:             address target = transferIndex < targetsLength
+98:                 ? address(uint160(targets[transferIndex]))
+99:                 : address(0); 
+```
+Use this:
+```solidity
+File: ERC20MultiDelegate.sol
+100:             address source;
+101:             address target;
+102:             if (transferIndex < sourcesLength) source = address(uint160(sources[transferIndex]));
+103:             if (transferIndex < targetsLength) target = address(uint160(targets[transferIndex]));
 ```
