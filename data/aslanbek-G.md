@@ -12,7 +12,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         );
 ```
 
-1. First loop - for indexes in `[0:min(s,t))`. Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
+1. First loop - for indexes in `[0:min(s,t))`. Ternary operator is removed: Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
 ```
         for (
             uint transferIndex = 0;
