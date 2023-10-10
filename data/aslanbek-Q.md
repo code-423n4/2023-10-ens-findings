@@ -8,9 +8,9 @@
         _delegateMulti(sources, targets, amounts);
     }
 ```
-Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, it is possible to mint tokens with id > 2^160 - 1, which would represent the same delegatee.
+Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegatee.
 
-These tokens are possible to transfer, as they are ERC1155 tokens. But it would not be possible to use them to transfer voting power between delegatees, because _processDelegation works only for tokenIds < 2^160.
+These tokens are possible to transfer, as they are ERC1155 tokens. But it would not be possible to use them to transfer voting power between delegatees, because `_processDelegation` works only for tokenIds < 2^160.
 
 Such user that entered wrong address as a target, unintentionally or maliciously, will only harm himself, and only in the way that they may not be able to transfer voting power between delegatees.
 
@@ -53,4 +53,4 @@ The affected user will just have to call delegateMulti with `source = tokenId` a
 
 ## Recommended Mitigation
 
-Use SafeCast for downcasting uint256 to uint160 to protect users from incorrect inputs.
+Use SafeCast for downcasting uint256 -> uint160 to protect users from their incorrect inputs.
