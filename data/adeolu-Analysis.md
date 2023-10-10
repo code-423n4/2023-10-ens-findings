@@ -18,7 +18,7 @@ The amount of ERC20Votes token with a source delegate address's `ERC20ProxyDeleg
 During transfers, source delegate must have its `ERC20ProxyDelegator` erc1155 token balance reduced to the amount to be transfered via `_burnBatch()` and Target must have its `ERC20ProxyDelegator` erc1155 token balance increased up to the amount to be transferred via `_mintBatch()`. 
 
 ## Architecture recommendations
-Here the only optimization i suggest is in the `_processDelegation()` fcn. `transferBetweenDelegators()` can be modified so we can pass the `proxyAddress` returned from the `deployProxyDelegatorIfNeeded`() into `transferBetweenDelegators()` and use that `proxyAddress` for `proxyAddressTo`  in the  `transferBetweenDelegators()` instead of calling `retrieveProxyContractAddress()` twice for `proxyAddressFrom` and `proxyAddressTo`.  This will reduce the number of `retrieveProxyContractAddress()` calls in the `_processDelegation()` logic flow to 2 from 3 (because `retrieveProxyContractAddress()` is also called in `deployProxyDelegatorIfNeeded()` fcn). This will the reduce computation. 
+Here the major optimization i suggest is in the `_processDelegation()` fcn. `transferBetweenDelegators()` can be modified so we can pass the `proxyAddress` returned from the `deployProxyDelegatorIfNeeded`() into `transferBetweenDelegators()` and use that `proxyAddress` for `proxyAddressTo`  in the  `transferBetweenDelegators()` instead of calling `retrieveProxyContractAddress()` twice for `proxyAddressFrom` and `proxyAddressTo`.  This will reduce the number of `retrieveProxyContractAddress()` calls in the `_processDelegation()` logic flow to 2 from 3 (because `retrieveProxyContractAddress()` is also called in `deployProxyDelegatorIfNeeded()` fcn). This will the reduce computation. 
 
 Here's an example snippet of what i am proposing. 
 ```
@@ -94,12 +94,15 @@ Here's an example snippet of what i am proposing.
         emit DelegationProcessed(source, target, amount);
     }
 ```
+This should save about 5208 gas. 
 
 ## Codebase quality analysis
 Overall the code in scope is of good quality, but not of highest quality as i noticed it doesnt follow all the solidity style guide rules i.e the functions are not arranged in the correct manner (layout), there is an external function in between two internal functions. Also not all functions have well detailed comments describing what they do. i.e `createProxyDelegatorAndTransfer()` and `transferBetweenDelegators()`.  These functions may be hard to understand for less skilled devs/ users. 
 
 ## Centralization risks
 The contract has centralization risks as it is ownable and the owner is a single address entity. This is further corrobarated by the bot report issues [M-O1](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#m01-centralization-risk-for-privileged-functions) and [L-01](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#l01-use-ownable2step-instead-of-ownable).
+
+
 
 
 ### Time spent:
