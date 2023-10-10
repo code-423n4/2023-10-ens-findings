@@ -4,13 +4,15 @@
 Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
 
 The expected input is: a amounts, s sources, t targets; a = max(s,t). 
+
 ```
         require(
             Math.max(sourcesLength, targetsLength) == amountsLength,
             "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
         );
 ```
-For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function `_processDelegation` is called. So we're moving it into a separate loop:
+
+1. First loop - for indexes in `[0:min(s,t))`. Only `_processDelegation` will be invoked.
 ```
         for (
             uint transferIndex = 0;
@@ -23,7 +25,11 @@ For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function 
             _processDelegation(source, target, amount);
         }
 ```
-For `transferIndex` ∈ `[min(sourcesLength, targetsLength), max(sourcesLength, targetsLength))`, we create a separate loop (one for sources and one for targets):
+
+2. a) If s > t, we use a loop with `_reimburse`.
+
+   b) If s <= t, we use a loop with `createProxyDelegatorAndTransfer`.
+
 ```
         if (sourcesLength > targetsLength) {
             for (
@@ -135,32 +141,10 @@ Optimized version:
 
 | savings                                                      | 1101            | 1269   | 1269   | 1436    |         |
 ```
-Deployment cost will increase by ~29k gas, which will pay off very quickly.
+Deployment cost will increase by ~29k gas, which, as you can see, will pay off very quickly.
 
-# [G-02] Use address.code.length directly instead of caching extcodesize
-[ERC20MultiDelegate.sol#L179-L185](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L179-L185)
-```diff
-    function deployProxyDelegatorIfNeeded(
-        address delegate
-    ) internal returns (address) {
-        address proxyAddress = retrieveProxyContractAddress(token, delegate);
 
-        // check if the proxy contract has already been deployed
--       uint bytecodeSize;
--       assembly {
--           bytecodeSize := extcodesize(proxyAddress)
--       }
-
-        // if the proxy contract has not been deployed, deploy it
--       if (bytecodeSize == 0) {
-+       if (proxyAddress.code.length == 0) {
-            new ERC20ProxyDelegator{salt: 0}(token, delegate);
-            emit ProxyDeployed(delegate, proxyAddress);
-        }
-        return proxyAddress;
-    }
-```
-# [G-03] retrieveProxyContractAddress does not need `_token` parameter - it can be retrieved from the contract's bytecode
+# [G-02] retrieveProxyContractAddress does not need `_token` parameter - it can be retrieved from the contract's bytecode
 
 With the [G-02](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#g02-state-variables-that-are-never-modified-after-deploymentconstructor-should-be-declared-as-constant-or-immutable) optimization from the bot report, it's better to retrieve the `token` from contract's bytecode inside the function's body, instead of passing it as a parameter every time the function is invoked.
 
