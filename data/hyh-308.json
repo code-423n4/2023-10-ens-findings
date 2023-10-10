@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "hyh",
+  "risk": "2",
+  "title": "Using ERC20MultiDelegate with a fee on transfer, rebasing or any variable balances ERC20Votes token allows for stealing balances and freezing assets",
+  "issueId": 308,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/308"
+}
