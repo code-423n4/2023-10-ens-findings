@@ -116,6 +116,8 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 
 ### [G-7] Unnecessary balance check.
 There is no need to check additionally the balance in the _processDelegation() function, because this point is checked in the token burning function - _burnBatch(). If the user specifies a larger balance than he delegated, the contract will not be able to burn more tokens than he has (ERC-1155).
+
+We can delete assert() and function getBalanceForDelegate(). So, it will decrease deploy cost.
 ```diff
     function _processDelegation(
         address source,
@@ -126,6 +128,12 @@ There is no need to check additionally the balance in the _processDelegation() f
 
 -        assert(amount <= balance);
 
+
+-    function getBalanceForDelegate(
+-        address delegate
+-    ) internal view returns (uint256) {
+-        return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
+-    }
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L129-L131
 
