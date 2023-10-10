@@ -12,5 +12,7 @@ In `delegateMulti()` the contract deviates from its actual state as the action o
 ## Centralization risks
 None. The only privileged action is setting the metadata uri of ERC-1155 token. 
 
+
+
 ### Time spent:
-10 hours
+15 hours
