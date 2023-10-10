@@ -13,3 +13,60 @@ contracts/ERC20MultiDelegate.sol=> Line: 204
 // Line: 204
             abi.encode(_token, _delegate)
 ```
+
+## [G-02] Storage variable caching in memory for ERC20MultiDelegate contract
+**Description**
+The state variable called token is being utilised many times in the functions called transferBetweenDelegators & deployProxyDelegatorIfNeeded & _reimburse.
+Storage loads can be costly such as 100 gas from the first call in comparison to MLOAD/MSTORE of 3 gas per call.
+**Mitigation**
+Cache within memory rather than Storage variables called over and over again within the function. 
+ This will charge 1 SLOAD and not call over and over again being a fraction of the cost.
+**Locations**
+```sol
+// Line 28
+    ERC20Votes public token;
+```
+```sol
+// Line 144-149
+    function _reimburse(address source, uint256 amount) internal {
+        // Transfer the remaining source amount or the full source amount
+        // (if no remaining amount) to the delegator
+        address proxyAddressFrom = retrieveProxyContractAddress(token, source);
+        token.transferFrom(proxyAddressFrom, msg.sender, amount);
+    }
+```
+```sol
+// Line 163-171
+    function transferBetweenDelegators(
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
+        address proxyAddressFrom = retrieveProxyContractAddress(token, from);
+        address proxyAddressTo = retrieveProxyContractAddress(token, to);
+        token.transferFrom(proxyAddressFrom, proxyAddressTo, amount);
+    }
+```
+```sol
+// Line 173-190
+    function deployProxyDelegatorIfNeeded(
+        address delegate
+    ) internal returns (address) {
+        address proxyAddress = retrieveProxyContractAddress(token, delegate);
+
+
+        // check if the proxy contract has already been deployed
+        uint bytecodeSize;
+        assembly {
+            bytecodeSize := extcodesize(proxyAddress)
+        }
+
+
+        // if the proxy contract has not been deployed, deploy it
+        if (bytecodeSize == 0) {
+            new ERC20ProxyDelegator{salt: 0}(token, delegate);
+            emit ProxyDeployed(delegate, proxyAddress);
+        }
+        return proxyAddress;
+    }
+```
