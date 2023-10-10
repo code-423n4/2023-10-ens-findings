@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "peakbolt",
+  "risk": "3",
+  "title": "Missing check for return values of transferFrom() can cause token holders to lose their tokens",
+  "issueId": 299,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/299"
+}
