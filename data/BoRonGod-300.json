@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "BoRonGod",
+  "risk": "3",
+  "title": "Can not update delegated votes of a created `ERC20ProxyDelegator`",
+  "issueId": 300,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/300"
+}
