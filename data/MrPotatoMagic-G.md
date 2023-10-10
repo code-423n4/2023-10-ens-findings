@@ -7,8 +7,9 @@
 | [G-03]            | Remove initialization to 0 to save gas                                                        | 1         |
 | [G-04]            | Remove parameter `ERC20Votes _token` from function `retrieveProxyContractAddress` to save gas | 1         |
 | [G-05]            | Use if conditional statements instead of ternary operators to save gas                        | 1         |
+| [G-06]            | Consider using alternatives to OpenZeppelin                                                   | 1         |
 
-### Total number of issues: 5 instances across 5 issues
+### Total number of issues: 6 instances across 6 issues
 
 ### Total deployment gas saved: 35209 gas
 
@@ -213,4 +214,22 @@ File: ERC20MultiDelegate.sol
 101:             address target;
 102:             if (transferIndex < sourcesLength) source = address(uint160(sources[transferIndex]));
 103:             if (transferIndex < targetsLength) target = address(uint160(targets[transferIndex]));
+```
+
+## [G-06] Consider using alternatives to OpenZeppelin
+
+Consider using [Solmate](https://github.com/transmissions11/solmate) and [Solady](https://github.com/Vectorized/solady). Solmate is a library that provides a number of gas-efficient implementations of common smart contract patterns. Solady is another gas-efficient library that places a strong emphasis on using assembly. In the [ERC20MultiDelegate.sol](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) contract, ERC1155 is used frequently. Using a gas-optimized version can help reduce gas costs on the user end.
+
+There is 1 instance of this:
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4C1-L9C54
+
+```solidity
+File: ERC20MultiDelegate.sol
+4: import {Address} from "@openzeppelin/contracts/utils/Address.sol";
+5: 
+6: import "@openzeppelin/contracts/access/Ownable.sol"; 
+7: import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+8: import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
+9: import "@openzeppelin/contracts/utils/math/Math.sol";
 ```
