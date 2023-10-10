@@ -8,13 +8,18 @@
         _delegateMulti(sources, targets, amounts);
     }
 ```
-Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegatee.
+```
+    _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
+```
+Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the uint256s, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegatee.
 
 These tokens are possible to transfer, as they are ERC1155 tokens. But it would not be possible to use them to transfer voting power between delegatees, because `_processDelegation` works only for tokenIds < 2^160.
 
 Such user that entered wrong address as a target, unintentionally or maliciously, will only harm himself, and only in the way that they may not be able to transfer voting power between delegatees.
 
 The affected user will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
+
+It would be also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegatee)))` will not show the complete picture.
 ```
     function _delegateMulti(
         uint256[] calldata sources,
