@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Sabit",
+  "risk": "3",
+  "title": "Use of \"else if\" chain in _delegateMulti function will cause a subsequent condition not to be checked",
+  "issueId": 297,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/297"
+}
