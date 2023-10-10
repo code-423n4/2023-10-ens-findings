@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "lsaudit",
+  "risk": "3",
+  "title": "User can steal tokens by front-running `delegateMulti`",
+  "issueId": 280,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/280"
+}
