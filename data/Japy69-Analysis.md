@@ -34,5 +34,7 @@ The only risks may come from:
 1. a proxy but it is out-of-scope.
 2. setUri function. A trigger can be added to let owner set it once.
 
+
+
 ### Time spent:
 8 hours
