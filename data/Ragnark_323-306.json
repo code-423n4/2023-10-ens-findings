@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Ragnark_323",
+  "risk": "3",
+  "title": "Unbounded Loops In _delegateMulti() can lead to Denail of Service",
+  "issueId": 306,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/306"
+}
