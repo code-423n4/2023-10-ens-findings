@@ -1,16 +1,4 @@
-# [G-01] Call balanceOf internally 
-[ERC20MultiDelegate.sol#L195](https://github.com/code-423n4/2023-10-ens/blob/1adbe2cce191140657b8bccffab85103953bdccb/contracts/ERC20MultiDelegate.sol#L195) 
-
-```diff
-    function getBalanceForDelegate(
-        address delegate
-    ) internal view returns (uint256) {
--       return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
-+       return balanceOf(msg.sender, uint256(uint160(delegate)));
-    }
-```
-
-# [G-02] function _delegateMulti - avoid if-else and ternary operator overuse by splitting the loop into smaller ones
+# [G-01] function _delegateMulti - avoid if-else and ternary operator overuse by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
 Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones.
 
@@ -127,7 +115,7 @@ Optimized version:
         }
 ```
 
-# [G-03] Use address.code.length directly instead of caching extcodesize
+# [G-02] Use address.code.length directly instead of caching extcodesize
 [ERC20MultiDelegate.sol#L179-L185](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L179-L185)
 ```
     function deployProxyDelegatorIfNeeded(
