@@ -8,14 +8,15 @@ From my understanding, the `ERC20MultiDelegate` functionality is to let ENS dele
 
 Every delegation is done via the [delegateMulti()](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L57) fcn primarily involves three main state changes: 
 -  transfer of a specified amount of the ERC20Votes token to the target delegator address's `ERC20ProxyDelegator` contract
--  mint's a specified amount of  erc1155 tokens to the delegator, with the id or ids specified as the delegatee/target address. 
--  burns a specified amount of erc1155 tokens from the delegator, with the id or ids specified as the source address. 
+-  mint's a specified amount of ERC20MultiDelegate erc1155 tokens to the delegator, with the id or ids specified as the delegatee/target address. 
+-  burns a specified amount of ERC20MultiDelegate erc1155 tokens from the delegator, with the id or ids specified as the source address. 
 
 [delegateMulti()](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L57) fcn here is external and not gated. This is the main user entry point. 
 
-The amount of ERC20Votes token with a source delegate address's `ERC20ProxyDelegator` contract is supposed to be equal to the `ERC20MultiDelegate` erc1155 token balance of the delegator for the token type source delegate address. 
+The noted invariants are: 
+- The amount of `ERC20Votes` token with a delegate address's `ERC20ProxyDelegator` contract is supposed to be equal to the `ERC20MultiDelegate` erc1155 token balance of the delegator for the token type which has an ID of delegate address. 
 
-During transfers, source delegate must have its `ERC20ProxyDelegator` erc1155 token balance reduced to the amount to be transfered via `_burnBatch()` and Target must have its `ERC20ProxyDelegator` erc1155 token balance increased up to the amount to be transferred via `_mintBatch()`. 
+- During delegation vote transfer, the delegator should decrease their balance of `ERC20MultiDelegate` ERC1155 tokens which have their ID as the source delegate by using `_burnBatch()` for the specified amount. Simultaneously, they should increase their balance of `ERC20MultiDelegate` ERC1155 tokens which have their ID as the target delegate by using `_mintBatch()` for the same amount.
 
 ## Architecture recommendations
 Here the major optimization i suggest is in the `_processDelegation()` fcn. `transferBetweenDelegators()` can be modified so we can pass the `proxyAddress` returned from the `deployProxyDelegatorIfNeeded`() into `transferBetweenDelegators()` and use that `proxyAddress` for `proxyAddressTo`  in the  `transferBetweenDelegators()` instead of calling `retrieveProxyContractAddress()` twice for `proxyAddressFrom` and `proxyAddressTo`.  This will reduce the number of `retrieveProxyContractAddress()` calls in the `_processDelegation()` logic flow to 2 from 3 (because `retrieveProxyContractAddress()` is also called in `deployProxyDelegatorIfNeeded()` fcn). This will the reduce computation. 
@@ -101,6 +102,8 @@ Overall the code in scope is of good quality, but not of highest quality as i no
 
 ## Centralization risks
 The contract has centralization risks as it is ownable and the owner is a single address entity. This is further corrobarated by the bot report issues [M-O1](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#m01-centralization-risk-for-privileged-functions) and [L-01](https://github.com/code-423n4/2023-10-ens/blob/main/bot-report.md#l01-use-ownable2step-instead-of-ownable).
+
+
 
 
 
