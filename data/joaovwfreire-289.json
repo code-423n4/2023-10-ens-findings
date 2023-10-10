@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "joaovwfreire",
+  "risk": "2",
+  "title": "_mintBatch and _burnBatch are called with non-truncated uint256 arrays at the sources and at the targets arguments",
+  "issueId": 289,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/289"
+}
