@@ -14,7 +14,7 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 @dev A utility contract to let delegators to pick multiple ~delegate~ delegates
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L23
 
-3. Misleading/hard to understand comments
+3. Misleading/hard to understand comment
 
 `// Handle any remaining source amounts after the transfer process.`
 ```
@@ -24,7 +24,21 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 These read like after the `_processDelegation` function is called, the `_reimburse` function should be immediately called after to withdraw the amount left ie `the remaining source amount` from the `_processDelegation` transfer back to the delgator. 
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L145C1-L146C53
 
-4. ERC1155Supply vulnerability in OpenZeppelin Contracts
+4. Polymorphic functions make security audits more time-consuming and error-prone
+The instances below point to one of two functions with the same name. Consider naming each function differently, in order to make code navigation and analysis easier.
+
+` function delegateMulti`, `function _delegateMulti`
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L57
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L65C4-L65C29
+
+5. Unusual loop variable
+The normal name for loop variables is i, and when there is a nested loop, to use j. Not following this convention may lead to some reviewer confusion
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L86
+
+6. ERC1155Supply vulnerability in OpenZeppelin Contracts
 
 When ERC1155 tokens are minted, a callback is invoked on the receiver of those tokens, as required by the spec. When including the ERC1155Supply extension, total supply is not updated until after the callback, thus during the callback the reported total supply is lower than the real number of tokens in circulation.
 
@@ -42,7 +56,7 @@ A fix is included in version 4.3.3 of @openzeppelin/contracts.
 Reference
 https://github.com/OpenZeppelin/openzeppelin-contracts/security/advisories/GHSA-wmpv-c2jp-j2xg
 
-5. Numbers downcast to addresses may result in collisions
+7. Numbers downcast to addresses may result in collisions
 If a number is downcast to an address the upper bytes are truncated, which may mean that more than one value will map to the address
 
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L91
