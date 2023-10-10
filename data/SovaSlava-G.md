@@ -13,7 +13,7 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 You can calculate the minimum length of arrays once and use this value, rather than calculating it at each iteration
 ```diff
   // Iterate until all source and target delegates have been processed.
-+    uint minLen =  Math.min(sourcesLength, targetsLength);
++    uint minLen =  sourcesLength < targetsLength ? sourcesLength: targetsLength;
         for (
             uint transferIndex = 0;
             transferIndex < Math.max(sourcesLength, targetsLength);
@@ -64,7 +64,30 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L208
 
-[G5] Unnecessary conversion 0 to uint.
+[G5] It is not necessary to use library functions for simple mathematics. We can insert the calculation directly into the contract. And create variable maxLen, and use it instead call library function.
+```diff
+// Create variable maxLen
++  uint maxLen = (sourcesLength >= targetsLength ? sourcesLength : targetsLength);
+// place 1
+
+require(
+-     Math.max(sourcesLength, targetsLength) == amountsLength,
++     maxLen == amountsLength,
+      "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
+);
+
+// place 2
+ for (
+            uint transferIndex = 0;
+-           transferIndex < Math.max(sourcesLength, targetsLength);
++           transferIndex < maxLen;
+            transferIndex++
+    ) {
+
+```
+
+
+[G6] All function not payable, so we can change in all places 0 to msg.value
 We can use msg.value (as 0) because function delegateMulti() is not payable. Value of msg.value always will be 0.
 ```diff
 // case 1
@@ -86,3 +109,4 @@ We can use msg.value (as 0) because function delegateMulti() is not payable. Val
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L210
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L185
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L186
+
