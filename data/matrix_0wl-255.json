@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "matrix_0wl",
+  "risk": "2",
+  "title": "Reentrancy Attack in ERC20MultiDelegate Contract",
+  "issueId": 255,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/255"
+}
