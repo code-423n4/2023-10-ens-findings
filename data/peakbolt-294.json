@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "peakbolt",
+  "risk": "3",
+  "title": "Lack of support for infinite allowance can cause tokens to be locked in ERC20ProxyDelegator",
+  "issueId": 294,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/294"
+}
