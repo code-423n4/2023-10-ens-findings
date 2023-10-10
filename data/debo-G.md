@@ -17,10 +17,10 @@ contracts/ERC20MultiDelegate.sol=> Line: 204
 ## [G-02] Storage variable caching in memory for ERC20MultiDelegate contract
 **Description**
 The state variable called token is being utilised many times in the functions called transferBetweenDelegators & deployProxyDelegatorIfNeeded & _reimburse.
-Storage loads can be costly such as 100 gas from the first call in comparison to MLOAD/MSTORE of 3 gas per call.
+Storage loads can be costly such as 100 gas from the first call in comparison to memory load or memory store of 3 gas per call.
 **Mitigation**
 Cache within memory rather than Storage variables called over and over again within the function. 
- This will charge 1 SLOAD and not call over and over again being a fraction of the cost.
+ This will charge 1 storage load and not call over and over again being a fraction of the cost.
 **Locations**
 ```sol
 // Line 28
