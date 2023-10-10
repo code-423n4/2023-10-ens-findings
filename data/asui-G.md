@@ -1,0 +1,2 @@
+1. Use ```return balanceOf(msg.sender, uint256(uint160(delegate)));``` instead of
+ ```return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));``` in the [```getBalanceForDelegate```]() function. 
