@@ -41,3 +41,10 @@ A fix is included in version 4.3.3 of @openzeppelin/contracts.
 
 Reference
 https://github.com/OpenZeppelin/openzeppelin-contracts/security/advisories/GHSA-wmpv-c2jp-j2xg
+
+5. Numbers downcast to addresses may result in collisions
+If a number is downcast to an address the upper bytes are truncated, which may mean that more than one value will map to the address
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L91
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L94
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L214
