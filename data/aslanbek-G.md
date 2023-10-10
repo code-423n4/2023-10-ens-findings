@@ -9,7 +9,7 @@
 +       return balanceOf(msg.sender, uint256(uint160(delegate)));
     }
 ```
-# [G-02] function _delegateMulti
+# [G-02] function _delegateMulti - avoid if-else and ternary operator abuse by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
 Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones.
 
@@ -20,7 +20,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
             "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
         );
 ```
-For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function `_processDelegation` is called. So we're moving it into a separate loop, avoiding plenty of `if` branchings:
+For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function `_processDelegation` is called. So we're moving it into a separate loop, avoiding plenty of branchings:
 ```
         for (
             uint transferIndex = 0;
@@ -35,7 +35,6 @@ For `transferIndex` ∈ `[0; min(sourcesLength, targetsLength))`, only function 
 ```
 For `transferIndex` ∈ `[min(sourcesLength, targetsLength), max(sourcesLength, targetsLength))`, we create a separate loop (one for sources and one for targets):
 ```
-
         if (sourcesLength > targetsLength) {
             for (
                 uint transferIndex = minSourcesTargetsLength;
