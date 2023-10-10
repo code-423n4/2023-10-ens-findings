@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "tapir",
+  "risk": "2",
+  "title": "Incompatibility issue in ERC20MultiDelegate due to Non-Standard \"msg.sender\" reference",
+  "issueId": 259,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/259"
+}
