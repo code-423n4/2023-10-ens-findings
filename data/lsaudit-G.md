@@ -152,7 +152,7 @@ to:
 
 # [G-07] Unnecessary declaration of `proxyAddressFrom`, `proxyAddressTo` variables in `transferBetweenDelegators`
 
-`proxyAddressFrom` and `proxyAddressTo` are used only once, which implies, that it does not need to be declared at all.
+`proxyAddressFrom` and `proxyAddressTo` are used only once, which implies, that they do not need to be declared at all.
 
 Change:
 
@@ -282,3 +282,51 @@ The code can look like this:
 ```
 
 Please take into a consideration, that for the clarity of the code, we did not enforced additional optimizations which were suggested in the previous paragraphs of this report (such as: `transferIndex++` should be `unchecked`, `Math.min` and `Math.max` result should be calculated once and cached).
+
+# [G-09] Unnecessary declaration of `bytecode`, `hash` variables in `retrieveProxyContractAddress`
+
+`bytecode` and `hash` are used only once, which implies, that they do not need to be declared at all.
+
+Change:
+
+```
+   function retrieveProxyContractAddress(
+        ERC20Votes _token,
+        address _delegate
+    ) private view returns (address) {
+        bytes memory bytecode = abi.encodePacked(
+            type(ERC20ProxyDelegator).creationCode, 
+            abi.encode(_token, _delegate)
+        );
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                bytes1(0xff),
+                address(this),
+                uint256(0), // salt
+                keccak256(bytecode)
+            )
+        );
+        return address(uint160(uint256(hash)));
+    }
+```
+
+to:
+
+```
+   function retrieveProxyContractAddress(
+        ERC20Votes _token,
+        address _delegate
+    ) private view returns (address) {
+        return address(uint160(uint256(keccak256(
+            abi.encodePacked(
+                bytes1(0xff),
+                address(this),
+                uint256(0), // salt
+                keccak256(abi.encodePacked(
+            type(ERC20ProxyDelegator).creationCode, 
+            abi.encode(_token, _delegate)
+        ))
+            )
+        ))));
+    }
+```
