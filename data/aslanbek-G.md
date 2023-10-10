@@ -170,3 +170,27 @@ While the optimization makes the deployment ~29k gas more expensive, it saves ~2
 | delegateMulti                                                | 213567          | 616474 | 616474 | 1019381 | 2       |
 ```
 [Multidelegate.t.sol](https://gist.github.com/aslanbekaibimov/10135b8d15888a9c2bbaa3814d511bdf)
+
+# [G-03] Use address.code.length directly instead of caching extcodesize
+[ERC20MultiDelegate.sol#L179-L185](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L179-L185)
+```
+    function deployProxyDelegatorIfNeeded(
+        address delegate
+    ) internal returns (address) {
+        address proxyAddress = retrieveProxyContractAddress(token, delegate);
+
+        // check if the proxy contract has already been deployed
+-       uint bytecodeSize;
+-       assembly {
+-           bytecodeSize := extcodesize(proxyAddress)
+-       }
+
+        // if the proxy contract has not been deployed, deploy it
+-       if (bytecodeSize == 0) {
++       if (proxyAddress.code.length == 0) {
+            new ERC20ProxyDelegator{salt: 0}(token, delegate);
+            emit ProxyDeployed(delegate, proxyAddress);
+        }
+        return proxyAddress;
+    }
+```
