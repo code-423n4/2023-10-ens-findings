@@ -1,7 +1,7 @@
 # [G-01] function _delegateMulti - avoid excessive if-else and ternary operators by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
 
-Instead of a single "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
+Instead of the "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
 
 The expected input is: a amounts, s sources, t targets; a = max(s,t). 
 
@@ -12,7 +12,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         );
 ```
 
-1. First loop - for indexes in `[0:min(s,t))`. Only `_processDelegation` will be invoked.
+1. First loop - for indexes in `[0:min(s,t))`. Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
 ```
         for (
             uint transferIndex = 0;
@@ -26,9 +26,9 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         }
 ```
 
-2. a) If s > t, we use a loop with `_reimburse`.
+2. a) If s > t, we use a loop with `_reimburse`. Only Sources are needed and they are guaranteed to be provided.
 
-   b) If s <= t, we use a loop with `createProxyDelegatorAndTransfer`.
+   b) If s <= t, we use a loop with `createProxyDelegatorAndTransfer`. Only Targets are needed and they are guaranteed to be provided.
 
 ```
         if (sourcesLength > targetsLength) {
