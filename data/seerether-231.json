@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "seerether",
+  "risk": "3",
+  "title": "The _reimburse() function is vulnerable to token theft",
+  "issueId": 231,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/231"
+}
