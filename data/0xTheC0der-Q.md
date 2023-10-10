@@ -54,3 +54,26 @@ index e557d4e..88d6ff6 100644
 
 ```
 I recommend to consistently use the `address` type, especially in the [signature of delegateMulti(...)](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L58-L59), to completely resolve this issue. As a result, the unsafe down-casts can be removed and only internal up-casts from addresses to ERC1155 token IDs are necessary.
+
+
+## Non-critical 1: Address check of newly created `ERC20ProxyDelegator`
+
+Although contracts are [deployed at a deterministic](https://www.evm.codes/#f5?fork=shanghai) address using the `CREATE2` opcode and the `new` keyword implicitly checks if the opcode returned a non-zero address, it is still good practice to check if the actual address of deployment matches the pre-computed address:
+
+```diff
+diff --git a/contracts/ERC20MultiDelegate.sol b/contracts/ERC20MultiDelegate.sol
+index 28e0f5d..1a448b0 100644
+--- a/contracts/ERC20MultiDelegate.sol
++++ b/contracts/ERC20MultiDelegate.sol
+@@ -183,7 +183,8 @@ contract ERC20MultiDelegate is ERC1155, Ownable {
+ 
+         // if the proxy contract has not been deployed, deploy it
+         if (bytecodeSize == 0) {
+-            new ERC20ProxyDelegator{salt: 0}(token, delegate);
++            ERC20ProxyDelegator deployedAddress = new ERC20ProxyDelegator{salt: 0}(token, delegate);
++            assert(address(deployedAddress) == proxyAddress);
+             emit ProxyDeployed(delegate, proxyAddress);
+         }
+         return proxyAddress;
+
+```
