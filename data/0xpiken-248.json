@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xpiken",
+  "risk": "2",
+  "title": "Contract account could be blocked to use delegateMulti function due to not supporting ERC-1155",
+  "issueId": 248,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/248"
+}
