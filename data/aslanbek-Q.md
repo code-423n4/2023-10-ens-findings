@@ -182,7 +182,7 @@ delegateMulti -> _delegateMulti -> _processDelegation
         return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
     }
 ```
-the code above checks if Alice has enough tokens with `id == bob`, not with `id == bob + 2^160`, and does not revert, although Alice is using a different tokenId.
+The code above checks if Alice has enough tokens with `id == bob`, not with `id == bob + 2^160`, and does not revert, although Alice is using a different tokenId.
 
 The contract will then successfully burn the token with `id == bob + 2^160` from Alice.
 
