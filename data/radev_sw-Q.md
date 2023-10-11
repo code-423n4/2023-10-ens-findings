@@ -45,6 +45,11 @@
 
 ## <a name="L-01"></a>[L-01] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
 
+#### GitHub Links
+
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65-L116
+- (more specific link: https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L85-L108)
+
 #### Overview:
 
 The function `_delegateMulti()` processes the delegation transfer process for multiple source and target delegates. Currently, there are no explicit bounds set for the lengths of the `sources` and `targets` arrays. This lack of upper limit poses potential risks in terms of gas costs and unwanted system behaviors.
@@ -76,6 +81,10 @@ By introducing these checks, you can ensure that the `_delegateMulti()` function
 
 ## <a name="L-02"></a>[L-02] Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address
 
+#### GitHub Links
+
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L173-L190
+
 #### **Impact**
 
 This vulnerability potentially impacts the upgradability of the `ERC20ProxyDelegator` contract. In scenarios where there's a need to redeploy an `ERC20ProxyDelegator` for a specific `token` and `delegate` combination due to, for instance, an upgrade or bug fix, the system wouldn't be able to deploy the new contract at the same address. As a result, the predictability and management of the system can be compromised. Furthermore, an attacker aware of this static salt can precompute and self-destruct the proxy contract's address, causing a Denial-of-Service (DoS) condition where the contract can't be redeployed at its expected address.
@@ -102,6 +111,10 @@ The `ERC20ProxyDelegator` contract is a proxy delegator contract designed to vot
 
 ## <a name="L-03"></a>[L-03] Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`
 
+#### GitHub Links
+
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L173-L190
+
 #### **Impact**
 
 If there's a malfunction during the initialization of the `ERC20ProxyDelegator`, or if an out-of-gas error occurs during its deployment, it could lead to the `ERC20ProxyDelegator` contract being deployed without proper initialization. This can render the deployed contract useless, potentially halting any subsequent operations or interactions relying on this contract. Such a scenario can result in a Denial-of-Service (DoS) state for the affected operations.
@@ -125,6 +138,11 @@ The `ERC20ProxyDelegator` contract, upon deployment, is expected to approve a sp
 ---
 
 ## <a name="L-04"></a>[L-05] Front Running of `ERC20ProxyDelegator` Deployment
+
+#### GitHub Links
+
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L15-L20
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L173-L190
 
 #### Impact
 
@@ -152,6 +170,10 @@ Front-running is a scenario on public blockchains where a malicious actor can se
 ---
 
 ## <a name="L-05"></a>[L-05] Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`
+
+#### GitHub Links
+
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L173-L190
 
 #### Impact
 
@@ -186,12 +208,10 @@ For instance, both `UNI` and `COMP` tokens feature special-case logic in their `
 <i>This issue is present in the following location:</i>
 
 ```solidity
-📁 File: contracts/ERC20MultiDelegate.sol
-
 17:         _token.approve(msg.sender, type(uint256).max);
 ```
 
-[Link to Code Line 17](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol/#L17)
+- Links: https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol/#L17
 
 **Full Contract Context**:
 
@@ -213,12 +233,10 @@ It is essential to note that not all `IERC20` implementations utilize the `rever
 <i>The issue occurs in the following segment:</i>
 
 ```solidity
-📁 File: contracts/ERC20MultiDelegate.sol
-
 17:         _token.approve(msg.sender, type(uint256).max);
 ```
 
-[Link to Code Line 17](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol/#L17-L17)
+Link: https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol/#L17-L17
 
 ---
 
@@ -229,12 +247,10 @@ To enhance readability and assist future reviewers, it is advisable to provide d
 <i>This recommendation is based on the following code:</i>
 
 ```solidity
-📁 File: contracts/ERC20MultiDelegate.sol
-
 28:     ERC20Votes public token;
 ```
 
-[Link to Code Line 28](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol/#L28-L28)
+Link: https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol/#L28-L28
 
 ---
 
@@ -320,6 +336,8 @@ for (
     ...
 }
 ```
+
+[Link to Code](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65-L116)
 
 In the snippet above, there is logic to set `source` or `target` to `address(0)` if their respective lengths are exceeded. However, this does not prevent the user from manually providing the zero address in the `sources` or `targets` arrays.
 
@@ -419,6 +437,10 @@ During the delegation transfer process for multiple source and target delegates,
 2. **Logical Integrity:** Transferring tokens between identical source and target addresses or transferring an amount of zero doesn't align with the logical intent of a transfer operation.
 
 3. **Preventing Unexpected Behaviors:** Ensuring logical checks can prevent potential unwanted system behaviors, edge cases, or vulnerabilities.
+
+#### Links:
+
+- https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65-L116)
 
 #### Recommendation:
 
