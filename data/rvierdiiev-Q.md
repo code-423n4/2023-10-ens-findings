@@ -5,3 +5,12 @@ When new proxy for delegate is deployed, then in constructor [`delegate` functio
 In case if there will be voting token with overriden delegate function that doesn't allow delegate when you have 0 balance, then this approach will not work. Then construction of proxy will simply revert. As result someone will need to send 1 wei of tokens to the proxy, before construction, in order to be able to deploy it, which is not convenient.
 ## Recommendation
 First transfer tokens and then deploy proxy. 
+
+## QA-02. ERC20MultiDelegate.createProxyDelegatorAndTransfer doesn't emit event.
+## Description
+When someone delegates his voting power to delegator, then `DelegationProcessed` event should be emitted.
+This is done for case, when user [transfers voting power from one delegator to another](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L136) inside `_processDelegation` function, but it isn't done, [when user deploys new delegator and transfer voting power](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L155-L161). Because of that it will be harder to track voting power changes using events.
+
+Also i guess, that in case if user just withdraws from delegator, then even should be emitted as well.
+## Recommendation
+Emit `DelegationProcessed` event inside `createProxyDelegatorAndTransfer` function.
