@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "wvleak",
+  "risk": "2",
+  "title": "Delegation to address(0) should not be allowed",
+  "issueId": 605,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/605"
+}
