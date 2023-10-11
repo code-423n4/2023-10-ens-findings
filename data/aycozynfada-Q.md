@@ -48,7 +48,11 @@ Recommendation: minimize centralization by decentralizing privileged functions a
 The codebase for 2023-04-ens is generally well-structured and follows Solidity best practices. However, it requires further improvements in documentation, testing, and gas efficiency to ensure higher quality and security.
 
 
-1. # Event not emitted after residual target transfer through the "transferBetweenDelegators" method likewise the _reImburse function and setUri function [low-1]
+
+
+
+
+# Event not emitted after residual target transfer through the "transferBetweenDelegators" method likewise the _reImburse function and setUri function [low-1]
 
 The process _processDelegation function during multi-delegation of the _delegateMulti successfully emits an event for the _processDelegation function. But the "transferBetweenDelegators" which processs the residual target transactions doesn't emit any confirmation event of the transaction, likewise the _reImburse function
 ```solidity
