@@ -209,7 +209,8 @@ Deployment savings - 20874 gas
 ```
 
 # [G-03] Redundant retrieveProxyContractAddress
-
+[ERC20MultiDelegate.sol#L133](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L133)
+[ERC20MultiDelegate.sol#L169](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L169)
 ```diff
     function _processDelegation(
         address source,
