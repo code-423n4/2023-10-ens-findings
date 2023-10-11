@@ -181,5 +181,7 @@ Consider implementing a separate public function for each type of transaction, s
 | **Target delegatee** | The delegatee account to which the voting power will be deposited in an inter-delegatee transfer. |
 
 
+
+
 ### Time spent:
 37 hours
