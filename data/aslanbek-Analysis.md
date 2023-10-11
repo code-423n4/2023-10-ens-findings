@@ -7,7 +7,8 @@ ERC20MultiDelegate solves this problem: it allows token holders to cheaply and p
 Token holders are able to:
 
 1. Lock their ERC20Votes token and distribute their voting power in any arbitrary proportion between however many delegatees they want, in one call.
-![FirstDelegation.png](https://user-images.githubusercontent.com/85546446/274232424-e6ed4ef1-29a9-4be5-ae3c-50ab5f518bd4.png)
+
+![FirstDelegation.png](https://user-images.githubusercontent.com/85546446/274298514-fdd64e2e-b134-4277-96f1-390a5c6e183e.png)
 
 2. Move an arbitrary amount of voting power between delegatees.
 
@@ -50,6 +51,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 The codebase is written with respect to clarity and security practices. No major vulnerabilities or optimizations were detected. 
 
 While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 
