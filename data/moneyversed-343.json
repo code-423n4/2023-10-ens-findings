@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "moneyversed",
+  "risk": "2",
+  "title": "Misuse of `assert` in ERC20MultiDelegate's `_processDelegation`function results in eventual Denial-of-Service via full gas consumption on over-delegation",
+  "issueId": 343,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/343"
+}
