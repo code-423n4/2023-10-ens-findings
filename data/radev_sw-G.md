@@ -30,8 +30,8 @@
 | ----------------- | ------------------------------------------------------- |
 | [GAS-01](#GAS-01) | Use of `Math.max` and `Math.min`                        |
 | [GAS-02](#GAS-02) | Single Read of `Math.max(sourcesLength, targetsLength)` |
-| [GAS-04](#GAS-04) | Use of Indexed Events                                   |
-| [GAS-05](#GAS-05) | Use assembly for loops to save gas                      |
+| [GAS-03](#GAS-03) | Use of Indexed Events                                   |
+| [GAS-04](#GAS-04) | Use assembly for loops to save gas                      |
 
 ---
 
@@ -92,7 +92,7 @@ Store the value of `Math.max(sourcesLength, targetsLength)` in a local variable 
 
 ---
 
-## <a name="GAS-04"></a>[GAS-04] Use of Indexed Events
+## <a name="GAS-03"></a>[GAS-03] Use of Indexed Events
 
 ### Overview:
 
@@ -120,7 +120,7 @@ Review all events and ensure that all parameters that users might want to filter
 
 ---
 
-## <a name="GAS-05"></a>[GAS-05] Use assembly for loops to save gas
+## <a name="GAS-04"></a>[GAS-04] Use assembly for loops to save gas
 
 **Saves `2450 GAS` for every iteration from `7 instances`.
 Assembly is more gas efficient for loops. Saves minimum `350 GAS` per iteration as per remix gas checks.**
