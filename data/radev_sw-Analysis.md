@@ -389,5 +389,7 @@ Day 5:
 
 
 
+
+
 ### Time spent:
-40 hours
+46 hours
