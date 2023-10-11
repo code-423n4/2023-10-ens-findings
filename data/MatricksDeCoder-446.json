@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "MatricksDeCoder",
+  "risk": "2",
+  "title": "Contracts wont work with tokens that need to approve to 0 like USDT type tokens ",
+  "issueId": 446,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/446"
+}
