@@ -32,6 +32,8 @@ These could be updated, to inherit from much more recent and considered safer li
 > […] The point highlighted is the potential benefit of clearly defining the versions of dependencies intended for deployment, as late as possible, and the **possibility of introducing new vulnerabilities in the case of an upgrade *after* the audit is completed**.
 > 
 
+Although this is not entirely in scope, since only OpenZeppelin contracts are actually imported in ERC20MultiDelegate, I’d rather declare it as an informational issue for these reasons.
+
 ```json
 "dependencies": {
     // 2 years old, latest is 0.0.22 as of 2023-10-11
