@@ -53,8 +53,23 @@ This will be done by calling the ```delegateMulti``` function in the **multiDele
    * amounts - the amount is how much of the ENSToken the user wants to stop delegating to the addresses.
 In this process the specified amount of ENSToken will be sent back to the user from the respective address's proxy contract. And the voting rights of the addresses will be decreased accordingly. 
 
-3. A user can also transfer the voting rights from one address to another.
-  This will be done by calling the 
+3. A user can also transfer the voting rights from one address to another directly.
+  This will be done by calling the the ```delegateMulti``` function with the arguments:
+       * sources - the address the user wants to move the voting rights from.
+       * targets - the address the user wants to move the voting rights to.
+       * amounts - how much of the rights to move from sources to targets .
+
+In this process, the given amount of ENSToken tokens will be transfered from the sources to the targets respectively which in turn will change the amount of voting rights.
+If the target address has never been delegated then a new proxy contract will be created for that target else it will send the ENSToken to the existing proxy to increase the voting rights.
+
+
+
+
+Note: In the above explanation sources or targets are said to be address but it will need to be turned into uint256 first.
+
+**The ERC1155 (multiDelegate) token:**
+The ```multiDelegate.sol``` contract is also an ERC1155 token. This token represents the amount of the ENSTokens and is minted when a user delegate ENSToken(send to the proxy) to an address. 
+
 
 ### Time spent:
 48 hours
