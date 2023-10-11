@@ -15,6 +15,8 @@ As always, I started off by reading the docs and links provided to help gain a g
 ## Architecture Recommendations
 A solid smart contract architecture is fundamental to safeguard against potential risks and enhance scalability and maintainability. Adopting a modular design that separates distinct functionalities into different contracts, while ensuring precise interaction, could enhance clarity and facilitate easier upgrades. It’s essential to implement versioning in smart contracts, enabling smoother transitions to upgraded contracts without risking existing data. A thorough audit of dependencies and interactions among contracts will identify potential bottlenecks and ensure efficient gas usage. Implementing a secure upgrade pattern like the Proxy pattern should be considered for ensuring upgradeability without compromising security.
 
+![image](https://user-images.githubusercontent.com/143369715/274363571-fcdfd37e-ed0c-46c4-984e-670ed030a7c1.png)
+
 Within the contract in scope, it's crucial to conduct an architecture review focusing on the robustness and extensibility of the design. Deploying proxy contracts can become resource-intensive in terms of gas costs, and it's worthwhile to explore more gas-efficient alternatives or layer-2 solutions for scalability. Additionally, considering user experience, implementation of revert messages in `require` statements can provide better error diagnostics. Deploying a new contract for each delegation via `new ERC20ProxyDelegator` could lead to excessive use of resources and make tracking of deployed contracts challenging. Implementing an architecture that uses a single contract to manage all delegations may be considered to optimize resource utilization.
 
 ## Codebase Quality Analysis
@@ -34,6 +36,8 @@ In the mechanism implemented within `_processDelegation` and `_reimburse`, ensur
 
 ## Systemic Risks
 Systemic risks pertain to the broad impacts that could threaten the stability and functionality of the entire platform. Examples include smart contract vulnerabilities, economic instability, or severe network congestion. Implement comprehensive monitoring and alerting systems to swiftly identify and respond to security incidents or network abnormalities. Employ circuit breakers or pause mechanisms in smart contracts to halt certain functionalities in the event of a detected issue. Diversifying dependencies (such as using multiple oracles or data sources) and establishing a robust emergency response and communication plan ensures preparedness to manage unforeseen crises and maintain user trust.
+
+
 
 
 
