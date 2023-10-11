@@ -77,6 +77,8 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 ### [G-5] Dont use MATH library for simple math.
 It is not necessary to use library functions for simple mathematics. We can insert the calculation directly into the contract. And create variable maxLen, and use it instead call library function.
 ```diff
+-  import "@openzeppelin/contracts/utils/math/Math.sol";
+...
 // Create variable maxLen
 +  uint maxLen = (sourcesLength >= targetsLength ? sourcesLength : targetsLength);
 // place 1
