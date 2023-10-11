@@ -4,7 +4,7 @@
 |--------|--------------------------------------------------------------------------------------|-----------|
 | [N-01] | Missing event emission for critical state changes                                    | 4         |
 | [N-02] | Unnecessary typecast to uint256                                                      | 1         |
-| [N-03] | Remove unnecessary code                                                              | 3         |
+| [N-03] | Remove unnecessary code                                                              | 4         |
 | [N-04] | Constants should be defined rather than using magic numbers                          | 2         |
 | [L-01] | Missing getUri() function that returns baseUri appended with a user specific tokenId | 1         |
 | [R-01] | Consider adding a time interval field                                                | 1         |
