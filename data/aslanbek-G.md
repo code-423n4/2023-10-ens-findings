@@ -271,17 +271,15 @@ Deployment savings - 5400 gas
     ) internal {
 -       uint256 balance = getBalanceForDelegate(source);
 +       uint256 balance = balanceOf(msg.sender, uint256(uint160(source)));
-
-        // N-09 from the bot report
--       assert(amount <= balance);
-+       require(amount <= balance, "Insufficient Balance");
-
-        deployProxyDelegatorIfNeeded(target);
-        transferBetweenDelegators(source, target, amount);
-
-
-        emit DelegationProcessed(source, target, amount);
+      /* ... */ 
     }
+```
+```diff
+-   function getBalanceForDelegate(
+-       address delegate
+-   ) internal view returns (uint256) {
+-       return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
+-   }
 ```
 ```
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
