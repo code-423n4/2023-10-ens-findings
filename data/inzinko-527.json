@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "inzinko",
+  "risk": "2",
+  "title": "Amounts not checked for out of bounds can lead to unintended consequences",
+  "issueId": 527,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/527"
+}
