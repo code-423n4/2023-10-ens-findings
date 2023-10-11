@@ -18,7 +18,7 @@ Token holders are able to:
 
 ![Reimburse.png](https://user-images.githubusercontent.com/85546446/274232768-bc27ffe8-8d98-4fd1-826f-d9ae0ab96dfc.png)
 
-4. Transfer ERC-1155's to EOAs or `ERC1155TokenReceiver`s. These tokens represent voting power delegated to a delegate, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator contract.
+4. Transfer ERC-1155's to other addresses. These tokens represent voting power delegated to a delegate, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator contract.
 
 # Centralization Risks
 
@@ -51,6 +51,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 The codebase is written with respect to the best security practices. No major vulnerabilities or optimizations were detected. 
 
 While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 
