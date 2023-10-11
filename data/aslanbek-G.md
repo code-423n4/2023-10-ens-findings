@@ -254,27 +254,31 @@ Deployment savings - 20874 gas
 
 Deployment savings - 5400 gas
 ```
-# [G-04] function getBalanceForDelegate is redundant
-```
-    function getBalanceForDelegate(
-        address delegate
-    ) internal view returns (uint256) {
-        return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
-    }
-```
-`getBalanceForDelegate` has no additional logic in comparison to `balanceOf`. Consider using `balanceOf` directly.
+# [G-04] `_processDelegation` optimizations
 
- ```diff
+[ERC20MultiDelegate.sol#L124-L137](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L124-L137)
+[ERC20MultiDelegate.sol#L192-L196](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L192-L196)
+
+1. `assert` is redundant: every transaction that tries to transfer more tokens than possible will revert in `_burnBatch`. 
+
+2. `getBalanceForDelegate` is used only for this `assert` and should be removed too.
+
+```diff
     function _processDelegation(
         address source,
         address target,
         uint256 amount
     ) internal {
 -       uint256 balance = getBalanceForDelegate(source);
-+       uint256 balance = balanceOf(msg.sender, uint256(uint160(source)));
-      /* ... */ 
+-       assert(amount <= balance);
+
+        deployProxyDelegatorIfNeeded(target);
+        transferBetweenDelegators(source, target, amount);
+
+        emit DelegationProcessed(source, target, amount);
     }
 ```
+
 ```diff
 -   function getBalanceForDelegate(
 -       address delegate
@@ -289,11 +293,11 @@ Deployment savings - 5400 gas
 | delegateMulti                                                | 885663          | 952517 | 952517 | 1019371 | 2       |
 
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
-| 2099427                                                      | 11115           |        |        |         |         |
+| 2086012                                                      | 11048           |        |        |         |         |
 | Function Name                                                | min             | avg    | median | max     | # calls |
-| delegateMulti                                                | 881831          | 950601 | 950601 | 1019371 | 2       |
+| delegateMulti                                                | 879881          | 949626 | 949626 | 1019371 | 2       |
 
-| Savings                                                      | 3832            | 1916   | 1916   | 0       |         |
+| Savings                                                      | 5782            | 2891   | 2891   | 0       |         |
 
-Deployment savings - 26029 gas
+Deployment savings - 39444 gas
 ```
