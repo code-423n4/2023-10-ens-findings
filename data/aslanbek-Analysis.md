@@ -47,7 +47,11 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 
 # Codebase quality analysis
 
-The codebase is written with respect to clarity and security practices. No major vulnerabilities or optimizations were detected. While only a brief README was provided, the Sponsor was very responsive and covered every question.
+The codebase is written with respect to clarity and security practices. No major vulnerabilities or optimizations were detected. 
+
+While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 ### Time spent:
