@@ -1,10 +1,11 @@
-| *Issue* | *Description*                                                                                                                                              |
+| *Issue* | *Description* |
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [L-01]  | Possible re-entrancy in Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65) |
-| [L-02]  | The whole contract does not work with approvals  |
+| [L-01] | Possible re-entrancy in Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65) |
+| [L-02] | The whole contract does not work with approvals  |
 | [L-03] | Quadratic voting is less secure with [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) |    
-| [L-04] | If a user claims to his **ERC20ProxyDelegator** his tokens will be lost |                                                                                                      
-| [N-01]  | If a user send any vote tokens to [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) they will be lost forever |                                                                       
+| [L-04] | If a user claims to his **ERC20ProxyDelegator** his tokens will be lost | 
+| [L-05] | The wrapper will not work with any token |                                                                                                     
+| [N-01] | If a user send any vote tokens to [ERC20ProxyDelegator](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol) they will be lost forever |                                                                       
 
 
 ### [L-01] Possible re-entrancy in [_delegateMulti](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65)
@@ -135,6 +136,11 @@ Example:
 2. User2 claims his ENS tokens directly to his **ProxyDelegator**
 
 User2 will not receive any ERC1155 tokens and the vote tokens will be stuck forever in his **ProxyDelegator**. He will be able to vote with them, however if he want to delegate them to someone else, he will not be able to do so.
+
+### [L-05] The wrapper will not work with any token
+The sponsor explained that the wrapper - **ERC20MultiDelegate** can be used with any vote token and it's not only for ENS to use it. However there is an issue as some vote tokens **disable transfers**. Usually this is done in order for the DAO to have a better time tracking votes, and avoids many vulnerabilities (multiple votings, vote->transfer->vote, ...).
+
+Because they disable the transfer and **ERC20MultiDelegate** works directly by transferring these vote tokens to another contract (ProxyDelegator) the whole contract will not function for such tokens. This is not a massive issue, and for now I am unaware of how it can be fixed (don't make transfers, yet delegate to multiple users), hence I am putting it as a low.
 
 ### [N-01] If a user send any vote tokens to ERC20ProxyDelegator they will be lost forever
 If a user sends any VoteTokens to **ERC20ProxyDelegator** they will be counted as votes, since this contract delegates to someone, however they will be stuck there forever. 
