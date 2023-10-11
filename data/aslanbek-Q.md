@@ -1,4 +1,4 @@
-# [L-01] Users can create multiple ERC-1155 tokenIds for the same delegate
+# [L-01] Users can mint different ERC-1155 tokenIds for the same delegate
 ```
     function delegateMulti(
         uint256[] calldata sources,
