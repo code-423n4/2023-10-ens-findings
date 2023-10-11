@@ -9,14 +9,15 @@
 | [G-05]            | Use if conditional statements instead of ternary operators to save gas                        | 1         |
 | [G-06]            | Use gas-efficient assembly for common math operations like min and max                        | 3         |
 | [G-07]            | Consider using alternatives to OpenZeppelin                                                   | 1         |
+| [G-08]            | Remove return statement to save gas                                                           | 1         |
 
-### Total number of issues: 9 instances across 7 issues
+### Total number of issues: 10 instances across 8 issues
 
-### Total deployment gas saved: 35209 gas
+### Total deployment gas saved: 36325 gas
 
-### Total function execution gas saved: 488 gas (per call)
+### Total function execution gas saved: 514 gas (per call)
 
-### Total gas saved: 35697 gas
+### Total gas saved: 36839 gas
 
 ## [G-01] Unnecessary function can be removed
 
@@ -265,3 +266,60 @@ File: ERC20MultiDelegate.sol
 8: import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 9: import "@openzeppelin/contracts/utils/math/Math.sol";
 ```
+
+## [G-08] Remove return statement to save gas
+
+There is 1 instance of this:
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L189
+
+**Before VS After**
+
+**Deployment cost: 4121917 - 4120801 = 1116 gas saved**
+
+**Function execution cost: 90194 - 90168 = 26 gas saved per call**
+
+Instead of this:
+```solidity
+File: ERC20MultiDelegate.sol
+211:     function deployProxyDelegatorIfNeeded(
+212:         address delegate
+213:     ) internal returns (address) {
+214:          address proxyAddress = retrieveProxyContractAddress(token, delegate);
+215: 
+216:         // check if the proxy contract has already been deployed
+217:         uint bytecodeSize;
+218:         assembly {
+219:             bytecodeSize := extcodesize(proxyAddress)
+220:         }
+221: 
+222:         // if the proxy contract has not been deployed, deploy it
+223:         if (bytecodeSize == 0) {
+224:             new ERC20ProxyDelegator{salt: 0}(token, delegate);
+225:             emit ProxyDeployed(delegate, proxyAddress);
+226:         }
+227:         return proxyAddress;
+228:     }
+```
+Use this:
+```solidity
+File: ERC20MultiDelegate.sol
+211:     function deployProxyDelegatorIfNeeded(
+212:         address delegate
+213:     ) internal returns (address proxyAddress) {
+214:         proxyAddress = retrieveProxyContractAddress(token, delegate);
+215: 
+216:         // check if the proxy contract has already been deployed
+217:         uint bytecodeSize;
+218:         assembly {
+219:             bytecodeSize := extcodesize(proxyAddress)
+220:         }
+221: 
+222:         // if the proxy contract has not been deployed, deploy it
+223:         if (bytecodeSize == 0) {
+224:             new ERC20ProxyDelegator{salt: 0}(token, delegate);
+225:             emit ProxyDeployed(delegate, proxyAddress);
+226:         }
+227:     }
+```
+ 
