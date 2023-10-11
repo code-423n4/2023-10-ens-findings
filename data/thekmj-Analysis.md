@@ -1,3 +1,11 @@
+Any comments for the judge to contextualize your findings
+Approach taken in evaluating the codebase
+Architecture recommendations
+Codebase quality analysis
+Centralization risks
+Mechanism review
+Systemic risks
+
 ## Approach taken in evaluating the codebase
 
 The two token standards involved here are ERC20Votes and ERC1155. We first dig into the two tokens' contract source itself, noting down any caveats that one may not be fully aware of. 
@@ -42,7 +50,9 @@ This codebase is short and easy to understand, given that it only deals with ERC
 
 We also want to highlight that `_delegateMulti` correctly follows the CEI pattern to prevent reentrancy, as external call happens during minting of ERC1155, which is executed last.
 
-One comment we would have is that there are quite a lot of easy gas-savings techniques can be spotted, and were found by the [automated report](https://gist.github.com/code423n4/33c1c8dad584e9eba48c38c69495fb59). We highlight some of the easily implementable, but impactful, findings in the following section.
+There are two areas we would improve in thet codebase: 
+- There are quite a lot of easy gas-savings techniques can be spotted, and were found by the [automated report](https://gist.github.com/code423n4/33c1c8dad584e9eba48c38c69495fb59). We highlight some of the easily implementable, but impactful, findings in the following section.
+- While the codebase is easy to understand, the idea of tokenizing voting powers is new. Documentation could be better to make users aware of the new token they are interacting with.
 
 ## Architecture recommendations
 
@@ -53,6 +63,8 @@ We highlight some of the bot findings that can be easily implemented, but are of
 - **[G-21]**: Functions `Math.max()` and `Math.min()` are called multiple times. Their result can be cached.
 
 Further gas findings can be found in our own gas report submission.
+
+Regarding documentation, while the docs in the code itself is sufficient for devs to understand, users may not be aware of the idea of tokenizing vote powers. We think a docs explaining the idea will benefit in making users aware that the ERC1155 token they're interacting with is an intended token, so that they do not transfer it away, reducing the risk of losing funds by accident.
 
 ## Centralization risks
 
