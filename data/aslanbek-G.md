@@ -1,7 +1,7 @@
 # [G-01] function _delegateMulti - save gas on if-else and ternary operators by splitting the loop into smaller ones
 [ERC20MultiDelegate.sol#L85-L108](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L85-L108)
 
-Instead of the "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
+Instead of the "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that won't have them.
 
 ## Details
 
@@ -226,7 +226,7 @@ Deployment savings - 20874 gas
         emit DelegationProcessed(source, target, amount);
     }
 ```
-```
+```diff
     function transferBetweenDelegators(
         address from,
         address to,
