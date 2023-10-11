@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xDemon",
+  "risk": "2",
+  "title": "Avoid using 'extcodesize' to check for Externally Owned Accounts",
+  "issueId": 362,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/362"
+}
