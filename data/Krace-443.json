@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Krace",
+  "risk": "2",
+  "title": "Users may delegate to the wrong address if the `targets` are larger than type(uint160).max",
+  "issueId": 443,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/443"
+}
