@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "niki",
+  "risk": "3",
+  "title": "This code is not wroking `amounts[:sourcesLength]`",
+  "issueId": 500,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/500"
+}
