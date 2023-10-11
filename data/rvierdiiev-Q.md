@@ -14,3 +14,12 @@ This is done for case, when user [transfers voting power from one delegator to a
 Also i guess, that in case if user just withdraws from delegator, then even should be emitted as well.
 ## Recommendation
 Emit `DelegationProcessed` event inside `createProxyDelegatorAndTransfer` function.
+
+## QA-03. Voting token that doesn't return bool on transferFrom will not work with ERC20MultiDelegate.
+## Description
+In order to send voting tokens, ERC20MultiDelegate uses `transferFrom` function from ERC20 standart. This function returns `bool` value.
+However, not all tokens implement that correctly, so sometimes their `transferFrom` function returns nothing.
+
+In case such token will be used as `token` inside ERC20MultiDelegate, then all calls will revert and contract will not be able to work.
+## Recommendation
+Use `SafeERC20` extension from OZ to make transfer calls.
