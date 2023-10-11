@@ -330,3 +330,26 @@ to:
         ))));
     }
 ```
+# [G-10] Amounts should be checked for 0 before calling a transfer
+
+It is beneficial to check if an amount is zero before invoking a transfer function, such as `transferFrom`, to avoid unnecessary gas costs associated with executing the transfer operation. 
+Whenever amount is 0, the transfer operation would not have any effect, which implies that performing that check can prevent unnecessary gas usage.
+
+Function `transferFrom` is being called without checking if amount is 0 in below functions:
+
+* `transferBetweenDelegators`
+* `createProxyDelegatorAndTransfer`
+* `_reimburse`
+
+
+# [G-11] Use constants instead of `type(uint256).max`
+
+When you use type(uint256).max - it may result in higher gas costs because it involves a runtime operation to calculate the `type(uint256).max` at runtime. This calculation is performed every time the expression is evaluated.
+
+To save gas, it is recommended to use constants to represent the maximum value. Declaration of a constant with the maximum value means that the value is known at compile-time and does not require any runtime calculations.
+
+```
+17:             _token.approve(msg.sender, type(uint256).max);
+```
+
+Please take into a consideration, that this affects only `constructor`, however the impact on the gas will not be minimal, since `ERC20ProxyDelegator` is being deployed multiple of times (function `deployProxyDelegatorIfNeeded`).
