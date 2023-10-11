@@ -134,7 +134,7 @@ File: testDelegateMulti.t.sol
 
 The codebase is high quality due to the difficulty to break it and it's simplicity. The specific aspects of why this codebase is rock solid has been included in sections of this Analysis report such as [What's unique?](#whats-unique) and [How this codebase compares to others I'm familiar with](#whats-using-existing-patterns-and-how-this-codebase-compare-to-others-im-familiar-with).
 
-Additionally, the contract has close to 100% test coverage, which adds an additionaly layer of security to ensure all functions work as intended. I would recommend the sponsor to integrate a foundry test suite with fuzz tests as well to ensure the functions work with all types of soure-target inputs.
+Additionally, the contract has close to 100% test coverage, which adds an additional layer of security to ensure all functions work as intended. I would recommend the sponsor to integrate a foundry test suite with fuzz tests as well to ensure the functions work with all types of soure-target inputs.
 
 ## Centralization risks
 
@@ -195,6 +195,8 @@ This section includes answers to certain questions/attack surfaces the sponsor w
    - Zero address in sources and delegates are not possible when transferring, minting and burning since 0Z adds address(0) checks and causes reverts if there are any in the arrays.
 2. Are retrievals of Proxy contracts and deployment addresses matching?
    - Yes
+
+
 
 
 
