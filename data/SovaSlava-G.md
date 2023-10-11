@@ -49,11 +49,13 @@ If we understand that the array element is empty, then we do not need to assign 
 -    address target = transferIndex < targetsLength
 -                ? address(uint160(targets[transferIndex]))
 -                : address(0);
++    address source;
++    address target;
 +    if(transferIndex < sourcesLength) {
 +                source = address(uint160(sources[transferIndex]));
 +    }
 +    if(transferIndex < targetsLength) {
-+                source = address(uint160(targets[transferIndex]));
++                target = address(uint160(targets[transferIndex]));
 +    }
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L92
