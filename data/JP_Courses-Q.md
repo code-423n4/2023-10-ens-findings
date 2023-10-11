@@ -137,3 +137,16 @@ Affected code where it fails to check allowance before making the transfer, and 
         return true;
     }
 ```
+5. LOW:
+
+Regarding the ability of a delegator to self-delegate and potentially enable double voting power for themselves, it appears that there might be a vulnerability in the contract that could lead to this situation. Let's examine the relevant portions of the code and potential risks:
+
+In the `transferBetweenDelegators` function, the contract transfers tokens from one proxy contract to another. Specifically, it uses the `token.transferFrom` function to transfer voting tokens from `proxyAddressFrom` to `proxyAddressTo`. This operation involves both actual token transfers and ERC1155 voting power representing "token" shares minted to the target delegates, with a subsequent burn from the source delegate.
+
+The risk here lies in the possibility of a delegator self-delegating by transferring tokens to another proxy contract controlled by the same delegator. In this scenario, the delegator could temporarily double their voting power.
+
+For example, if Delegator A has 100 voting tokens in their proxy contract, they could transfer 100 tokens to another proxy contract owned by the same Delegator A. In this way, both proxy contracts would temporarily have the same voting power. However, this self-delegation can only occur once because after the initial transfer, Delegator A's voting power in the source proxy contract would be reduced to zero. Subsequent self-delegations would not provide additional voting power because the source proxy contract would have no tokens left.
+
+To confirm if this is a vulnerability, you should review the `_moveVotingPower` method and related logic within the contract. Specifically, ensure that the contract correctly handles self-delegation and that it enforces the intended behavior.
+
+In some contexts, self-delegation is allowed, while in others, it may not be permitted. It's essential to validate if the contract aligns with the intended design and, if necessary, implement safeguards to prevent double voting through self-delegation if it is not allowed.
