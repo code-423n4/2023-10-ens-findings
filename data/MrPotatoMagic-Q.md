@@ -4,13 +4,17 @@
 |--------|--------------------------------------------------------------------------------------|-----------|
 | [N-01] | Missing event emission for critical state changes                                    | 4         |
 | [N-02] | Unnecessary typecast to uint256                                                      | 1         |
-| [N-03] | Remove unnecessary code                                                              | 4         |
+| [N-03] | Remove unnecessary code                                                              | 3         |
 | [N-04] | Constants should be defined rather than using magic numbers                          | 2         |
 | [L-01] | Missing getUri() function that returns baseUri appended with a user specific tokenId | 1         |
+| [R-01] | Consider adding a time interval field                                                | 1         |
+
+**N = Non-Critical, L = Low-severity, R = Recommendation**
 
 ### Number of Non-Critical issues: 11 instances across 4 issues
 ### Number of Low-severity issues: 1 instance across 1 issue
-### Total number of issues: 12 instances across 5 issues
+### Number of Recommendations: 1 instance across 1 issue
+### Total number of issues: 13 instances across 6 issues
 
 ## [N-01] Missing event emission for critical state changes
 
@@ -193,3 +197,9 @@ Solution:
         return string(abi.encodePacked(baseUri, tokenID));
     }
 ```
+
+## [R-01] Consider adding a time interval field
+
+The time interval field would represent the length of a proposal or the wait time before which delegation cannot be reimbursed or transferred to another delegator. 
+
+This can help prevent gaining proposal majority by disallowing a single entity from voting from multiple addresses. This interval is just an extra layer of prevention in case an external voting implementation has an error in it that allows this issue to occur. The interval can be set to 0 for external voting systems that do not require a wait-time.
