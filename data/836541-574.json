@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "836541",
+  "risk": "3",
+  "title": "`_reimburse` and `createProxyDelegatorAndTransfer` uses `ERC20Votes.transferFrom` with user as msg.sender, but allowance is given for ERC20MultiDelegate contract.",
+  "issueId": 574,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/574"
+}
