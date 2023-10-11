@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "SUPERMAN_I4G",
+  "risk": "3",
+  "title": "\"deployProxyDelegatorIfNeeded\" Can Be Exploited To Steal Funds Or Even Cause Denial Of Service",
+  "issueId": 645,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/645"
+}
