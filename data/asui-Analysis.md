@@ -69,6 +69,10 @@ Note: In the above explanation sources or targets are said to be address but it 
 
 **The ERC1155 (multiDelegate) token:**
 The ```multiDelegate.sol``` contract is also an ERC1155 token. This token represents the amount of the ENSTokens and is minted when a user delegate ENSToken(send to the proxy) to an address. 
+The id of this token will be determined by the given target.
+The holder of this token can get back the ENSToken by following the step 2 explained above.  
+
+
 
 
 ### Time spent:
