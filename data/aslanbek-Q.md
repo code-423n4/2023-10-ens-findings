@@ -110,7 +110,7 @@ Event `DelegationProcessed` is emitted whenever tokens are moved from one proxy 
 ```
 `address(0)` instead of `msg.sender` could also be used, but `msg.sender` would be more informative and convenient as it would show the delegator.
 
-# [N-03] Assertion for tokenId >= 2^160 can be bypassed with a different token 
+# [N-03] `assert` for tokenId >= 2^160 can be bypassed with a different token 
 
 Same as L-01, this issue arises from unsafe downcasting of uint256 to address. 
 
