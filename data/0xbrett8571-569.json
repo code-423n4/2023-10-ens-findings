@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xbrett8571",
+  "risk": "2",
+  "title": "Missing revocation function risks users' locked delegations to malicious actors.",
+  "issueId": 569,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/569"
+}
