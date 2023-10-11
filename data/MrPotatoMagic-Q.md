@@ -4,12 +4,13 @@
 |--------|--------------------------------------------------------------------------------------|-----------|
 | [N-01] | Missing event emission for critical state changes                                    | 4         |
 | [N-02] | Unnecessary typecast to uint256                                                      | 1         |
-| [N-03] | Remove unnecessary code                                                              | 3         |
+| [N-03] | Remove unnecessary code                                                              | 4         |
+| [N-04] | Constants should be defined rather than using magic numbers                          | 2         |
 | [L-01] | Missing getUri() function that returns baseUri appended with a user specific tokenId | 1         |
 
-### Number of Non-Critical issues: 8 instances across 3 issues
+### Number of Non-Critical issues: 11 instances across 4 issues
 ### Number of Low-severity issues: 1 instance across 1 issue
-### Total number of issues: 9 instances across 4 issues
+### Total number of issues: 12 instances across 5 issues
 
 ## [N-01] Missing event emission for critical state changes
 
@@ -78,7 +79,7 @@ File: ERC20MultiDelegate.sol
 
 ## [N-03] Remove unnecessary code
 
-There are 3 instances of this issue:
+There are 4 instances of this issue:
 
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L57C1-L63C6
 
@@ -150,6 +151,28 @@ File: ERC20MultiDelegate.sol
 246:         );
 247:         return address(uint160(uint256(hash)));
 248:     }
+```
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L189
+
+The return statement `return proxyAddress` below can be removed and a named return can be used. This can additionally save some gas as well.
+```solidity
+File: contracts/ERC20MultiDelegate.sol
+189: return proxyAddress;
+```
+
+## [N-04] Constants should be defined rather than using magic numbers
+
+There are 2 instances of this issue:
+
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L186
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L210
+
+Below are 2 instances of magic number 0 being used for salt. Use a constant variable `salt` to avoid using the magic number directly. This can further increase the readability and maintainability of the code.
+```solidity
+File: ERC20MultiDelegate.sol
+224:  new ERC20ProxyDelegator{salt: 0}(token, delegate);
+248:  uint256(0), // salt 
 ```
 
 ## [L-01] Missing getUri() function that returns baseUri appended with a user specific tokenId
