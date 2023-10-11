@@ -26,11 +26,11 @@ File: ERC20MultiDelegate.sol
 
 ## [NC-2] Unnecessary import
 
-Some imports aren’t used inside the project
+Imports aren’t used inside the project
 
 ```solidity
 File: ERC20MultiDelegate.sol
 
 4:       import {Address} from "@openzeppelin/contracts/utils/Address.sol";
-9:       import "@openzeppelin/contracts/utils/math/Math.sol";
+26:      using Address for address;      
 ```
