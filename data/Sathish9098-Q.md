@@ -111,6 +111,31 @@ FILE: 2023-10-ens/contracts/ERC20MultiDelegate.sol
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L148
 
+##
 
+## [L-6] ``deployProxyDelegatorIfNeeded(target)`` function returns address not checked and not cached
 
+The ``deployProxyDelegatorIfNeeded`` function doesn't need to return an address because the created proxy delegator's address is ``already known``.
+
+```solidity
+
+function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+        uint256 balance = getBalanceForDelegate(source);
+
+        assert(amount <= balance);
+
+        deployProxyDelegatorIfNeeded(target);
+        transferBetweenDelegators(source, target, amount);
+
+        emit DelegationProcessed(source, target, amount);
+    }
+
+function deployProxyDelegatorIfNeeded(address delegate) internal returns (address)
+
+```
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L124-L137
 
