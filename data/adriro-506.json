@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "adriro",
+  "risk": "2",
+  "title": "Token ids can differ from the delegatee address",
+  "issueId": 506,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/506"
+}
