@@ -24,8 +24,6 @@ But it in order to use them for transferring voting power between delegates, a u
         uint256 amount
     ) internal {
         uint256 balance = getBalanceForDelegate(source);
-
-
         assert(amount <= balance);
 ``` 
 ## Impact
