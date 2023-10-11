@@ -90,12 +90,14 @@ mitigation:  Events should be implemented to in sensitive operations
 
 2. # The external  function "delegateMulti" can be removed and the internal function "_delegateMulti" modified to external to save gas.
 
- function delegateMulti(
+ ```solidity
+function delegateMulti(
         uint256[] calldata sources,
         uint256[] calldata targets,
         uint256[] calldata amounts
     ) external {
         _delegateMulti(sources, targets, amounts);
     }
+```
 
 the "delegateMulti" external function only calls one function which is not a gas saving mechanism because it does no other thing than to call another _delegate function.  The external function can be removed and the internal "_delegateMulti" modified to external to save gas.
