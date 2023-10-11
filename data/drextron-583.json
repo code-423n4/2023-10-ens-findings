@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "drextron",
+  "risk": "3",
+  "title": "Possibility of security vulnerabilities introduced by creating ERC20ProxyDelegator instances on the fly using static salt values",
+  "issueId": 583,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/583"
+}
