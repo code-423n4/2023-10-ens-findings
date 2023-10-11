@@ -253,3 +253,48 @@ Deployment savings - 20874 gas
 
 Deployment savings - 5400 gas
 ```
+# [G-04] function getBalanceForDelegate is redundant
+```
+    function getBalanceForDelegate(
+        address delegate
+    ) internal view returns (uint256) {
+        return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
+    }
+```
+`getBalanceForDelegate` has no additional logic in comparison to `balanceOf`. Consider using `balanceOf` directly.
+
+ ```diff
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+-       uint256 balance = getBalanceForDelegate(source);
++       uint256 balance = balanceOf(msg.sender, uint256(uint160(source)));
+
+        // N-09 from the bot report
+-       assert(amount <= balance);
++       require(amount <= balance, "Insufficient Balance");
+
+        deployProxyDelegatorIfNeeded(target);
+        transferBetweenDelegators(source, target, amount);
+
+
+        emit DelegationProcessed(source, target, amount);
+    }
+```
+```
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2125456                                                      | 11245           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 885663          | 952517 | 952517 | 1019371 | 2       |
+
+| Deployment Cost                                              | Deployment Size |        |        |         |         |
+| 2099427                                                      | 11115           |        |        |         |         |
+| Function Name                                                | min             | avg    | median | max     | # calls |
+| delegateMulti                                                | 881831          | 950601 | 950601 | 1019371 | 2       |
+
+| Savings                                                      | 3832            | 1916   | 1916   | 0       |         |
+
+Deployment savings - 26029 gas
+```
