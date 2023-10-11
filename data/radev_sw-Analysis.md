@@ -334,9 +334,10 @@ This function is used to determine the address of a proxy contract that represen
 
 # 5. My opinion for the contract (Code Complexity, Systemic Risks, etc,)
 
-- The ERC20MultiDelegate contract is well-designed and written.
-- The codebase, as a whole, is straightforward and understandable.
-- The ERC20MultiDelegate contract addresses the primary limitation in `ERC20Votes contract` (the fact that you must delegate your entire voting power to only one address. The `ERC20MultiDelegate contract` overcomes this using ERC1155 and Proxy contracts.
+- **The ERC20MultiDelegate contract is well-designed and written.**
+- **The codebase, as a whole, is straightforward and understandable.**
+- **The ERC20MultiDelegate contract addresses the primary limitation in `ERC20Votes contract` (the fact that you must delegate your entire voting power to only one address. The `ERC20MultiDelegate contract` overcomes this using ERC1155 and Proxy contracts.**
+- **During the audit contest, I tested the contract logic with multiple tests and reviewed the entire logic and flow of the contract multiple times. I can say that the contract is very well written.**
 
 ---
 
@@ -378,5 +379,7 @@ Day 4:
 
 
 
+
+
 ### Time spent:
-30 hours
+35 hours
