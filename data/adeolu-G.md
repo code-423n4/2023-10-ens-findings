@@ -7,7 +7,7 @@
 
 ## [G-01] save value from `Math.max(sourcesLength, targetsLength)` to a local variable and reuse in other instances to prevent re computation. 
 
-in `_delegateMulti()` we can get value from Math.max(sourcesLength, targetsLength) once and save it to a local varibale and use that variable in other instances where the max of sourceLength and targetslengths are re calculated. we can do it like this. 
+in `_delegateMulti()` we can get value from `Math.max(sourcesLength, targetsLength)` once and save it to a local varibale and use that variable in other instances where the max of sourceLength and targetslengths are re calculated. we can do it like this. 
 ```
    //304979 gas (before optimize),  304838 gas (after optimize) if array lengths are all 1
     function _delegateMulti(
@@ -66,7 +66,11 @@ in `_delegateMulti()` we can get value from Math.max(sourcesLength, targetsLengt
     }
 
 ```
-This way we will save about **141** gas as the initial logic costs 310187 gas while my optimizaton reduces it to 310046 gas (if all array inputs have lengths of 1). 
+This way we will save about **142** gas as the initial logic costs 310165 gas while my optimizaton reduces it to 310023 gas (if all array inputs have lengths of 1).  
+I wrote a test that proves this. Please follow these steps to run the tests:
+- clone this repo - https://github.com/adeolu98/2023-10-ens/tree/G-01
+- navigate to the branch named **G-01**.
+- in the terminal, enter ` yarn test ./test/G-01Test.js` to run this [gas test file](https://github.com/adeolu98/2023-10-ens/blob/G-01/test/G-01Test.js)
 
 ## [G-02] reduce number of times `proxyAddressTo` is calculated in `_processDelegation()` by saving the returned target proxyAdress from `deployProxyDelegatorIfNeeded` to memory. 
 
@@ -145,4 +149,10 @@ since `target` and `proxyAddressTo` are same address. In the logic flow of `_pro
         emit DelegationProcessed(source, target, amount);
     }
 ```
-This way, recalculation of the target's proxyContract is reduced by one and this saves about **5208** gas from the `delegateMulti()` call. Gas cost before the optimization is 310187. Cost after is 304979. (if all array inputs have lengths of 1)
+This way, recalculation of the target's proxyContract is reduced by one and this saves about **5209** gas from the `delegateMulti()` call. Gas cost before the optimization is 310165. Cost after is 304956. (if all array inputs have lengths of 1)
+
+I wrote a test that proves this. Please follow these steps to run the tests:
+- clone this repo - https://github.com/adeolu98/2023-10-ens/tree/G-02
+- navigate to the branch named **G-02**.
+- in the terminal, enter `yarn test ./test/G-02Test.js` to run this [gas test file](https://github.com/adeolu98/2023-10-ens/blob/G-02/test/G-02Test.js)
+
