@@ -69,37 +69,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
     using Address for address;
 ```
 
-# [N-02] function getBalanceForDelegate is redundant
-```
-    function getBalanceForDelegate(
-        address delegate
-    ) internal view returns (uint256) {
-        return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
-    }
-```
-`getBalanceForDelegate` has no additional logic in comparison to `balanceOf`. Consider using `balanceOf` directly.
-
- ```diff
-    function _processDelegation(
-        address source,
-        address target,
-        uint256 amount
-    ) internal {
--       uint256 balance = getBalanceForDelegate(source);
-+       uint256 balance = balanceOf(msg.sender, uint256(uint160(source)));
-
-        // N-09 from the bot report
--       assert(amount <= balance);
-+       require(amount <= balance, "Insufficient Balance");
-
-        deployProxyDelegatorIfNeeded(target);
-        transferBetweenDelegators(source, target, amount);
-
-
-        emit DelegationProcessed(source, target, amount);
-    }
-```
-# [N-03] Consider emitting DelegationProcessed event in `_reimburse` and `createProxyDelegatorAndTransfer`
+# [N-02] Consider emitting DelegationProcessed event in `_reimburse` and `createProxyDelegatorAndTransfer`
 ```
     function _processDelegation(
         address source,
@@ -140,7 +110,7 @@ Event `DelegationProcessed` is emitted whenever tokens are moved from one proxy 
 ```
 `address(0)` instead of `msg.sender` could also be used, but `msg.sender` would be more informative and convenient as it would show the delegator.
 
-# [N-04] Assertion for tokenId >= 2^160 can be bypassed with a different token 
+# [N-03] Assertion for tokenId >= 2^160 can be bypassed with a different token 
 
 Same as L-01, this issue arises from unsafe downcasting of uint256 to address. 
 
