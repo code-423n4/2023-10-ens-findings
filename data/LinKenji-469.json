@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "LinKenji",
+  "risk": "3",
+  "title": "ERC20MultiDelegate's `_processDelegation` transfers tokens without checking delegate proxy contract approvals, risking transfer failures.",
+  "issueId": 469,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/469"
+}
