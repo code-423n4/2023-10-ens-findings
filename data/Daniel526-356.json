@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Daniel526",
+  "risk": "3",
+  "title": "Unrestricted transferFrom Usage Could Lead to Token Loss",
+  "issueId": 356,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/356"
+}
