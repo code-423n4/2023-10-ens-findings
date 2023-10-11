@@ -23,3 +23,15 @@ However, not all tokens implement that correctly, so sometimes their `transferFr
 In case such token will be used as `token` inside ERC20MultiDelegate, then all calls will revert and contract will not be able to work.
 ## Recommendation
 Use `SafeERC20` extension from OZ to make transfer calls.
+
+## QA-04. Contract has unused library
+## Description
+```
+import {Address} from "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+using Address for address;
+```
+
+ERC20MultiDelegate has imported Address and Math library, but they are never used inside the contract. These imports should be removed.
+## Recommendation
+Remove unused libs imports.
