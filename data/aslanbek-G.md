@@ -5,7 +5,7 @@ Instead of the "swiss-army-knife" loop that handles every input via if-else and 
 
 ## Details
 
-The expected input is: a amounts, s sources, t targets; a = max(s,t). 
+The expected user input is: a amounts, s sources, t targets; a = max(s,t). 
 
 ```
         require(
