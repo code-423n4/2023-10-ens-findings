@@ -149,7 +149,7 @@ since `target` and `proxyAddressTo` are same address. In the logic flow of `_pro
         emit DelegationProcessed(source, target, amount);
     }
 ```
-This way, recalculation of the target's proxyContract is reduced by one and this saves about **5209** gas from the `delegateMulti()` call. Gas cost before the optimization is 310165. Cost after is 304956. (if all array inputs have lengths of 1)
+This way, recalculation of the target's proxyContract is reduced by one and this saves about **5209** gas from the `delegateMulti()` call. Gas cost before the optimization is 310165. Cost after is 304956. (if all array inputs have lengths of 1).
 
 I wrote a test that proves this. Please follow these steps to run the tests:
 - clone this repo - https://github.com/adeolu98/2023-10-ens/tree/G-02
