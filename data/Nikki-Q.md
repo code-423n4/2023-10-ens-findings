@@ -1,6 +1,6 @@
-- The function `deployProxyDelegatorIfNeeded` doesn’t validate deployed address.
+### 1. The function `deployProxyDelegatorIfNeeded` doesn’t validate deployed address.
     
-    In the function `deployProxyDelegatorIfNeeded` there is no validation to check if the `deployedAddress` is equal to `proxyAddress`.
+In the function `deployProxyDelegatorIfNeeded` there is no validation to check if the `deployedAddress` is equal to `proxyAddress`.
     
  ```solidity
     function deployProxyDelegatorIfNeeded(
@@ -23,4 +23,10 @@
             }
             return proxyAddress;
         }
+```
+
+### 2. Implement a mapping to track unique deployed proxies address for a given delegate.
+
+```solidity
+mapping(address delegateAddress => address deployedAddress) public deployed;
 ```
