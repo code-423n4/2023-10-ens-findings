@@ -28,11 +28,12 @@
 
 | ID              | Title                                                                                                                                      | Instances | Severity                  |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------- |
-| [L-01](#L-01)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
-| [L-02](#L-02)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
-| [L-03](#L-03)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
-| [L-04](#L-04)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
-| [L-05](#L-05)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
+| [L-01](#L-01)   | Inefficient token handling in `delegateMulti()` when a user wants to both `reimburse` and `delegate` MultiDelegate tokens                  | 1         | _Low to Medium_           |
+| [L-02](#L-02)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
+| [L-03](#L-03)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
+| [L-04](#L-04)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
+| [L-05](#L-05)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
+| [L-06](#L-06)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
 | [NC-01](#NC-01) | Potential Reversion Issue with Certain ERC20 Token Approvals                                                                               | 1         | _Non Critical_            |
 | [NC-02](#NC-02) | Unchecked Return Values for `approve()`                                                                                                    | 1         | _Non Critical_            |
 | [NC-03](#NC-03) | Need for Comments on State Variables                                                                                                       | 1         | _Non Critical_            |
@@ -43,7 +44,125 @@
 
 ---
 
-## <a name="L-01"></a>[L-01] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
+---
+
+## <a name="L-01"></a>[L-01] Inefficient token handling in `delegateMulti()` when a user wants to both `reimburse` and `delegate` MultiDelegate tokens
+
+### GitHub Links:
+
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L57-L116
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L124-L137
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L155-L161
+
+### Impact
+
+- Inefficient token handling in `delegateMulti()` when a user wants to both `reimburse` and `delegate` MultiDelegate tokens / Inefficient System Design and Flow.
+- Users left with a negative impression of the protocol.
+- Users spend more gas.
+- The user who is delegator ends up with inefficient minted MultiDelegate tokens, resulting in unfair `MultiDelegate` tokens delegation in the future.
+
+### Proof of Concept
+
+#### Scenario
+
+1. Bob approve `ERC20MultiDelegate` contract with `100000 ERC20Votes tokens` and after that `delegate 100000 ERC20Votes to Alice`. For this purpose he calls `delegateMulti()` function with the following parameters.
+
+   - `sources[]`: []
+   - `targets[]`: [alice's address]
+   - `arguments[]`: [100000]
+
+2. After some period of time, Bob decides to `reimburse` his 100,000 ERC20Votes tokens to Alice and `delegate` another 100,000 ERC20Votes tokens to Charlie in a `single transaction`.
+   - For this purpose, Bob calls `delegateMulti(sources: [alice's address], targets: [bob's address, charlie's address], amounts: [100000, 100000])`.
+   - As a result, Bob removes his delegated tokens to Alice and delegates new 100,000 ERC20Votes to Charlie. However...
+   - However Bob doesn't actually receive back his 100,000 ERC20Votes tokens. Instead, these tokens are transferred to the ERC20ProxyDelegate contract.
+   - Consequently, Bob is left with a negative impression of the protocol and has to execute another transaction (spend additional gas) to reclaim his ERC20Votes tokens.
+
+#### Coded Proof of Concept
+
+- Paste the following test in _2023-10-ens\test\delegatemulti.js_, _describe("deposit")_
+- **Also paste this code block below after this line: https://github.com/code-423n4/2023-10-ens/blob/main/test/delegatemulti.js#L130**
+
+```javascript
+await increaseTime(365 * 24 * 60 * 60);
+await token.mint(bob, mintAmount);
+await increaseTime(365 * 24 * 60 * 60);
+await token.mint(alice, mintAmount);
+```
+
+---
+
+```javascript
+it("proof of concept", async () => {
+  // For our example let's say that:
+  // Bob: delegator
+
+  const bobSigner = await ethers.provider.getSigner(bob);
+
+  // -> Step 1: Bob approve ERC20MultiDelegate contract with 100000 ERC20Votes tokens and after that delegate 100000 ERC20Votes to Alice
+  await token.connect(bobSigner).approve(multiDelegate.address, 100000);
+  await multiDelegate.connect(bobSigner).delegateMulti([], [alice], [100000]);
+
+  let bobToAliceMultiDelegateTokensBalance = await multiDelegate.balanceOf(
+    bob,
+    alice
+  );
+  console.log(
+    `Step 1. MultiDelegated tokens from Bob to Alice: ${bobToAliceMultiDelegateTokensBalance.toString()}`
+  ); // 100000
+  expect(await bobToAliceMultiDelegateTokensBalance.toString()).to.equal(
+    "100000"
+  );
+
+  // -> Step 2: Bob decides to `reimburse` his 100,000 ERC20Votes tokens to Alice and `delegate` another 100,000 ERC20Votes tokens to Charlie in a single transaction.
+  // For this purpose, Bob calls `delegateMulti(sources: [alice], targets: [bob, charlie], amounts: [100000, 100000])`.
+  // As a result, Bob removes his delegated tokens to Alice and delegates new 100,000 ERC20Votes to Charlie. However...
+  // However Bob doesn't actually receive back his 100,000 ERC20Votes tokens. Instead, these tokens are transferred to the ERC20ProxyDelegate contract.
+  // Consequently, Bob is left with a negative impression of the protocol and has to execute another transaction (spend additional gas) to reclaim his ERC20Votes tokens.
+  await token.connect(bobSigner).approve(multiDelegate.address, 100000);
+  await multiDelegate
+    .connect(bobSigner)
+    .delegateMulti([alice], [bob, charlie], [100000, 100000]);
+
+  bobToAliceMultiDelegateTokensBalance = await multiDelegate.balanceOf(
+    bob,
+    alice
+  );
+  let bobToCharlieMultiDelegateTokensBalance = await multiDelegate.balanceOf(
+    bob,
+    charlie
+  );
+  let bobToBobMultiDelegateTokensBalance = await multiDelegate.balanceOf(
+    bob,
+    bob
+  );
+  console.log(
+    `Step 2. MultiDelegated tokens from Bob to Alice: ${bobToAliceMultiDelegateTokensBalance.toString()}`
+  ); // 0
+  console.log(
+    `Step 2. MultiDelegated tokens from Bob to Charlie: ${bobToCharlieMultiDelegateTokensBalance.toString()}`
+  ); // 100000
+  console.log(
+    `Step 2. MultiDelegated tokens from Bob to Bob: ${bobToBobMultiDelegateTokensBalance.toString()}`
+  ); // 100000
+
+  expect(await bobToAliceMultiDelegateTokensBalance.toString()).to.equal("0");
+  expect(await bobToCharlieMultiDelegateTokensBalance.toString()).to.equal(
+    "100000"
+  );
+  expect(await bobToBobMultiDelegateTokensBalance.toString()).to.equal(
+    "100000"
+  );
+});
+```
+
+### Tools Used
+
+- Manual inspection
+- Hardhat
+
+---
+
+## <a name="L-02"></a>[L-02] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
 
 #### GitHub Links
 
@@ -79,7 +198,7 @@ By introducing these checks, you can ensure that the `_delegateMulti()` function
 
 ---
 
-## <a name="L-02"></a>[L-02] Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address
+## <a name="L-03"></a>[L-03] Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address
 
 #### GitHub Links
 
@@ -109,7 +228,7 @@ The `ERC20ProxyDelegator` contract is a proxy delegator contract designed to vot
 
 ---
 
-## <a name="L-03"></a>[L-03] Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`
+## <a name="L-04"></a>[L-04] Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`
 
 #### GitHub Links
 
@@ -137,7 +256,7 @@ The `ERC20ProxyDelegator` contract, upon deployment, is expected to approve a sp
 
 ---
 
-## <a name="L-04"></a>[L-05] Front Running of `ERC20ProxyDelegator` Deployment
+## <a name="L-05"></a>[L-05] Front Running of `ERC20ProxyDelegator` Deployment
 
 #### GitHub Links
 
@@ -169,7 +288,7 @@ Front-running is a scenario on public blockchains where a malicious actor can se
 
 ---
 
-## <a name="L-05"></a>[L-05] Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`
+## <a name="L-06"></a>[L-06] Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`
 
 #### GitHub Links
 
