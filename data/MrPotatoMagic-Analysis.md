@@ -6,7 +6,7 @@ This section contains my submitted issues which include Gas/QA reports and certa
 
 1. Gas Report - My Gas report includes 8 gas optimizations that save 36839 gas in total. None of these gas findings affect the logic of the code, which is proved by all the tests passing. Each finding shows the deployment and function execution cost separately for the sponsor to select the ones that save the most gas without affecting code readability and maintainability.
 
-2. QA Report - My QA report includs 4 non-critical and 1 low-severity issue. Out of these, the two most important issues are [N-03] and [L-01]. The [N-03] issue points out code that is unnecessary in the codebase and can be optimized to not only improve code readability but also save some gas. The [L-01] issue points out a missing implementation of token type ID substitution mechanism, which is used by user's to read the onchain pointer (baseUri + tokenId) to their metadata stored offchain on an IPFS solution. The other issues submitted as important as well but not as much as these two mentioned above.
+2. QA Report - My QA report includs 4 non-critical issues, 1 low-severity issue and 1 recommendation. Out of these, the two most important issues are [N-03] and [L-01]. The [N-03] issue points out code that is unnecessary in the codebase and can be optimized to not only improve code readability but also save some gas. The [L-01] issue points out a missing implementation of token type ID substitution mechanism, which is used by user's to read the onchain pointer (baseUri + tokenId) to their metadata stored offchain on an IPFS solution. The other issues submitted as important as well but not as much as these two mentioned above.
 
 **Unsubmitted issues:**
 
@@ -195,6 +195,8 @@ This section includes answers to certain questions/attack surfaces the sponsor w
    - Zero address in sources and delegates are not possible when transferring, minting and burning since 0Z adds address(0) checks and causes reverts if there are any in the arrays.
 2. Are retrievals of Proxy contracts and deployment addresses matching?
    - Yes
+
+
 
 
 
