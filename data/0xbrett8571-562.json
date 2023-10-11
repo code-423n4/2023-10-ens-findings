@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xbrett8571",
+  "risk": "2",
+  "title": "Using `extcodesize` can falsely deploy proxies for regular EOA accounts.",
+  "issueId": 562,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/562"
+}
