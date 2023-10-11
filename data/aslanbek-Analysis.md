@@ -10,16 +10,16 @@ Token holders are able to:
 
 2. Move an arbitrary amount of their voting power between delegatees.
 
-3. Reimburse voting power from delegatees back to themselves.
+3. Reimburse locked tokens back to themselves.
 
-4. Transfer ERC-1155's to EOAs or IERC1155Receiver's. These tokens represent voting power delegated to a delegatee, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator.
+4. Transfer ERC-1155's to EOAs or IERC1155Receiver's. These tokens represent voting power delegated to a delegatee, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator contract.
 
 
 
 
 # Centralization Risks
 
-The contract is almost perfectly decentralized: the only thing that owner can change is URI, which is arguably irrelevant for the contract's purpose.
+The contract is almost fully decentralized: the only thing that owner can change is URI, which is arguably irrelevant for the contract's purpose.
 
 # Systemic risks
 
@@ -52,6 +52,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 # Codebase quality analysis
 
 The codebase is well-written. No major vulnerabilities or optimizations were detected. While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 ### Time spent:
 25 hours
