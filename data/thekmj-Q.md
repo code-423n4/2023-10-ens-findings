@@ -14,7 +14,25 @@ We suggest changing `assert` to a `require` statement, with a clear error messag
 
 While the only ERC20 token that the contract interacts with is the designated token with voting capability, if the token does not revert on failed transfer (e.g. transfer exceeds balance), then anyone can infinitely mint the ERC1155 token. This can be extended into a honeypot attack vector that can steal funds from succeeded transfers.
 
-We recognize this as a low severity issue because, while the impact is high, we could not identify such a token with both voting capability and doesn't revert on failed transfer. However we do not rule out such possibility that a token does exist.
+**POC**:
+- Alice doesn't own any tokens.
+- Alice can mint ERC1155 for some delegate for free by using `delegateMulti`.
+- Bob mints ERC1155 for the same delegate, using his tokens.
+- Alice burns her ERC1155, stealing Bob's tokens.
+
+Alice can be aware of Bob's delegatee by simply front-running.
+
+We recognize this as a low severity issue because, while the impact is high, we could not identify such a token with both voting capability and doesn't revert on failed transfer. However we do not rule out the possibility that such a token does exist.
+
+## [S-01] Tokenizing vote delegation is a new idea, user should be notified/contract should be documented to prevent transferring away their ERC1155
+
+The `ERC20MultiDelegate` splits delegation by wrapping ENS, and tokenizing it into an ERC1155, with the id being the delegatee. We note some of the behaviors that we, as a user, may not expect it to have:
+- In the `ERC20MultiDelegate` ERC1155, transferring the token retains the voting power to the current delegatee.
+    - In the vanilla ERC20Votes, transferring away ERC20 tokens also transfers away the voting power i.e. if Alice transfers tokens to Bob, then Alice's delegatee's voting power is transferred to Bob's delegatee.
+- ERC1155 is a transferrable token. However, transferring away `ERC20MultiDelegate` is equivalent to transferring away ENS. The token may show up on block explorers such as etherscan, and users may attempt to transfer it away, losing their funds as a result.
+    - This can be achieved by social engineering or other non-blockchain attacks.
+
+These are some behaviors of the token that we find, while logically sound, should not be unexpected for a user to deduce at first usage, and users should be made aware of the vote tokenizing mechanism to prevent accidentally losing funds.
 
 ## [N-01] Documentation should mention minting of ERC1155 when calling `delegateMulti()`
 
@@ -44,4 +62,5 @@ The docs for function `_reimburse()` mentions
 // (if no remaining amount) to the delegator
 ```
 
-However the function always (attempt to) transfers exactly `amount`, which should be specified as a function parameter earlier in the `delegateMulti()` call.
+However the function always (attempt to) transfers exactly `amount`, which should be specified as a function parameter earlier in the `delegateMulti()` call. This is inconsistent with the documentation
+
