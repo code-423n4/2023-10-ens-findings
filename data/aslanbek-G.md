@@ -193,18 +193,15 @@ Remove `token` parameter from the following lines:
 ```
 
 ```
-|--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
 | 2143100                                                      | 11491           |        |        |         |         |
 | Function Name                                                | min             | avg    | median | max     | # calls |
 | delegateMulti                                                | 882638          | 949097 | 949097 | 1015556 | 2       |
 
-|--------------------------------------------------------------|-----------------|--------|--------|---------|---------|
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
 | 2122226                                                      | 11366           |        |        |         |         |
 | Function Name                                                | min             | avg    | median | max     | # calls |
 | delegateMulti                                                | 882518          | 949017 | 949017 | 1015516 | 2       | 
-
 
 | Savings                                                      | 120             | 80     | 80     | 40      |         | 
 
