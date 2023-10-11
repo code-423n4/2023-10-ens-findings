@@ -1,2 +1,2 @@
 1. Use ```return balanceOf(msg.sender, uint256(uint160(delegate)));``` instead of
- ```return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));``` in the [```getBalanceForDelegate```](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L195C9-L195C80) function ```balanceOf``` can be accessed directly. 
+ ```return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));``` in the [```getBalanceForDelegate```](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L195C9-L195C80) function since ```balanceOf``` can be accessed directly. 
