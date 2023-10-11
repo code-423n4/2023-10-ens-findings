@@ -141,7 +141,11 @@ We can delete assert() and function getBalanceForDelegate(). So, it will decreas
 ```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L129-L131
 
-### [G-8] All functions not payable, so we can change in all places 0 to msg.value.
+### [G-8] Unnecessary event ProxyDeployed.
+There is no point in emitting an event 'ProxyDeployed', because users do not directly interact with the proxy contract(ERC20ProxyDelegator) and they do not need its address. If there is no proxy for the target address, it is created without user intervention and the user does not need to care whether there is a proxy for the target address or not. This information does not carry any semantic load.
+https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L187C18-L187C31
+
+### [G-9] All functions not payable, so we can change in all places 0 to msg.value.
 We can use msg.value (as 0) because function delegateMulti() is not payable. Value of msg.value always will be 0.
 ```diff
 // case 1
