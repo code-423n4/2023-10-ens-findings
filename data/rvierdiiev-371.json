@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "rvierdiiev",
+  "risk": "2",
+  "title": "Voting token that doesn't return bool on transferFrom will not work with ERC20MultiDelegate",
+  "issueId": 371,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/371"
+}
