@@ -1,6 +1,6 @@
 # Mechanism review
 
-The current ERC20Votes implementation allows a ERC20Votes token holder to delegate their **whole** voting power either to another user or to themselves. If they want to split their voting power between more than one delegates, they need to transfer some of their tokens to a different account and delegate from there, and repeat that for every delegate, spending a ton of gas along the way.
+The current ERC20Votes implementation allows a token holder to delegate their **whole** voting power either to another user or to themselves. If they want to split their voting power between more than one delegates, they need to transfer some of their tokens to a different account and delegate from there, and repeat that for every delegate, spending a ton of gas along the way.
 
 ERC20MultiDelegate solves this problem: it allows token holders to cheaply and permissionessly split their voting power between delegates.
 
@@ -51,6 +51,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 The codebase is written with respect to the best security practices. No major vulnerabilities or optimizations were detected. 
 
 While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 ### Time spent:
