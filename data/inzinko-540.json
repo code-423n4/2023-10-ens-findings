@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "inzinko",
+  "risk": "2",
+  "title": "A smart contract user delegator not following the ERC 1155 specification might encounter issues",
+  "issueId": 540,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/540"
+}
