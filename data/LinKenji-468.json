@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "LinKenji",
+  "risk": "3",
+  "title": "Reimbursing leftover funds in _reimburse() lacks authentication, enabling potential theft.",
+  "issueId": 468,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/468"
+}
