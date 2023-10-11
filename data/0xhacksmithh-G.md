@@ -2,11 +2,11 @@
 |Title|Instances|Total Gas Saved|Issue|
 |-|:-|:-:|:-:|
 |[G-1] _delegateMulti() could be more optimizable, if we cache `Math.max` and `Math.min` in local variable | 3 | 650 |
-|[G-2] `memory` variable should created outside of the loop |  |  |
-|[G-3] Creation of `source` and `target` will be more gas efficient if we don't go for `transferIndex` check with `sourcesLength` and `targetsLength` respectively |  |  |
-|[G-4] Reorder Inheritance order so that `ERC1155` state variable could packed with `ERC20MultiDelegate` contract |  |  |
-|[G-5] Use of `assert` key word should replace with `require/revert` or `custom errors` |  |  |
-|[G-6] Unnessary type casting |  |  |
+|[G-2] `memory` variable should created outside of the loop | 3 | approx 300 |
+|[G-3] Creation of `source` and `target` will be more gas efficient if we don't go for `transferIndex` check with `sourcesLength` and `targetsLength` respectively | 2 | approx 240 |
+|[G-4] Reorder Inheritance order so that `ERC1155` state variable could packed with `ERC20MultiDelegate` contract | 1 | 2.1k |
+|[G-5] Use of `assert` key word should replace with `require/revert` or `custom errors` | 1 |  |
+|[G-6] Unnessary type casting | 1 |  |
 
 
 Total:  6 issues
