@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xnev",
+  "risk": "3",
+  "title": "## [H-01]: `ERC20MultiDelegate._delegateMulti()`: Delegation does not work as intended if number of source delegates is greater than number of target delegates or vice versa",
+  "issueId": 337,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/337"
+}
