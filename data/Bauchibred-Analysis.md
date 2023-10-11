@@ -63,5 +63,7 @@ The time I invested in this review totaled 15 hours, spread across three days:
 
 The codebase is impressively structured and provided a valuable learning opportunity. Upon deeper reflection, I've reclassified all my findings to QA reports, believing the severity to be less critical than initially assessed. In essence about the added contracts in protocol though, the ERC20MultiDelegate contract presents an innovative approach to address the multi-delegation complexities associated with the ERC20Votes standard.
 
+
+
 ### Time spent:
-13 hours
+15 hours
