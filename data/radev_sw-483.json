@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "radev_sw",
+  "risk": "2",
+  "title": "Chain Reorganization Attack in `ERC20MultiDelegate` Contract",
+  "issueId": 483,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/483"
+}
