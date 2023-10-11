@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "drextron",
+  "risk": "2",
+  "title": "Un-sanitized input arrays to delegateMulti can lead to unintended results, errors, and potential vulnerabilites",
+  "issueId": 566,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/566"
+}
