@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Prestige",
+  "risk": "3",
+  "title": "_approve function, if the allowance passed in is type(uint256).max, nothing happens.  because the max allowance attainable is type(uint256).max - 1.",
+  "issueId": 366,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/366"
+}
