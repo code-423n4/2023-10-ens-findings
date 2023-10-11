@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "nirlin",
+  "risk": "2",
+  "title": "Use of transferFrom method leads to multiple issues in multiple function in `ERC20MultiDelegate.so`",
+  "issueId": 374,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/374"
+}
