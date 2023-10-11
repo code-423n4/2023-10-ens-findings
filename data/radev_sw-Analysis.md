@@ -286,6 +286,30 @@ This function is used to determine the address of a proxy contract that represen
 
 - EIP1155 is used to keep track of all delegates for a token holder. A token holder will call `delegateMultifunction` to delegate his token, this will trigger a proxy deployment (if needed) for each delegate the token holder has decided to delegate to. The token holder will send his token to the proxy (or from a proxy to another, but this is still tokens actually owned by the token holder), and ERC20MultiDelegate inherits from ERC1155 to keep track of delegated tokens actually owned by the token holder, in all different proxy delegate contracts. Here, ID of erc1155 `_balances` mapping is the delegate address (and not a token). `_burnBatch` and `_mintBatch` are here used to update ERC1155 mappings and check if the caller of (delegateMulti) is legitimate.
 
+### 3.4 Roles in the protocol:
+
+- Actors/Users/Token holders (source addresses)
+- ERC10MultiDelegate contract
+- ERC20ProxyDelegator
+- Final targets of the delegation (target addresses)
+
+### 3.5 Transfer flow functions of delegation:
+
+1. When the `_processDelegation` will be triggered:
+
+- Both `sources` and `targets` arrays have the same length
+- The `sources` array is shorter than the `targets` array
+- The `targets` array is shorter than the `sources` array
+
+2. When the `_reimburse` will be trigger:
+
+- The `sources` array is longer than the `targets` array.
+
+3. When the `createProxyDelegatorAndTransfer` will be trigger:
+
+- The `targets` array is longer than the `sources` array.
+- with `source address``:
+
 ---
 
 ---
@@ -346,6 +370,8 @@ Day 4:
 ---
 
 ---
+
+
 
 
 
