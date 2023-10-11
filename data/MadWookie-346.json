@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "MadWookie",
+  "risk": "2",
+  "title": "Multiple ERC115 ids can point to the same proxy leading to loss of functionality and potentially funds.",
+  "issueId": 346,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/346"
+}
