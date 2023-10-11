@@ -59,3 +59,38 @@ for (...) {
   if (transferIndex < minOfSourcesAndTargetsLength) { ... }
 }
 ```
+
+## G-03: transferIndex++ should be unchecked{transferIndex++} when it is impossible for them to overflow
+
+### Lines of Code
+
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L88
+
+### Proof of Concept
+
+Found in line 88 of ERC20MultiDelegate.sol.
+Since `Math.max(sourcesLength, targetsLength) == amountsLength`, which is uint256, it's impossible for `transferIndex` to overflow. We could use `unchecked{transferIndex++}` to save gas.
+
+```solidity
+for (
+      uint transferIndex = 0;
+      transferIndex < Math.max(sourcesLength, targetsLength);
+      transferIndex++
+    ) {
+    ...
+    }
+```
+
+### Mitigation
+
+Use `unchecked{transferIndex++}` instead of `transferIndex++`.
+
+```solidity
+for (
+      uint transferIndex = 0;
+      transferIndex < Math.max(sourcesLength, targetsLength);
+      unchecked{transferIndex++}
+    ) {
+    ...
+    }
+```
