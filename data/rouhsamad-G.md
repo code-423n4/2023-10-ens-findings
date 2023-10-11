@@ -12,7 +12,7 @@ https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate
 Gas optimization - `createProxyDelegatorAndTransfer` and `_processDelegation` in `ERC20MultiDelegate` contract are checking whether `target` proxy delegator is deployed or not by first calculating the address and then fetching the code size using `extcodesize` opcode which will cost 2600 amount of gas on next calls after deployment (since we are not interacting with proxy delegator address after deployment). the gas cost of `extcodesize` opcode is variant depending on whether the address is in `touched_addresses` (100) or not (2600 in our case)
 (when the proxy is deployed, the address of created contract is in `touched_addresses` hence 100 gas will be consumed on `extcodesize`)
 recommended mitigation:
-its suggested to keep track of whether a wallet has already deployed a proxy before or not
+its suggested to keep track of whether a wallet has already deployed a proxy before or not (using a mapping or using a bitMap)
 References about extcodesize and its gas usage (A5):
 https://github.com/wolflo/evm-opcodes/blob/main/gas.md#a5-balance-extcodesize-extcodehash
 https://github.com/wolflo/evm-opcodes/blob/main/gas.md#a0-2-access-sets
