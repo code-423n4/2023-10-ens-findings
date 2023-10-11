@@ -101,10 +101,11 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
     }
 ```
 
-# [N-03] Assertion can be bypassed with a different token if its tokenId >= 2^160
+# [N-03] Assertion for tokenId >= 2^160 can be bypassed with a different token 
 
 Same as L-01, this issue arises from unsafe downcasting of uint256 to address. 
 
+### Scenario
 1. Alice calls 
 ```
 delegateMulti(
@@ -134,6 +135,13 @@ delegateMulti -> _delegateMulti -> _processDelegation
         uint256 balance = getBalanceForDelegate(source);
 
         assert(amount <= balance);
+```
+```
+    function getBalanceForDelegate(
+        address delegate
+    ) internal view returns (uint256) {
+        return ERC1155(this).balanceOf(msg.sender, uint256(uint160(delegate)));
+    }
 ```
 the code above checks if Alice has enough tokens with `id == bob`, not with `id == bob + 2^160`, and does not revert, although Alice is using a different tokenId.
 
