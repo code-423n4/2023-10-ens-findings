@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "neumo",
+  "risk": "2",
+  "title": "Users cannot delegate from a source to a target in certain scenarios",
+  "issueId": 405,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/405"
+}
