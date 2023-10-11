@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Rickard",
+  "risk": "2",
+  "title": "`_token.approve` revert if the underlying ERC20 token approve does not return boolean",
+  "issueId": 391,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/391"
+}
