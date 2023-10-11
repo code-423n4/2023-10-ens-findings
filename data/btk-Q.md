@@ -4,7 +4,7 @@ ENS is a decentralized naming service built on top of the Ethereum blockchain. I
 
 **`ERC20MultiDelegate.sol`** is a specific smart contract within the ENS protocol. It serves as a multi-delegation mechanism for ERC20 tokens that support the ERC20Votes extension. This contract allows users to delegate their voting power to multiple addresses in a single transaction.
 
-- *The contract leverages Solidity's native features for creating proxy contracts, enabling unique delegation capabilities for each user-delegate pair.*
+- *The contract leverages Solidity's create2 opcode for creating proxy contracts.*
 - *It does not use custom cryptographic algorithms but relies on the ERC20Votes and ERC1155 standards for managing delegation and token metadata, respectively.*
 
 # User Flow
@@ -16,7 +16,7 @@ ENS is a decentralized naming service built on top of the Ethereum blockchain. I
 
 | Risk    | Issues Details                                             | Number        |
 |---------|------------------------------------------------------------|---------------|
-| [QA-01] | Address library in not used in anywhere in the code        | 1             |
+| [QA-01] | Address library is not used anywhere in the code           | 1             |
 | [QA-02] | Add a reentrancy guard to the `delegateMulti()` function   | 1             |
 | [QA-03] | Add foundry tests                                          |               |
 | [QA-04] | Take warnings seriously                                    | 5             |
@@ -24,11 +24,11 @@ ENS is a decentralized naming service built on top of the Ethereum blockchain. I
 | [QA-06] | Solidity compiler optimizations can be problematic         | 1             |
 | [QA-07] | Use SMTChecker                                             |               |
 
-## [QA-01] Address library in not used in anywhere in the code
+## [QA-01] Address library is not used anywhere in the code 
 
 #### Description
 
-**`ERC20MultiDelegate`** import the Address library, but it is not used anywhere in the code.
+In the **`ERC20MultiDelegate`** contract, the Address library is imported and used with the using statement, but it serves no purpose and is not utilized anywhere in the code.
 
 #### Lines of code 
 
@@ -46,7 +46,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 #### Recommended Mitigation Steps
 
-Remove the unused import and line.
+Remove the unused import and code involving the Address library to keep the codebase clean and efficient.
 
 ## [QA-02] Add a reentrancy guard to the `delegateMulti()` function
 
@@ -59,8 +59,6 @@ The **`ERC20MultiDelegate`** contract, is an ERC1155, which have multiple hooks 
             _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
         }
 ```
-
-It is best practice to document it properly for future use, e.g. contract that will build on top of **`ERC20MultiDelegate`**.
 
 However, for the sake of clarity and to facilitate future development and understanding, it is advisable to implement a proper documentation within the `delegateMulti()` function, especially if other contracts plan to build on top of the **`ERC20MultiDelegate`**.
 
@@ -130,7 +128,7 @@ If the compiler warns you about something, you should change it. Even if you do 
 
 #### Recommended Mitigation Steps
 
-Follow the compiler warnings.
+Fix the compiler warnings.
 
 ## [QA-05] Lack of event emit
 
