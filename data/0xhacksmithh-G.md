@@ -63,7 +63,7 @@ require(
 ## `memory` variable should created outside of the loop
 - Severity: Gas Optimization
 - Confidence: High
-- Total Gas Saved: approx 
+
 
 
 ### Description
@@ -112,7 +112,7 @@ By doing so we save memory variable creation cost that that used in every iterat
 ## Creation of `source` and `target` will be more gas efficient if we don't go for `transferIndex` check with `sourcesLength` and `targetsLength` respectively
 - Severity: Gas Optimization
 - Confidence: High
-- Total Gas Saved: approx 
+
 
 
 ### Description
@@ -208,7 +208,7 @@ On assert failure no gas will refund to caller where gas will refuned on failure
 ## Unnessary type casting
 - Severity: Gas Optimization
 - Confidence: High
-- Total Gas Saved: approx 
+
 
 
 ### Description
