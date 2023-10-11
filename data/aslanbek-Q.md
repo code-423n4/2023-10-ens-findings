@@ -60,6 +60,12 @@ It would be also inconvenient for anyone to query delegators' balances: calling 
 
 Use SafeCast for downcasting uint256 -> uint160 to protect users from their incorrect inputs.
 
+
+
+
+
+The recommendation from L-01 solves this issue as well.
+
 # [N-01] library `Address` is imported but never used
 [ERC20MultiDelegate.sol#L4](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4)
 ```
@@ -100,3 +106,51 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
         emit DelegationProcessed(source, target, amount);
     }
 ```
+
+# [N-03] Assertion can be bypassed with a different token if its tokenId >= 2^160
+
+Same as L-01, this issue arises from unsafe downcasting of uint256 to address. 
+
+1. Alice calls 
+```
+delegateMulti(
+    sources = []
+    targets = [bob, bob + 2^160]
+    amounts = [1e18, 1e18]
+)
+```
+receives 1e18 tokens with `id == bob + 2^160`
+and 1e18 tokens with `id == bob`.
+2. Alice calls 
+```
+delegateMulti(
+    sources = [bob + 2^160]
+    targets = [charlie]
+    amounts = [1e18]
+)
+```
+the flow is the following:
+delegateMulti -> _delegateMulti -> _processDelegation
+```
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+        uint256 balance = getBalanceForDelegate(source);
+
+        assert(amount <= balance);
+```
+the code above checks if Alice has enough tokens with `id == bob`, not with `id == bob + 2^160`, and does not revert, although Alice is using a different tokenId.
+
+The contract will then successfully burn the token with `id == bob + 2^160` from Alice.
+
+Had Alice not have enough `bob + 2^160` tokens, the assertion would still be passed. But, thanks to `_burnBatch`, the execution would revert as Alice would not have had enough `bob` tokens.
+
+```
+_burnBatch(msg.sender, sources, amounts[:sourcesLength]);
+```
+
+Although `_burnBatch` serves as a second assertion in the current implementation, there may occur problems if `_delegateMulti` or `_burnBatch` is ever edited.
+
+The recommendation from L-01 is sufficient to prevent this issue.
