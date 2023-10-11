@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "LinKenji",
+  "risk": "3",
+  "title": "Lack of delegation revocation leads to accumulating zombie delegations over time.",
+  "issueId": 464,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/464"
+}
