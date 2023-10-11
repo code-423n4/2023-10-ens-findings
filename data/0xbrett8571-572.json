@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xbrett8571",
+  "risk": "3",
+  "title": "Missing validation lets users delegate more than they own.",
+  "issueId": 572,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/572"
+}
