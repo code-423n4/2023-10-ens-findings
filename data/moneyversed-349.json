@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "moneyversed",
+  "risk": "2",
+  "title": "Fixed salt value in `deployProxyDelegatorIfNeeded` causes inability to redeploy `ERC20ProxyDelegator` for the same delegate",
+  "issueId": 349,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/349"
+}
