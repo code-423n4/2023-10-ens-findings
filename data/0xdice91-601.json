@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xdice91",
+  "risk": "2",
+  "title": "Incorrect Addresses will be returned via `retrieveProxyContractAddress()` possibly bricking delegations.",
+  "issueId": 601,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/601"
+}
