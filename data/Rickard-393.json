@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Rickard",
+  "risk": "2",
+  "title": "`_token.approve` will not work for some tokens that don't support approve `type(uint256).max` amount",
+  "issueId": 393,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/393"
+}
