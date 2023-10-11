@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "SandNallani",
+  "risk": "2",
+  "title": "A front running bot could precompute and deploy proxy delegate contracts to steal the sender’s ENS tokens.  ",
+  "issueId": 411,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/411"
+}
