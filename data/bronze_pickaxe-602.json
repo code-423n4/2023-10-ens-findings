@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "bronze_pickaxe",
+  "risk": "3",
+  "title": "No address validation can lead to unexpected behaviour",
+  "issueId": 602,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/602"
+}
