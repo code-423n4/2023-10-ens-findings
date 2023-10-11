@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "emerald7017",
+  "risk": "3",
+  "title": "Unbounded approval in `ERC20ProxyDelegator` allows potential token theft; limit approvals.",
+  "issueId": 510,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/510"
+}
