@@ -7,11 +7,13 @@ ERC20MultiDelegate solves this problem: it allows token holders to cheaply and p
 Token holders are able to:
 
 1. Lock their ERC20Votes token and distribute their voting power in any arbitrary proportion between however many delegatees they want, in one call.
+![FirstDelegation.png](https://user-images.githubusercontent.com/85546446/274232424-e6ed4ef1-29a9-4be5-ae3c-50ab5f518bd4.png)
 
 2. Move an arbitrary amount of their voting power between delegatees.
 
+![AdjustingVotingPower.png](https://user-images.githubusercontent.com/85546446/274232660-49951268-f897-4522-a739-386488a79947.png)
 3. Reimburse locked tokens back to themselves.
-
+![Reimburse.png](https://user-images.githubusercontent.com/85546446/274232768-bc27ffe8-8d98-4fd1-826f-d9ae0ab96dfc.png)
 4. Transfer ERC-1155's to EOAs or `ERC1155TokenReceiver`s. These tokens represent voting power delegated to a delegatee, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator contract.
 
 
@@ -46,6 +48,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 # Codebase quality analysis
 
 The codebase is well-written. No major vulnerabilities or optimizations were detected. While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 
