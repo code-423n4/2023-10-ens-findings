@@ -6,7 +6,7 @@ ERC20MultiDelegate solves this problem: it allows token holders to cheaply and p
 
 Token holders are able to:
 
-1. Lock their ERC20Votes token and distribute their voting power in any arbitrary proportion between however much delegatees they want, in one call.
+1. Lock their ERC20Votes token and distribute their voting power in any arbitrary proportion between however many delegatees they want, in one call.
 
 2. Move an arbitrary amount of their voting power between delegatees.
 
@@ -20,12 +20,6 @@ Token holders are able to:
 # Centralization Risks
 
 The contract is almost fully decentralized: the only thing that owner can change is URI, which is arguably irrelevant for the contract's purpose.
-
-# Systemic risks
-
-Users can transfer their ERC1155 tokens, redeemable for tokens locked in a ERC20ProxyDelegator. While a user has to deliberately transfer tokens to another account for this to happen, it formally breaks the ["Tokens should only be transferred between approved delegators"](https://github.com/code-423n4/2023-10-ens#:~:text=Tokens%20should%20only%20be%20transferred%20between%20approved%20delegators.) invariant.
-
-If this is not intended, consider overriding ERC-1155 `_safeTransferFrom` and `_safeBatchTransferFrom` to always revert.
 
 # Architecture recommendations
 
@@ -47,11 +41,13 @@ The issue can be solved :
 
 It took me some time to get familiar with OpenZeppelin's Governor, ERC20Votes and ERC-1155.
 
-After that, I started looking for vulnerabilities and optimizations in small (2-4 hours) sessions, and managed to find some.
+After that, I started looking for vulnerabilities and optimizations in small (2-4 hours) sessions, and managed to find some minor ones.
 
 # Codebase quality analysis
 
 The codebase is well-written. No major vulnerabilities or optimizations were detected. While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 
