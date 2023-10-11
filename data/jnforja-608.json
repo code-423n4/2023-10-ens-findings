@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "jnforja",
+  "risk": "2",
+  "title": "token.transferFrom signaling failure by returning false may allow for funds to be stolen",
+  "issueId": 608,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/608"
+}
