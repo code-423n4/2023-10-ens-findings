@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "emerald7017",
+  "risk": "3",
+  "title": "`_reimburse()` bypasses 1155 accounting, allowing potential fund drainage.",
+  "issueId": 530,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/530"
+}
