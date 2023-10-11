@@ -109,3 +109,31 @@ Valid explanation in ERC1155.sol contract on L244-L245:
         _setURI(uri);
     }
 ```
+
+4. LOW: The custom/non-standard implementation of the ERC20 method `token.transferFrom()` in the ERC20MultiDelegate::`transferBetweenDelegators()` function fails the CEI pattern and executes the low level token transfer before checking allowance.
+
+https://github.com/code-423n4/2023-10-ens/blob/ed47c841a19abd26681110a26ef03c446da2b6dd/contracts/ERC20MultiDelegate.sol#L170
+
+Since the `transferFrom()` is called by the `transferBetweenDelegators()` function, I deem this as in scope for this contest as it can directly affect the correct & safe functioning of the ERC20MultiDelegate contract.
+
+Affected code where it fails to check allowance before making the transfer, and recommended changes:
+```solidity
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
+    --  _transfer(sender, recipient, amount);
+
+        uint256 currentAllowance = _allowances[sender][_msgSender()];
+        require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
+        
+    ++  _transfer(sender, recipient, amount);
+    
+        unchecked {
+            _approve(sender, _msgSender(), currentAllowance - amount);
+        }
+
+        return true;
+    }
+```
