@@ -128,7 +128,7 @@ Optimized version:
 
 
 
-[The test](https://gist.github.com/aslanbekaibimov/da4f4c8a0454f8a41277773e92a71c94) creates 5 delegatees, then moves their voting power to 5 other delegatees.
+[The test](https://gist.github.com/aslanbekaibimov/da4f4c8a0454f8a41277773e92a71c94) creates 5 delegates, then moves their voting power to 5 other delegates.
 
 `solc = 0.8.21` ([Sponsor has confirmed that they will be using the latest version](https://imgur.com/a/BSVDrzg))
 `runs = 200`
