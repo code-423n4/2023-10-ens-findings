@@ -26,12 +26,12 @@
 
 # Findings Summary
 
-| ID                | Title                                                   | Instances | Severity |
-| ----------------- | ------------------------------------------------------- | --------- | -------- |
-| [GAS-01](#GAS-01) | Use of `Math.max` and `Math.min`                        | 1         | _Low_    |
-| [GAS-02](#GAS-02) | Single Read of `Math.max(sourcesLength, targetsLength)` | 1         | _Low_    |
-| [GAS-03](#GAS-03) | Single Read of `Math.min(sourcesLength, targetsLength)` | 1         | _Low_    |
-| [GAS-04](#GAS-04) | Use of Indexed Events                                   | 1         | _Low_    |
+| ID                | Title                                                   |
+| ----------------- | ------------------------------------------------------- |
+| [GAS-01](#GAS-01) | Use of `Math.max` and `Math.min`                        |
+| [GAS-02](#GAS-02) | Single Read of `Math.max(sourcesLength, targetsLength)` |
+| [GAS-04](#GAS-04) | Use of Indexed Events                                   |
+| [GAS-05](#GAS-05) | Use assembly for loops to save gas                      |
 
 ---
 
@@ -43,7 +43,15 @@
 
 The contract currently uses the OpenZeppelin `Math` library's `max` and `min` functions to determine the maximum and minimum of `sourcesLength` and `targetsLength`. Although OpenZeppelin libraries are known for their robustness, certain simple operations like determining the maximum and minimum can be performed directly in the contract without the need for external calls. This can potentially lead to some gas savings.
 
-### Code
+### GitHub Links:
+
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L80
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L87
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L98
+
+### Example how to rewrite the code:
+
+Implement custom `max` and `min` utility functions within the contract to replace external calls to the `Math` library for these specific operations.
 
 ```solidity
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -55,10 +63,6 @@ The contract currently uses the OpenZeppelin `Math` library's `max` and `min` fu
     }
 ```
 
-### Recommendation:
-
-Implement custom `max` and `min` utility functions within the contract to replace external calls to the `Math` library for these specific operations.
-
 ---
 
 ## <a name="GAS-02"></a>[GAS-02] Single Read of `Math.max(sourcesLength, targetsLength)`
@@ -67,12 +71,17 @@ Implement custom `max` and `min` utility functions within the contract to replac
 
 In the `_delegateMulti()` function, the value of `Math.max(sourcesLength, targetsLength)` is computed multiple times within a loop. Each computation involves gas costs, and therefore computing this value only once and saving it in memory could lead to gas savings.
 
-### Code
+### GitHub links:
 
-```solidity
-    uint256 maxLen = max(sourcesLength, targetsLength);
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L80
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L87
 
-    for (uint transferIndex = 0; transferIndex < maxLen; transferIndex++) {
+### Example how to rewrite the code:
+
+```jsx
++   uint256 maxLength = Math.max(sourcesLength, targetsLength);
+
++   for (uint transferIndex; transferIndex < maxLength; transferIndex++) {
         // ...
     }
 ```
@@ -83,28 +92,6 @@ Store the value of `Math.max(sourcesLength, targetsLength)` in a local variable 
 
 ---
 
-## <a name="GAS-03"></a>[GAS-03] Single Read of `Math.min(sourcesLength, targetsLength)`
-
-### Overview:
-
-Similar to the above issue, the value of `Math.min(sourcesLength, targetsLength)` is also computed multiple times within a loop in the `_delegateMulti()` function. This repetitive computation can be avoided to save gas.
-
-### Code
-
-```solidity
-    uint256 minLen = min(sourcesLength, targetsLength);
-
-    if (transferIndex < minLen) {
-        // ...
-    }
-```
-
-### Recommendation:
-
-Store the value of `Math.min(sourcesLength, targetsLength)` in a local variable at the beginning of the function and reference this variable in the necessary places.
-
----
-
 ## <a name="GAS-04"></a>[GAS-04] Use of Indexed Events
 
 ### Overview:
@@ -112,10 +99,19 @@ Store the value of `Math.min(sourcesLength, targetsLength)` in a local variable 
 By indexing event parameters, they are not stored in the event data but in a separate data structure called the topics array, which can save a considerable amount of gas.
 Using indexed parameters in events can help reduce the gas costs when filtering for specific event logs. In the given contract, certain important parameters in the events such as `delegate` and `from` are already indexed, which is good. However, ensuring that all necessary fields are indexed can further optimize gas usage.
 
-### Code
+### GitHub links:
 
-```solidity
-    event SomeEvent(address indexed user, uint256 indexed value, ...);
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L32-L37
+
+### Example how the code to be rewrite:
+
+```jsx
++   event ProxyDeployed(address indexed delegate, address indexed proxyAddress);
+    event DelegationProcessed(
+        address indexed from,
+        address indexed to,
++       uint256 indexed amount
+    );
 ```
 
 ### Recommendation:
@@ -123,3 +119,65 @@ Using indexed parameters in events can help reduce the gas costs when filtering 
 Review all events and ensure that all parameters that users might want to filter by are indexed.
 
 ---
+
+## <a name="GAS-05"></a>[GAS-05] Use assembly for loops to save gas
+
+**Saves `2450 GAS` for every iteration from `7 instances`.
+Assembly is more gas efficient for loops. Saves minimum `350 GAS` per iteration as per remix gas checks.**
+
+```jsx
+    function _delegateMulti(
+        uint256[] calldata sources,
+        uint256[] calldata targets,
+        uint256[] calldata amounts
+    ) internal {
+        uint256 sourcesLength = sources.length;
+        uint256 targetsLength = targets.length;
+        uint256 amountsLength = amounts.length;
+
+        require(
+            sourcesLength > 0 || targetsLength > 0,
+            "Delegate: You should provide at least one source or one target delegate"
+        );
+
+        require(
+            Math.max(sourcesLength, targetsLength) == amountsLength,
+            "Delegate: The number of amounts must be equal to the greater of the number of sources or targets"
+        );
+
+        // Iterate until all source and target delegates have been processed.
+        for (
+            uint transferIndex = 0;
+            transferIndex < Math.max(sourcesLength, targetsLength);
+            transferIndex++
+        ) {
+            address source = transferIndex < sourcesLength
+                ? address(uint160(sources[transferIndex]))
+                : address(0);
+            address target = transferIndex < targetsLength
+                ? address(uint160(targets[transferIndex]))
+                : address(0);
+            uint256 amount = amounts[transferIndex];
+
+            if (transferIndex < Math.min(sourcesLength, targetsLength)) {
+                // Process the delegation transfer between the current source and target delegate pair.
+                _processDelegation(source, target, amount);
+            } else if (transferIndex < sourcesLength) {
+                // Handle any remaining source amounts after the transfer process.
+                _reimburse(source, amount);
+            } else if (transferIndex < targetsLength) {
+                // Handle any remaining target amounts after the transfer process.
+                createProxyDelegatorAndTransfer(target, amount);
+            }
+        }
+
+        if (sourcesLength > 0) {
+            _burnBatch(msg.sender, sources, amounts[:sourcesLength]);
+        }
+        if (targetsLength > 0) {
+            _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
+        }
+    }
+```
+
+[Links to code](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L65-L116)
