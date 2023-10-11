@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "aycozynfada",
+  "risk": "3",
+  "title": "Delegation process fails because source delegator addresses have not been minted previously as erc1155 tokens to multiDelegate contract.",
+  "issueId": 445,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/445"
+}
