@@ -24,6 +24,16 @@ Alice can be aware of Bob's delegatee by simply front-running.
 
 We recognize this as a low severity issue because, while the impact is high, we could not identify such a token with both voting capability and doesn't revert on failed transfer. However we do not rule out the possibility that such a token does exist.
 
+The recommended mitigation method is to use OpenZeppelin's `safeTransfer`.
+
+## [L-03] OpenZeppelin's ERC1155 forces contract recipients to implement `onERC115Received`
+
+The ERC721 token, closely related to ERC1155, has a `_safeMint` mechanism, where a contract recipient must implement `onERC721Received` to receive the minted NFT, otherwise the call will revert. This is to ensure that contract NFTs cannot be stuck in smart contracts.
+
+However, in OpenZeppelin's ERC1155, the function [`_mintBatch()`](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L114) requires that a contract user [must be able to accept the token](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/ERC1155.sol#L321), that is, it implements the ERC721-like safe mint mechanism by default.
+
+This brings forth an edge case where contract recipients (e.g. multisigs) may fail to delegate due to not being able to accept the token. We urge the sponsor to double check on whether this is the intended mechanism.
+
 ## [S-01] Tokenizing vote delegation is a new idea, user should be notified/contract should be documented to prevent transferring away their ERC1155
 
 The `ERC20MultiDelegate` splits delegation by wrapping ENS, and tokenizing it into an ERC1155, with the id being the delegatee. We note some of the behaviors that we, as a user, may not expect it to have:
@@ -64,3 +74,10 @@ The docs for function `_reimburse()` mentions
 
 However the function always (attempt to) transfers exactly `amount`, which should be specified as a function parameter earlier in the `delegateMulti()` call. This is inconsistent with the documentation
 
+## [N-04] Contract name is misleading
+
+The contract name is `ERC20MultiDelegate`, strongly implying it is an ERC20 token. Such naming can cause confusion, as:
+- It is not an ERC20 token, but rather an ERC1155.
+- It acts as a wrapper for any standard ERC20Votes, enabling multiple delegations, but cannot be a standalone token by itself.
+
+We suggest a more descriptive name, such as `ERC20VotesMultiDelegateWrapper`.
