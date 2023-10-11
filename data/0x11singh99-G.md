@@ -5,10 +5,9 @@
 | [[G-01](#g-01-use-constants-instead-of-typeuintxmax)]                          | Use constants instead of type(uintX).max                       |     1     |
 | [[G-02](#g-02-cache-calculation-rather-than-re-calculating-on-each-iteration)] | Cache calculation rather than re-calculating on each iteration |     5     |
 | [[G-03](#g-03-custom-error-cost-less-than-requireassert)]                      | Custom `error` cost less than `require`/`assert                |     1     |
-| [[G-04](#g-04-keccak256-hash-of-literals-should-only-be-computed-once)]        | `keccak256()` hash of literals should only be computed once    |     1     |
-| [[G-05](#g-05-use-hardcode-address-instead-addressthis)]                       | Use hardcode address instead address(this)                     |     1     |
-| [[G-06](#g-06-dont-cache-value-if-it-is-only-used-once)]                       | `Don’t cache` value if it is only used once                    |     1     |
-| [[G-07](#g-07-do-not-initialize-state-variables-with-their-default-value)]     | Do not initialize state variables with their `default value`   |     1     |
+| [[G-04](#g-04-use-hardcode-address-instead-addressthis)]                       | Use hardcode address instead address(this)                     |     1     |
+| [[G-05](#g-05-dont-cache-value-if-it-is-only-used-once)]                       | `Don’t cache` value if it is only used once                    |     1     |
+| [[G-06](#g-06-do-not-initialize-state-variables-with-their-default-value)]     | Do not initialize state variables with their `default value`   |     1     |
 
 ## [G-01] Use constants instead of type(uintX).max
 
@@ -164,30 +163,7 @@ File : contracts/ERC20MultiDelegate.sol
 
 [131](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L131)
 
-## [G-04] `keccak256()` hash of literals should only be computed once
-
-The result of the hash should be stored in an immutable variable, and the variable should be used instead. If the hash is being used as a part of a function selector, the cast to bytes4 should also only be done once.
-
-**_1 Instance_**
-
-```solidity
-
-File : contracts/ERC20MultiDelegate.sol
-
-206:    bytes32 hash = keccak256(
-            abi.encodePacked(
-                bytes1(0xff),
-                address(this),
-                uint256(0), // salt
-                keccak256(bytecode)
-            )
-213:    );
-
-```
-
-[206-213](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L206C8-L213C11)
-
-## [G-05] Use hardcode address instead address(this).
+## [G-04] Use hardcode address instead address(this).
 
 Instead of using address(this), it is more gas-efficient to pre-calculate and use the hardcoded address. Foundry’s script.sol and solmate’s LibRlp.sol contracts can help achieve this. In Solidity, the address(this) expression returns the address of the current contract instance. This expression is commonly used to send or receive Ether to or from the contract.
 Using a hardcoded address instead of the address(this) expression can be more gas-efficient when sending or receiving Ether to or from the contract. This is because using the address(this) expression requires additional gas to be consumed to retrieve the address of the current contract, while using a hardcoded address does not.
@@ -204,7 +180,7 @@ File :
 
 [209](https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L209C15-L209C31)
 
-## [G-06] `Don’t cache` value if it is only used once
+## [G-05] `Don’t cache` value if it is only used once
 
 If a value is only intended to be used once then it should not be cached. Caching the value will result in unnecessary stack manipulation.
 
@@ -254,7 +230,7 @@ File : contracts/ERC20MultiDelegate.sol
 
 ```
 
-## [G-07] Do not initialize state variables with their `default value`
+## [G-06] Do not initialize state variables with their `default value`
 
 Every variable assignment in Solidity costs gas. When initializing variables, we often waste gas by assigning default values that will never be used.
 
