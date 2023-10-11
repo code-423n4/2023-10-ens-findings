@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Shubham",
+  "risk": "2",
+  "title": "Malicious delegator creating hundreds of new proxy contracts by delegating dust amount",
+  "issueId": 478,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/478"
+}
