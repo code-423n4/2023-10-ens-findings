@@ -11,11 +11,11 @@
 ```
     _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
 ```
-Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the original uint256s, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegate.
+Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the original uint256s, it is possible to mint up to 2^96 different tokens which would represent the same delegate - all uint256s with the same `mod 2^160 == uint160(delegate)`.
 
 These tokens are possible to transfer to another users or ERC1155TokenReceivers, as any other ERC1155 tokens. 
 
-But it in order to use them for transferring voting power between delegates, a user will need to have at least the same amount of normal token (with id < 2^160 and the same modulo 2^160), because `assert` checks for the truncated id:
+But it in order to use them for transferring voting power between delegates, a user will need to have at least the same amount of the "normal" token (with `id == uint256(uint160(delegate))`), because `assert` checks for the truncated id balance:
 
 ```
     function _processDelegation(
@@ -29,46 +29,12 @@ But it in order to use them for transferring voting power between delegates, a u
 ## Impact
 Such user that entered wrong address as a target, unintentionally or maliciously, may only harm himself, and only in the way that they may not be able to transfer voting power between delegates. The affected user will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
 
-It would be also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegate)))` may not show the complete picture, as there could be many tokens representing the same (ERC20Votes,delegate) pair.
-```
-    function _delegateMulti(
-        uint256[] calldata sources,
-        uint256[] calldata targets,
-        uint256[] calldata amounts
-    ) internal {
-        /*...*/
-        for (
-            uint transferIndex = 0;
-            transferIndex < Math.max(sourcesLength, targetsLength);
-            transferIndex++
-        ) {
-            address source = transferIndex < sourcesLength
-                ? address(uint160(sources[transferIndex]))
-                : address(0);
-            address target = transferIndex < targetsLength
-                ? address(uint160(targets[transferIndex]))
-                : address(0);
-            uint256 amount = amounts[transferIndex];
-
-            if (transferIndex < Math.min(sourcesLength, targetsLength)) {
-                // Process the delegation transfer between the current source and target delegate pair.
-                _processDelegation(source, target, amount);
-            } 
-            /*...*/
-
-```
-```
-    function _processDelegation(
-        address source,
-        address target,
-        uint256 amount
-    ) internal {
-        uint256 balance = getBalanceForDelegate(source); // checks for tokenId % 2**160
-```
+It is also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegate)))` may not show the complete picture, as there could be many tokens representing the same (ERC20Votes,delegate) pair.
 
 ## Recommended Mitigation
 
-Use SafeCast for downcasting uint256 -> uint160 to protect users from their incorrect inputs.
+Use SafeCast for downcasting uint256 -> uint160 to prevent minting tokens with id >= 2^160.
+
 # [N-01] library `Address` is imported but never used
 [ERC20MultiDelegate.sol#L4](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4)
 ```
