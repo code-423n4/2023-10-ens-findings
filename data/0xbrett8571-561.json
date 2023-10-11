@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "0xbrett8571",
+  "risk": "3",
+  "title": "Permissive owner access allows misleading URI changes, impacting user trust.",
+  "issueId": 561,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/561"
+}
