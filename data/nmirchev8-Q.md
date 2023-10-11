@@ -7,6 +7,7 @@
 3. **Low:** Best practices suggest checking addresses for `address(0)` as the current implementation allows delegating funds to/from `address(0)`(if inside the target array there are address(0)s), which will only lock delegators' funds and lead to useless ERC1155 accounting, as the result of balances[address(0)][delegator] may arrise, but address votesOf(address(0)) will remain 0
 
 ## Analysis
+- `using Address for address` Address library from OZ util package is not used, so it could be removed
 - Caching `Math.min()` could save gas.
 - Consider marking private/internal functions with a prefix like "_" (e.g., `_getBalanceForDelegate()`) to clearly distinguish them from externally accessible functions.
 
