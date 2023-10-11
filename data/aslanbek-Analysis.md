@@ -12,7 +12,7 @@ Token holders are able to:
 
 3. Reimburse locked tokens back to themselves.
 
-4. Transfer ERC-1155's to EOAs or IERC1155Receiver's. These tokens represent voting power delegated to a delegatee, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator contract.
+4. Transfer ERC-1155's to EOAs or `ERC1155TokenReceiver`s. These tokens represent voting power delegated to a delegatee, and can be burned in return for ERC20Votes tokens locked in the respective ERC20ProxyDelegator contract.
 
 
 
@@ -52,6 +52,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 # Codebase quality analysis
 
 The codebase is well-written. No major vulnerabilities or optimizations were detected. While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 
