@@ -19,14 +19,12 @@ for (
 ```
 
 ### Mitigation
-
-Cache the Math.max compute result outside the for-loop.
+Since we have ensured `Math.max(sourcesLength, targetsLength) == amountsLength`, we could use `amountsLength` instead of `Math.max(sourcesLength, targetsLength)` inside the for-loop, thus avoiding math computation every for-loop.
 
 ```solidity
-uint256 maxOfSourcesAndTargetsLength = Math.max(sourcesLength, targetsLength);
 for (
     uint transferIndex = 0;
-    transferIndex < maxOfSourcesAndTargetsLength;
+    transferIndex < amountsLength;
     transferIndex++
 ) { ... }
 ```
