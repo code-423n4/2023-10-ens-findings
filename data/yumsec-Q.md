@@ -7,6 +7,7 @@
 https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L155-L161
 
 ### Proof of Concept
+unlike function `_processDelegation`, function `createProxyDelegatorAndTransfer` doesn't check balance before token transfer.
 
 ```solidity
 function createProxyDelegatorAndTransfer(
@@ -40,6 +41,7 @@ function createProxyDelegatorAndTransfer(
 https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L144-L147
 
 ### Proof of Concept
+unlike function `_processDelegation`, function `_reimburse` doesn't check token balance of `source` before transferring token.
 
 ```solidity
 function _reimburse(address source, uint256 amount) internal {
