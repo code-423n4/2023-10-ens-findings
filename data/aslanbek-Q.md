@@ -194,5 +194,5 @@ _burnBatch(msg.sender, sources, amounts[:sourcesLength]);
 
 Although `_burnBatch` serves as a second assertion in the current implementation, there may occur problems if `_delegateMulti` or `_burnBatch` is ever edited.
 
-The recommendation from L-01 is sufficient to prevent this issue.
+The recommendation from L-01 is sufficient to prevent this issue, as it would become impossible to mint tokens with id >= 2^160.
 
