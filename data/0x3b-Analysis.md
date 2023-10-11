@@ -13,22 +13,9 @@ This combination of contracts makes it possible for users to store their delegat
 |----------|-------------|
 | High     | 0           |
 | Medium   | 0           |
-| Low      | 3           |
+| Low      | 5           |
 | NC       | 1           |
 | Analysis | 2 hours     |
-
-
-# Time allocations
-
-|            |            |
-|------------|------------|
-| Start date | 09.10.2023 |
-| End date   | 09.10.2023 |
-| **Total**  | **1 day**  |
-
-| Members       | Positions            | Time spent |
-|---------------|----------------------|------------|
-| **0x3b**      | full time researcher | ~7H        |
 
 
 # Findings
@@ -81,6 +68,8 @@ Nonetheless, it is crucial to exercise caution when adding new features to the c
 
 # Conclusion
 In general, the ENS exhibits an interesting and well-developed architecture. I believe the team has done a good job regarding the code. It is also highly recommended that the team continues to invest in security measures such as mitigation reviews, audits, and bug bounty programs to maintain the security and reliability of the project.
+
+
 
 ### Time spent:
 7 hours
