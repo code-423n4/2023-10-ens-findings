@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "matrix_0wl",
+  "risk": "3",
+  "title": "DoS Vulnerability due to Unbounded Looping",
+  "issueId": 390,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/390"
+}
