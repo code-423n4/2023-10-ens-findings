@@ -31,7 +31,7 @@ It is worth noting that the used approach has certain implications when it comes
 
 The following diagram presents a high-level view of the architecture of the protocol:
 
-![ERC20MultiDelegate](https://evc540.pcloud.com/dpZIsdhRuZTcKN4xZ53u7ZXZCTKMykZ3VZZfYVZZ06MDQdlTRb5bBY7Sw7jWNf1PmALX/ENS20MultiDelegate.drawio.png)
+![ERC20MultiDelegate](https://i.imgur.com/PTOOz8D.png)
 
 At a lower level, the `ERC20MultiDelegate` contract provides a single entry point for interaction - the `delegateMulti()` function.
 
