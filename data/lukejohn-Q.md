@@ -91,3 +91,24 @@ QA4. I suggest to split the delegateMulti() function into three functions: trans
         _mintBatch(msg.sender, targets, amounts, "");
     }
 ```
+
+QA5. I suggest to allow ERC20ProxyDelegator() to delegate any ERC20 tokens not just for a fixed one:
+
+```javascript
+contract ERC20ProxyDelegator {
+    address owner;
+    address delegate;
+     
+    constructor(address _delegate) {
+        owner = msg.sender;
+        delegate = _delegate;
+    }
+
+    function delegateToken(ERC20 _token) public {
+        require(msg.sender == owner);
+
+        _token.approve(msg.sender, type(uint256).max);
+        _token.delegate(_delegate);
+
+}
+```
