@@ -38,3 +38,7 @@ function _getBalanceForDelegate() internal {}
 function _retrieveProxyContractAddress()internal  {}
 ```
 
+## Lack of Comments
+
+This code is generally clean and strategically straightforward; even so, comments can further enhance the experience for both auditors and developers. In the context of this codebase, I believe comments are generally effective in delivering value to readers. Comments are crucial because there are two phases of finding bugs in mathematical operations in a code. Usually, the easier one for most auditors is to spot a discrepancy between the intention the comments documenting the code transmit and the code itself. The other one is questioning the mathematical foundations and correctness of the formulas used. Being specific when commenting on the expected outcomes of calculations within the code greatly aids to address the former.
+
