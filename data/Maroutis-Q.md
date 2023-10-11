@@ -16,3 +16,16 @@ Properly functioning code should never reach a failing assert statement. However
 ## Recommended Mitigation Steps
 - Opt for `require` instead of `assert` for checks that aren’t validating invariants, and ensure to provide clear error messages to facilitate debugging.
 
+
+# Any token sent without using the `delegateMulti` function gets permanently stuck
+
+The proxy contract is designed to work with `ERC20Votes` tokens sent using the `delegateMulti`, but it doesn’t prevent any additionnal tokens or any other types of tokens from being sent to it. If a user mistakenly sends tokens to the contract, they could become stuck with no mechanism in place to retrieve them.
+
+Example: 
+If a user mistakenly sends standard tokens to the contract, they might expect similar functionality or the ability to retrieve them, which is not supported in the current implementation.
+
+## Impact
+- Loss of tokens: Any tokens sent directly to the contract could be irretrievable.
+
+## Recommended Mitigation Steps
+- Create a function that allows the `ERC20MultiDelegate` contract owner to retrieve any additional tokens sent to the proxies contracts mistakenly. The additionnal tokens are easily identifiable since they do not have a ERC1155 counterparty. The owner can then transfer the additionnal tokens to the corresponding owners.
