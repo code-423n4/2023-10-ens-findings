@@ -3,6 +3,8 @@
 
 Instead of the "swiss-army-knife" loop that handles every input via if-else and ternary operators, it will be better to separate the loop into smaller ones that wont have them.
 
+## Details
+
 The expected input is: a amounts, s sources, t targets; a = max(s,t). 
 
 ```
@@ -12,7 +14,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         );
 ```
 
-1. First loop - for indexes in `[0 : min(s,t))`. Ternary operator is removed: Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
+1. First loop - for indexes in `[0 : min(s,t)]`. Ternary operator is removed: Sources and Targets are guaranteed to be provided; Only `_processDelegation` will be invoked.
 ```
         for (
             uint transferIndex = 0;
@@ -26,7 +28,7 @@ The expected input is: a amounts, s sources, t targets; a = max(s,t).
         }
 ```
 
-2. The second loop is for `[min(s,t) : max(s,t))`.
+2. The second loop is for `[min(s,t) : max(s,t)]`.
 
 a) If s > t, we use a loop with `_reimburse`. Only Sources are needed and they are guaranteed to be provided.
 
