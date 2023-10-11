@@ -126,7 +126,7 @@ File: testDelegateMulti.t.sol
 
 ### What ideas can be incorporated?
 
- - Adding a time interval field - This time interval field represents the length of an ENS proposal or the wait time before a user can delegate power to someone else. This can help prevent gaining proposal majority by disallowing a single entity from voting from multiple addresses
+ - Adding a time interval field - This time interval field represents the length of a proposal or the wait time before a user can delegate power to someone else. This can help prevent gaining proposal majority by disallowing a single entity from voting from multiple addresses. This interval is just an extra layer of prevention in case an external voting implementation has an error in it that allows this issue to occur. The interval can be set to 0 for external voting systems that do not require a wait-time.
  - Implementing a reward system for honest target delegates - The more the number of users delegate to a target delegate and the longer a user delegates to a target delegate, the greater the rewards for that target delegate for honest behaviour towards its sources.
  - Using ERC1155 tokens as LP tokens in a lending/borrowing system, which can serve as proof for backed ERC20Votes tokens in a ProxyDelegator.
 
@@ -138,7 +138,7 @@ Additionally, the contract has close to 100% test coverage, which adds an additi
 
 ## Centralization risks
 
-There are no administration roles in this contract, which make it safe to use. The only centralization risk this contract poses is gaining proposal majority by using the same tokens to vote using different addresses owned by the same entity. This should be mitigated by setting a wait time till the proposal ends before which delegation cannot be reimbursed or transferred to another delegator.
+There are no administration roles in this contract, which make it safe to use. The only centralization risk this contract could pose (external to the system) is gaining proposal majority by using the same tokens to vote using different addresses owned by the same entity. This should be mitigated by setting a wait time till the proposal ends before which delegation cannot be reimbursed or transferred to another delegator. This interval/wait-time is just an extra layer of prevention in case an external voting implementation has an error in it that allows this issue to occur. The interval can be set to 0 for external voting systems that do not require a wait-time.
 
 ## Resources used to gain deeper context on the codebase
 
@@ -195,6 +195,8 @@ This section includes answers to certain questions/attack surfaces the sponsor w
    - Zero address in sources and delegates are not possible when transferring, minting and burning since 0Z adds address(0) checks and causes reverts if there are any in the arrays.
 2. Are retrievals of Proxy contracts and deployment addresses matching?
    - Yes
+
+
 
 
 ### Time spent:
