@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "dec3ntraliz3d",
+  "risk": "2",
+  "title": "Delegation to Zero Address Allowed, Potentially Silencing Voting Power",
+  "issueId": 340,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/340"
+}
