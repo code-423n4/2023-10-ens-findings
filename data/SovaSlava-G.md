@@ -143,6 +143,36 @@ https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e14141249
 
 ### [G-8] Unnecessary event ProxyDeployed.
 There is no point in emitting an event 'ProxyDeployed', because users do not directly interact with the proxy contract(ERC20ProxyDelegator) and they do not need its address. If there is no proxy for the target address, it is created without user intervention and the user does not need to care whether there is a proxy for the target address or not. This information does not carry any semantic load.
+```diff
+    /** ### EVENTS ### */
+
+-    event ProxyDeployed(address indexed delegate, address proxyAddress);
+    event DelegationProcessed(
+        address indexed from,
+        address indexed to,
+        uint256 amount
+    );
+...
+
+    function deployProxyDelegatorIfNeeded(
+        address delegate
+    ) internal returns (address) {
+        address proxyAddress = retrieveProxyContractAddress(token, delegate);
+
+        // check if the proxy contract has already been deployed
+        uint bytecodeSize;
+        assembly {
+            bytecodeSize := extcodesize(proxyAddress)
+        }
+
+        // if the proxy contract has not been deployed, deploy it
+        if (bytecodeSize == 0) {
+            new ERC20ProxyDelegator{salt: 0}(token, delegate);
+-            emit ProxyDeployed(delegate, proxyAddress);
+        }
+        return proxyAddress;
+    }
+```
 https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L187C18-L187C31
 
 ### [G-9] All functions not payable, so we can change in all places 0 to msg.value.
