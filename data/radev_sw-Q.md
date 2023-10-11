@@ -28,12 +28,13 @@
 
 | ID              | Title                                                                                                                                      | Instances | Severity                  |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------- |
-| [L-01](#L-01)   | Inefficient token handling in `delegateMulti()` when a user wants to both `reimburse` and `delegate` MultiDelegate tokens                  | 1         | _Low to Medium_           |
-| [L-02](#L-02)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
-| [L-03](#L-03)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
-| [L-04](#L-04)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
-| [L-05](#L-05)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
-| [L-06](#L-06)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
+| [L-01](#L-01)   | Inefficient token handling in `delegateMulti()` when a user wants to both `reimburse` and `delegate` MultiDelegate tokens                  | -         | _`Low to Medium`_         |
+| [L-02](#L-02)   | `ERC20MultiDelegate` contract breaks ERC1155 specifications                                                                                | -         | _`Low to Medium`_         |
+| [L-03](#L-03)   | Unbounded `for` loop in `_delegateMulti()`. Set max value for the loop iterations (max values for `sourcesLength[]` and `targetsLength[]`) | 1         | _Low_                     |
+| [L-04](#L-04)   | Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address                                    | 1         | _Low_                     |
+| [L-05](#L-05)   | Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`            | 1         | _Low_                     |
+| [L-06](#L-06)   | Front Running of `ERC20ProxyDelegator` Deployment                                                                                          | 1         | _Low_                     |
+| [L-07](#L-07)   | Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`                                                                                     | 1         | _Low_                     |
 | [NC-01](#NC-01) | Potential Reversion Issue with Certain ERC20 Token Approvals                                                                               | 1         | _Non Critical_            |
 | [NC-02](#NC-02) | Unchecked Return Values for `approve()`                                                                                                    | 1         | _Non Critical_            |
 | [NC-03](#NC-03) | Need for Comments on State Variables                                                                                                       | 1         | _Non Critical_            |
@@ -41,6 +42,8 @@
 | [NC-05](#NC-05) | Missing address zero checks for `sources[]` and `targets[]` arrays in `delegateMulti()` function                                           | 1         | _Non Critical_            |
 | [S-01](#S-01)   | Optimization for `deployProxyDelegatorIfNeeded()` function logic                                                                           | -         | _Suggestion/Optimization_ |
 | [S-02](#S-02)   | Optimization for transferring flow                                                                                                         | -         | _Suggestion/Optimization_ |
+
+**Note: I will leave it to the judge and sponsor to determine the actual severity of issues that I have classified as `Severity: Low to Medium`.**
 
 ---
 
@@ -162,7 +165,39 @@ it("proof of concept", async () => {
 
 ---
 
-## <a name="L-02"></a>[L-02] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
+## <a name="L-02"></a>[L-02] `ERC20MultiDelegate` contract breaks ERC1155 specifications
+
+### GitHub Links
+
+https://github.com/code-423n4/2023-10-ens/blob/main/contracts/ERC20MultiDelegate.sol#L25-L216
+
+### Impact
+
+- `ERC20MultiDelegate` contract does not adhere to ERC1155.
+- Smart Contract Interaction Breakdown: Any smart contract expecting standard ERC1155 behavior might not function correctly when interacting with the `ERC20MultiDelegate.sol` contract.
+- If tokens can be minted, burned or transferred to contracts without ensuring that they can accept ERC1155 tokens, it might expose the token and its holders to certain risks.
+
+### Proof of Concept
+
+Description: The `ERC20MultiDelegate` contract implements ERC1155 (https://eips.ethereum.org/EIPS/eip-1155). This contract contains `delegateMulti()` function that facilitates the process of transferring delegation amounts across multiple source and target delegate pairs. It serves as an interface for the `_delegateMulti()` function, which contains the actual logic.
+
+Inside the `_delegateMulti()` function MultiDelegate tokens are minted and burned (transferred) via `_mintBatch()` and `_burnBatch()` functions.
+
+Whenever there is a transfer, the standard requires checking the receiver accepts the transfer:
+
+- "If an implementation specific API function is used to transfer ERC-1155 token(s) to a contract, the safeTransferFrom or safeBatchTransferFrom (as appropriate) rules MUST still be followed if the receiver implements the ERC1155TokenReceiver interface. If it does not the non-standard implementation SHOULD revert but MAY proceed." By not checking a contract receiver accepts the transfer, `ERC20MultiDelegate` contract does not adhere to ERC1155.
+
+### Tools Used
+
+- Manual Inspection
+
+### Recommended Mitigation Steps
+
+If the recipient implements ERC1155TokenReceiver, require that it accepts the transfer. If the recipient is a contract that does not implement a receiver, reject the operation.
+
+---
+
+## <a name="L-03"></a>[L-03] Unbounded `for` loop in `_delegateMulti()`: Set maximum limit for loop iterations (max values for `sourcesLength` and `targetsLength`)
 
 #### GitHub Links
 
@@ -198,7 +233,7 @@ By introducing these checks, you can ensure that the `_delegateMulti()` function
 
 ---
 
-## <a name="L-03"></a>[L-03] Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address
+## <a name="L-04"></a>[L-04] Static Salt in `deployProxyDelegatorIfNeeded()`: Possibility of DoS due to Predictable Contract Address
 
 #### GitHub Links
 
@@ -228,7 +263,7 @@ The `ERC20ProxyDelegator` contract is a proxy delegator contract designed to vot
 
 ---
 
-## <a name="L-04"></a>[L-04] Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`
+## <a name="L-05"></a>[L-05] Unchecked Initialization in `deployProxyDelegatorIfNeeded()`: Risk of DoS due to Potential Malfunction in `ERC20ProxyDelegator`
 
 #### GitHub Links
 
@@ -256,7 +291,7 @@ The `ERC20ProxyDelegator` contract, upon deployment, is expected to approve a sp
 
 ---
 
-## <a name="L-05"></a>[L-05] Front Running of `ERC20ProxyDelegator` Deployment
+## <a name="L-06"></a>[L-06] Front Running of `ERC20ProxyDelegator` Deployment
 
 #### GitHub Links
 
@@ -288,7 +323,7 @@ Front-running is a scenario on public blockchains where a malicious actor can se
 
 ---
 
-## <a name="L-06"></a>[L-06] Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`
+## <a name="L-07"></a>[L-07] Gas Concerns - DoS in `deployProxyDelegatorIfNeeded()`
 
 #### GitHub Links
 
