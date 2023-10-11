@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "kebabsec",
+  "risk": "2",
+  "title": "Delegation transfer might become temporarily unavailable due to input format in `_delegateMulti`",
+  "issueId": 599,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/599"
+}
