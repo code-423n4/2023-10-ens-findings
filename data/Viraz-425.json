@@ -1,8 +1,0 @@
-{
-  "contest": 294,
-  "handle": "Viraz",
-  "risk": "2",
-  "title": "No check whether erc20 transfers were successful or not",
-  "issueId": 425,
-  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/425"
-}
