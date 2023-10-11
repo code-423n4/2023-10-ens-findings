@@ -33,7 +33,7 @@ If a user mistakenly sends standard tokens to the contract, they might expect si
 # Tokens Not Reverting on Failure
 
 ## Impact
-- **Unexpected Behavior:** While this is technically compliant with the ERC20 standard, ERC20 Tokens like ZRX and EURS, which return `false` instead of reverting on failure, can lead to unexpected contract behavior if calls to `transferFrom` are not properly checked. Equivalent tokens that implement the ERC20Votes can have the exact behaviours.
+- **Unexpected Behavior:** While this is technically compliant with the ERC20 standard, ERC20 Tokens like ZRX and EURS, which return `false` instead of reverting on failure, can lead to unexpected contract behavior if calls to `transferFrom` are not properly checked. Equivalent tokens that implement the ERC20Votes can have the exact behaviors.
 - **Security Risks:** Failing to handle the `false` return value could expose the contract to logical errors between the value of ERC1155 tokens minted and the actual tokens sent to the proxy.
 
 ## Proof of Concept
@@ -51,7 +51,7 @@ If a user mistakenly sends standard tokens to the contract, they might expect si
 # Revert on Large Approvals & Transfers
 
 ## Impact
-- **Incompatibility Issues:** While this is technically compliant with the ERC20 standard, tokens like UNI and COMP revert on large approvals and transfers, which might not be expected by interacting contracts and could cause transactions to fail. Equivalent tokens that implement ERC20Votes might display the same behaviours.
+- **Incompatibility Issues:** While this is technically compliant with the ERC20 standard, tokens like UNI and COMP revert on large approvals and transfers, which might not be expected by interacting contracts and could cause transactions to fail. Equivalent tokens that implement ERC20Votes might display the same behaviors.
 - **Logical Errors:** The `ERC20ProxyDelegator` contract is expecting the maximum approved value to be reflected in the allowances mapping.
 
 ## Proof of Concept
@@ -70,7 +70,7 @@ If a user mistakenly sends standard tokens to the contract, they might expect si
 This is more of a specific issue. A user wishes to create a proxy contract without sending any tokens. He wants to send tokens later on.
 
 ## Impact
-- **Transaction Failures:** While this is technically compliant with the ERC20 standard, tokens like LEND revert on zero-value transfers, which might cause transactions to fail unexpectedly if not handled properly. Equivalent tokens that implement ERC20Votes might display the same behaviours.
+- **Transaction Failures:** While this is technically compliant with the ERC20 standard, tokens like LEND revert on zero-value transfers, which might cause transactions to fail unexpectedly if not handled properly. Equivalent tokens that implement ERC20Votes might display the same behaviors.
 - **User Experience:** Users might encounter failed transactions and be unsure of the cause if zero-value transfers are not handled or communicated effectively.
 
 ## Proof of Concept
