@@ -11,7 +11,7 @@
 ```
     _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
 ```
-Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the uint256s, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegatee.
+Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the original uint256s, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegatee.
 
 These tokens are possible to transfer, as they are ERC1155 tokens. But it would not be possible to use them to transfer voting power between delegatees, because `_processDelegation` works only for tokenIds < 2^160.
 
@@ -19,7 +19,7 @@ Such user that entered wrong address as a target, unintentionally or maliciously
 
 The affected user will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
 
-It would be also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegatee)))` will not show the complete picture.
+It would be also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegatee)))` may not show the complete picture.
 ```
     function _delegateMulti(
         uint256[] calldata sources,
@@ -59,12 +59,6 @@ It would be also inconvenient for anyone to query delegators' balances: calling 
 ## Recommended Mitigation
 
 Use SafeCast for downcasting uint256 -> uint160 to protect users from their incorrect inputs.
-
-
-
-
-
-The recommendation from L-01 solves this issue as well.
 
 # [N-01] library `Address` is imported but never used
 [ERC20MultiDelegate.sol#L4](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4)
