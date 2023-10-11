@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "00xSEV",
+  "risk": "2",
+  "title": "The `_processDelegation` will revert if user deposited to a target not padded with 0s",
+  "issueId": 359,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/359"
+}
