@@ -27,7 +27,7 @@ But it in order to use them for transferring voting power between delegates, a u
         assert(amount <= balance);
 ``` 
 ## Impact
-Such user that entered wrong address as a target, unintentionally or maliciously, may only harm himself, and only in the way that they may not be able to transfer voting power between delegates. The affected user will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
+Such users that entered wrong address as a target, unintentionally or maliciously, may only harm themselves, and only in the way that they may not be able to transfer voting power between delegates. The affected users will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
 
 It is also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegate)))` may not show the complete picture, as there could be many tokens representing the same (ERC20Votes,delegate) pair.
 
