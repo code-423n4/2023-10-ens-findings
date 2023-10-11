@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "Audinarey",
+  "risk": "2",
+  "title": "use of integer type for salt at the point of contract deployment can lead to malformed proxy delegator contracts",
+  "issueId": 571,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/571"
+}
