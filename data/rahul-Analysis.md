@@ -170,6 +170,19 @@ When updating this codebase ensure to follow check-interaction-pattern to avoid 
 The `multiDelegate` function handles several types of transactions such as creation of a new delegation, transfer of existing delegation, and withdrawal of existing delegation. This makes the function a single point of failure for the entire contract should there be a critical bug. It also makes the contract logic complex to follow.
 
 Consider implementing a separate public function for each type of transaction, so that control flow or branching errors does not trigger the wrong transaction type.
+
+## Analysis approach
+
+**Access control:**  
+As mentioned in the scope, significant portion of this analysis focused on understanding the roles and permissions of all user personas and ensuring that system protects critical assets from external threat actors.
+
+**Invariant analyses:**  
+Key invariant were identified and verified to ensure boundary conditions put the delegated assets at risk.
+
+**Architecture and code**:
+The architecture was reviewed for its simplicity and efficacy. Possible enhancements and recommendation for future development was also considered.  The code was reviewed for clarity, consistency, style, and logical errors.
+
+
 ## Appendix A: Definitions
 
 | **Term**             | Definition                                                                                       |
@@ -179,6 +192,8 @@ Consider implementing a separate public function for each type of transaction, s
 | **Delegatee**        | The recipient account of voting power delegation.                                                |
 | **Source delegatee** | The delegatee account from which voting power will be withdrawn in an inter-delegatee transfer.   |
 | **Target delegatee** | The delegatee account to which the voting power will be deposited in an inter-delegatee transfer. |
+
+
 
 
 
