@@ -11,15 +11,27 @@
 ```
     _mintBatch(msg.sender, targets, amounts[:targetsLength], "");
 ```
-Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the original uint256s, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegatee.
+Because _delegateMulti casts sources and targets from uint256 -> uint160 -> address, but _mintBatch uses the original uint256s, it is possible to mint up to 2^96 different tokens (all uint256s congruent modulo 2^160), which would represent the same delegate.
 
-These tokens are possible to transfer, as they are ERC1155 tokens. But it would not be possible to use them to transfer voting power between delegatees, because `_processDelegation` works only for tokenIds < 2^160.
+These tokens are possible to transfer to another users or ERC1155TokenReceivers, as any other ERC1155 tokens. 
 
-Such user that entered wrong address as a target, unintentionally or maliciously, will only harm himself, and only in the way that they may not be able to transfer voting power between delegatees.
+But it in order to use them for transferring voting power between delegates, a user will need to have at least the same amount of normal token (with id < 2^160 and the same modulo 2^160), because `assert` checks for the truncated id:
 
-The affected user will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
+```
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+        uint256 balance = getBalanceForDelegate(source);
 
-It would be also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegatee)))` may not show the complete picture.
+
+        assert(amount <= balance);
+``` 
+## Impact
+Such user that entered wrong address as a target, unintentionally or maliciously, may only harm himself, and only in the way that they may not be able to transfer voting power between delegates. The affected user will just have to call delegateMulti with `source = tokenId` and empty destination, which will successfully withdraw their tokens.
+
+It would be also inconvenient for anyone to query delegators' balances: calling `ERC1155#balanceOf(delegator, (uint256(uint160(delegate)))` may not show the complete picture, as there could be many tokens representing the same (ERC20Votes,delegate) pair.
 ```
     function _delegateMulti(
         uint256[] calldata sources,
@@ -86,7 +98,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
         emit DelegationProcessed(source, target, amount);
     }
 ```
-Event `DelegationProcessed` is emitted whenever tokens are moved from one proxy to another, but not emitted when users reimburse their tokens or delegate their own tokens to a new delegatee.
+Event `DelegationProcessed` is emitted whenever tokens are moved from one proxy to another, but not emitted when users reimburse their tokens or delegate their own tokens to a new delegate.
 
 ## Recommendation
 ```diff
