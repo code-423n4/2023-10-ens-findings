@@ -1,0 +1,8 @@
+{
+  "contest": 294,
+  "handle": "te_aut",
+  "risk": "3",
+  "title": "Transfer/transferFrom not checked",
+  "issueId": 615,
+  "issueUrl": "https://github.com/code-423n4/2023-10-ens-findings/issues/615"
+}
