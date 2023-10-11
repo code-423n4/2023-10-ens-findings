@@ -25,7 +25,7 @@ The contract is almost fully decentralized: the only thing that owner can change
 
 # Architecture recommendations
 
-To have a nice feature of ERC-1155 tokenIds matching delegatees' addresses, there has to be either upcasting user inputs from `address` to `uint256`, or downcasting from `uint256` to `address`. 
+To have a nice feature of ERC-1155 tokenIds matching delegatees' addresses, there has to be either upcasting of user inputs from `address` to `uint256`, or downcasting from `uint256` to `address`. 
 
 The developers chose the latter, but it ended up creating a minor issue described in L-01, where users can create tokens with id >= 2^160. 
 
@@ -50,6 +50,8 @@ After that, I started looking for vulnerabilities and optimizations in small (2-
 The codebase is written with respect to clarity and security practices. No major vulnerabilities or optimizations were detected. 
 
 While only a brief README was provided, the Sponsor was very responsive and covered every question.
+
+
 
 
 
