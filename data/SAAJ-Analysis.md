@@ -108,9 +108,11 @@ The recommendation provided in the analysis, if implemented will ensure better, 
 
 -  **Note to Judge:**
       - I spent around 20 hours reviewing code base that helps me in identifying potential vulnerabilities that existed in the code base and can result in possible exploit.
-      - The reviewing helps me in identifying and reporting 03 mediums and 02 low issues.
-      - One medium issue is related to reentrancy exploiting, second one is based on not subtracting amount after transfer and the last one is related to maximum approval of tokens that can be exploited or misuse.
+      - The reviewing helps me in identifying and reporting 01 high, 02 mediums and 02 low issues.
+      - The high issue is related to maximum approval of tokens, 1st medium issue is related to reentrancy exploiting and second one is based on not subtracting amount after transfer.
       - All the above findings will facilitate in improving the security as well as working flow of the contract for the purpose of providing delegation platform.
+
+
 
 
 
