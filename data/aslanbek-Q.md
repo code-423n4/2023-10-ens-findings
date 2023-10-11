@@ -59,7 +59,6 @@ It would be also inconvenient for anyone to query delegators' balances: calling 
 ## Recommended Mitigation
 
 Use SafeCast for downcasting uint256 -> uint160 to protect users from their incorrect inputs.
-
 # [N-01] library `Address` is imported but never used
 [ERC20MultiDelegate.sol#L4](https://github.com/code-423n4/2023-10-ens/blob/ed25379c06e42c8218eb1e80e141412496950685/contracts/ERC20MultiDelegate.sol#L4)
 ```
@@ -100,8 +99,48 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
         emit DelegationProcessed(source, target, amount);
     }
 ```
+# [N-03] Consider emitting DelegationProcessed event in `_reimburse` and `createProxyDelegatorAndTransfer`
+```
+    function _processDelegation(
+        address source,
+        address target,
+        uint256 amount
+    ) internal {
+        uint256 balance = getBalanceForDelegate(source);
 
-# [N-03] Assertion for tokenId >= 2^160 can be bypassed with a different token 
+        assert(amount <= balance);
+
+        deployProxyDelegatorIfNeeded(target);
+        transferBetweenDelegators(source, target, amount);
+
+        emit DelegationProcessed(source, target, amount);
+    }
+```
+Event `DelegationProcessed` is emitted whenever tokens are moved from one proxy to another, but not emitted when users reimburse their tokens or delegate their own tokens to a new delegatee.
+
+## Recommendation
+```diff
+    function _reimburse(address source, uint256 amount) internal {
+        // Transfer the remaining source amount or the full source amount
+        // (if no remaining amount) to the delegator
+        address proxyAddressFrom = retrieveProxyContractAddress(token, source);
+        token.transferFrom(proxyAddressFrom, msg.sender, amount);
++       emit DelegationProcessed(source, msg.sender, amount);
+    }
+```
+```
+    function createProxyDelegatorAndTransfer(
+        address target,
+        uint256 amount
+    ) internal {
+        address proxyAddress = deployProxyDelegatorIfNeeded(target);
+        token.transferFrom(msg.sender, proxyAddress, amount);
++       emit DelegationProcessed(msg.sender, target, amount);
+    }
+```
+`address(0)` instead of `msg.sender` could also be used, but `msg.sender` would be more informative and convenient as it would show the delegator.
+
+# [N-04] Assertion for tokenId >= 2^160 can be bypassed with a different token 
 
 Same as L-01, this issue arises from unsafe downcasting of uint256 to address. 
 
@@ -156,3 +195,4 @@ _burnBatch(msg.sender, sources, amounts[:sourcesLength]);
 Although `_burnBatch` serves as a second assertion in the current implementation, there may occur problems if `_delegateMulti` or `_burnBatch` is ever edited.
 
 The recommendation from L-01 is sufficient to prevent this issue.
+
