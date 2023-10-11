@@ -134,14 +134,14 @@ Optimized version:
 `runs = 200`
 ```
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
-| 2143100                                                      | 11491           |        |        |         |         |
+| 2125456                                                      | 11245           |        |        |         |         |
 | Function Name                                                | min             | avg    | median | max     | # calls |
-| delegateMulti                                                | 882638          | 949097 | 949097 | 1015556 | 2       |
+| delegateMulti                                                | 885663          | 952517 | 952517 | 1019371 | 2       |
 
 | Deployment Cost                                              | Deployment Size |        |        |         |         |
-| 2171929                                                      | 11635           |        |        |         |         |
+| 2154292                                                      | 11389           |        |        |         |         |
 | Function Name                                                | min             | avg    | median | max     | # calls |
-| delegateMulti                                                | 881537          | 947828 | 947828 | 1014120 | 2       |
+| delegateMulti                                                | 884562          | 951248 | 951248 | 1017935 | 2       |
 
 | Savings                                                      | 1101            | 1269   | 1269   | 1436    |         |
 ```
